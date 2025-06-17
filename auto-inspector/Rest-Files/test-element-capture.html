@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Capture Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            border: 2px solid #ccc;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .highlight-green {
+            background-color: rgba(0, 255, 0, 0.3) !important;
+            border: 2px solid green !important;
+        }
+        .nested-content {
+            margin-left: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+        }
+        .inline-elements span {
+            margin: 0 5px;
+            padding: 2px 5px;
+            background: #e0e0e0;
+        }
+        .small-elements {
+            font-size: 10px;
+        }
+        .custom-styles {
+            color: #333;
+            text-decoration: none;
+        }
+        .visual-user-link {
+            color: blue;
+            text-decoration: underline;
+        }
+        .hidden-content {
+            display: none;
+        }
+        .visible-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Element Capture Test Page</h1>
+        <p>This page tests whether all visible elements are captured and highlighted during scanning.</p>
+        
+        <div class="test-section">
+            <h2>Links and Navigation</h2>
+            <p>Testing various link types that might be missed:</p>
+            <a href="#" class="visual-user-link">visual_user</a> |
+            <a href="/dashboard" class="custom-styles">Dashboard</a> |
+            <a href="/profile">Profile</a> |
+            <a href="/settings" data-testid="settings-link">Settings</a>
+            
+            <div class="nested-content">
+                <a href="/nested-link">Nested Link</a>
+                <span><a href="/span-wrapped">Span Wrapped Link</a></span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Buttons and Interactive Elements</h2>
+            <button type="button">Regular Button</button>
+            <button id="primary-btn" class="btn-primary">Primary Button</button>
+            <input type="button" value="Input Button" />
+            <input type="submit" value="Submit Button" />
+            
+            <div class="nested-content">
+                <button data-action="save">Save Action</button>
+                <span><button>Span Wrapped Button</button></span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Form Elements</h2>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" />
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" />
+                
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                </select>
+                
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="3"></textarea>
+                
+                <input type="checkbox" id="agree" name="agree" />
+                <label for="agree">I agree to terms</label>
+            </form>
+        </div>
+        
+        <div class="test-section">
+            <h2>Text Elements</h2>
+            <p>Regular paragraph text</p>
+            <span>Inline span text</span>
+            <div>Block div text</div>
+            <strong>Bold text</strong>
+            <em>Italic text</em>
+            <small class="small-elements">Small text element</small>
+            
+            <div class="inline-elements">
+                <span>Span 1</span>
+                <span>Span 2</span>
+                <span>Span 3</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Lists and Tables</h2>
+            <ul>
+                <li>List item 1</li>
+                <li>List item 2 <a href="#">with link</a></li>
+                <li>List item 3</li>
+            </ul>
+            
+            <table border="1">
+                <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                </tr>
+                <tr>
+                    <td>Cell 1</td>
+                    <td>Cell 2 <a href="#">table link</a></td>
+                </tr>
+                <tr>
+                    <td><button>Table Button</button></td>
+                    <td><input type="text" placeholder="Table input" /></td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="test-section">
+            <h2>Images and Media</h2>
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='50'%3E%3Crect width='100' height='50' fill='%23ccc'/%3E%3Ctext x='50' y='25' text-anchor='middle' dy='0.3em'%3ETest Image%3C/text%3E%3C/svg%3E" alt="Test Image" />
+            
+            <div class="nested-content">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Ccircle cx='25' cy='25' r='20' fill='%23007bff'/%3E%3C/svg%3E" alt="Nested Image" />
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Complex Nested Elements</h2>
+            <div class="level-1">
+                <div class="level-2">
+                    <div class="level-3">
+                        <a href="#deep-link">Deep Nested Link</a>
+                        <span class="level-4">
+                            <button type="button">Deep Nested Button</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Elements with Special Attributes</h2>
+            <div data-testid="special-div">Div with test ID</div>
+            <span data-role="tooltip">Tooltip span</span>
+            <button aria-label="Close dialog" title="Close">×</button>
+            <input aria-describedby="help-text" placeholder="Input with aria" />
+            <div id="help-text">Help text for input</div>
+        </div>
+        
+        <!-- Hidden elements that should not be captured -->
+        <div class="hidden-content">
+            <a href="#">Hidden Link</a>
+            <button>Hidden Button</button>
+        </div>
+        
+        <!-- Custom element for testing -->
+        <div id="custom-element-container">
+            <custom-element data-custom="test">Custom Element</custom-element>
+        </div>
+    </div>
+    
+    <script>
+        // Add some dynamic content
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded');
+            
+            // Create a custom element
+            if (!customElements.get('custom-element')) {
+                class CustomElement extends HTMLElement {
+                    connectedCallback() {
+                        this.innerHTML = `
+                            <div>Custom Element Content</div>
+                            <a href="#custom">Custom Element Link</a>
+                            <button>Custom Element Button</button>
+                        `;
+                    }
+                }
+                customElements.define('custom-element', CustomElement);
+            }
+            
+            // Add event listeners to track which elements get highlighted
+            let highlightCount = 0;
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        const element = mutation.target;
+                        if (element.style.backgroundColor && element.style.backgroundColor.includes('rgb')) {
+                            highlightCount++;
+                            console.log(`Element highlighted (#${highlightCount}):`, {
+                                tag: element.tagName,
+                                text: element.textContent ? element.textContent.trim().substring(0, 50) : '',
+                                id: element.id,
+                                class: element.className,
+                                selector: getSimpleSelector(element)
+                            });
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(document.body, {
+                attributes: true,
+                subtree: true,
+                attributeFilter: ['style']
+            });
+            
+            // Helper function to get simple selector
+            function getSimpleSelector(element) {
+                if (element.id) return `#${element.id}`;
+                if (element.className) return `${element.tagName.toLowerCase()}.${element.className.split(' ')[0]}`;
+                return element.tagName.toLowerCase();
+            }
+            
+            // Add a summary function
+            window.getHighlightSummary = function() {
+                console.log(`Total elements highlighted: ${highlightCount}`);
+                
+                // Count specific element types
+                const linkCount = document.querySelectorAll('a').length;
+                const buttonCount = document.querySelectorAll('button, input[type="button"], input[type="submit"]').length;
+                const inputCount = document.querySelectorAll('input, select, textarea').length;
+                
+                console.log(`Expected counts - Links: ${linkCount}, Buttons: ${buttonCount}, Inputs: ${inputCount}`);
+                console.log(`Check if "visual_user" link was highlighted:`, 
+                    document.querySelector('.visual-user-link')?.style?.backgroundColor || 'No highlighting detected');
+                
+                return {
+                    totalHighlighted: highlightCount,
+                    expectedLinks: linkCount,
+                    expectedButtons: buttonCount,
+                    expectedInputs: inputCount
+                };
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Scan Workflow - Universal Element Locator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            color: #00ff88;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .button {
+            background: linear-gradient(45deg, #00ff88, #00aaff);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .text-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .links a {
+            color: #00ff88;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .links a:hover {
+            text-decoration: underline;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 4px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .hidden-element {
+            display: none;
+        }
+        
+        .invisible-element {
+            visibility: hidden;
+        }
+        
+        .opacity-zero {
+            opacity: 0;
+        }
+        
+        .instructions {
+            background: rgba(0,255,136,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid #00ff88;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Test Page - Scan Workflow</h1>
+        
+        <div class="instructions">
+            <h3>📋 Testing Instructions:</h3>
+            <div class="step">
+                <strong>Step 1:</strong> Open the Universal Element Locator extension popup (click the 🎯 icon)
+            </div>
+            <div class="step">
+                <strong>Step 2:</strong> Notice that "View Scanned Results" button is disabled initially
+            </div>
+            <div class="step">
+                <strong>Step 3:</strong> Click "Scan Page Elements" - watch for element highlighting
+            </div>
+            <div class="step">
+                <strong>Step 4:</strong> After scan completes, "View Scanned Results" button should be enabled
+            </div>
+            <div class="step">
+                <strong>Step 5:</strong> Click "View Scanned Results" - it should open in a new tab
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>🔘 Buttons</h3>
+            <button class="button">Primary Button</button>
+            <button class="button">Secondary Button</button>
+            <button class="button">Action Button</button>
+        </div>
+        
+        <div class="section">
+            <h3>📝 Form Elements</h3>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" class="text-input" placeholder="Enter your name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" class="text-input" placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category">
+                    <option value="">Select a category</option>
+                    <option value="web">Web Development</option>
+                    <option value="mobile">Mobile Development</option>
+                    <option value="design">UI/UX Design</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>🔗 Links</h3>
+            <div class="links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3>📊 Data Elements</h3>
+            <ul>
+                <li data-id="item1" data-category="tech">Technology Item</li>
+                <li data-id="item2" data-category="design">Design Item</li>
+                <li data-id="item3" data-category="marketing">Marketing Item</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h3>🎨 Various Element Types</h3>
+            <div>
+                <span class="highlight">Highlighted Text</span>
+                <strong>Bold Text</strong>
+                <em>Italic Text</em>
+                <code>Code Element</code>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPC9zdmc+" alt="Test Image" width="40" height="40">
+                <span style="margin-left: 10px;">Image with text</span>
+            </div>
+        </div>
+        
+        <!-- Hidden elements that should not be highlighted -->
+        <div class="hidden-element">This is hidden with display:none</div>
+        <div class="invisible-element">This is hidden with visibility:hidden</div>
+        <div class="opacity-zero">This is hidden with opacity:0</div>
+        
+        <div class="section" style="margin-top: 30px;">
+            <h3>✅ Expected Behavior:</h3>
+            <ul>
+                <li>Elements should be highlighted with green border during scan</li>
+                <li>Only visible elements should be highlighted (not hidden ones)</li>
+                <li>Highlighting should clear after a few seconds</li>
+                <li>"View Scanned Results" should only enable after successful scan</li>
+                <li>Results should open in a new tab with detailed element information</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Add some dynamic content for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded - ready for scanning');
+            
+            // Add click handlers for testing
+            document.querySelectorAll('.button').forEach((btn, index) => {
+                btn.addEventListener('click', function() {
+                    console.log(`Button ${index + 1} clicked`);
+                    this.style.background = 'linear-gradient(45deg, #ff6b35, #f7931e)';
+                    setTimeout(() => {
+                        this.style.background = 'linear-gradient(45deg, #00ff88, #00aaff)';
+                    }, 1000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

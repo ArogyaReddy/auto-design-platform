@@ -1,0 +1,275 @@
+#!/bin/bash
+
+# Test Highlighting Fix
+echo "🧪 Testing Highlighting Fix..."
+
+# Create test page specifically for highlighting
+cat > /Users/arog/ADP/AutoExtractor/browser-extension/test-highlighting-fix.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highlighting Fix Test Page</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px;
+            background: white;
+        }
+        .test-element {
+            background: #e3f2fd;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #2196f3;
+            border-radius: 4px;
+        }
+        .shadow-container { 
+            background: #fff3e0; 
+            padding: 15px; 
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>🎯 Highlighting Test Instructions</h2>
+        <ol>
+            <li>Scan this page with the extension</li>
+            <li>In the results page, click any 🎯 (highlight) button</li>
+            <li>Switch back to this tab immediately</li>
+            <li>You should see the element highlighted with <strong>orange outline and glow</strong></li>
+            <li>Test both regular DOM and Shadow DOM elements</li>
+        </ol>
+    </div>
+
+    <h1 id="main-title">Highlighting Fix Test Page</h1>
+    <p>This page tests the improved highlighting functionality with better visual feedback and error handling.</p>
+
+    <!-- Regular DOM elements -->
+    <div class="section">
+        <h2>Regular DOM Elements</h2>
+        <button id="test-btn-1" class="test-element" data-testid="regular-button">Test Button 1 - Click 🎯 to highlight me!</button>
+        <button id="test-btn-2" class="test-element" data-testid="another-button">Test Button 2 - Click 🎯 to highlight me!</button>
+        <input id="test-input-1" class="test-element" placeholder="Test input - Click 🎯 to highlight me!">
+        <div id="test-div-1" class="test-element" data-testid="content-div">Test div - Click 🎯 to highlight me!</div>
+        <p id="test-paragraph" class="test-element">Test paragraph - Click 🎯 to highlight me!</p>
+    </div>
+
+    <!-- Form elements -->
+    <div class="section">
+        <h2>Form Elements</h2>
+        <form id="test-form">
+            <label for="email-input">Email:</label>
+            <input type="email" id="email-input" name="email" data-testid="email-field" placeholder="Enter email">
+            
+            <label for="select-field">Choose option:</label>
+            <select id="select-field" name="choice" data-testid="select-dropdown">
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+            </select>
+            
+            <button type="submit" id="submit-button" data-testid="submit-action">Submit Form</button>
+        </form>
+    </div>
+
+    <!-- Shadow DOM elements -->
+    <div class="section">
+        <h2>Shadow DOM Elements</h2>
+        <div id="shadow-host-1" class="shadow-container">
+            <p>Shadow Host 1 - check inner elements for highlighting</p>
+        </div>
+        <div id="shadow-host-2" class="shadow-container">
+            <p>Shadow Host 2 - check inner elements for highlighting</p>
+        </div>
+    </div>
+
+    <!-- Elements with classes -->
+    <div class="section">
+        <h2>Class-based Elements</h2>
+        <div class="highlight-test-element special-class" data-role="test-container">
+            <span class="inner-span">Span inside div - test class selectors</span>
+            <button class="action-button primary-btn">Action Button with Multiple Classes</button>
+        </div>
+    </div>
+
+    <!-- Table elements -->
+    <div class="section">
+        <h2>Table Elements</h2>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <thead>
+                <tr>
+                    <th id="header-1">Header 1</th>
+                    <th id="header-2">Header 2</th>
+                    <th id="header-3">Header 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="cell-1-1" data-testid="table-cell">Cell 1,1</td>
+                    <td id="cell-1-2">Cell 1,2</td>
+                    <td id="cell-1-3">Cell 1,3</td>
+                </tr>
+                <tr>
+                    <td id="cell-2-1">Cell 2,1</td>
+                    <td id="cell-2-2" class="important-cell">Cell 2,2 (important)</td>
+                    <td id="cell-2-3">Cell 2,3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Create Shadow DOM content for testing
+        const shadowHost1 = document.getElementById('shadow-host-1');
+        const shadow1 = shadowHost1.attachShadow({mode: 'open'});
+        shadow1.innerHTML = `
+            <style>
+                .shadow-content { 
+                    background: #ffebee; 
+                    padding: 10px; 
+                    border-radius: 5px;
+                    border: 2px dashed #f44336;
+                }
+                .shadow-button { 
+                    background: #f44336; 
+                    color: white; 
+                    padding: 8px 12px; 
+                    border: none;
+                    border-radius: 4px;
+                    margin: 5px;
+                    cursor: pointer;
+                }
+                .shadow-input {
+                    padding: 5px;
+                    margin: 5px;
+                    border: 1px solid #f44336;
+                    border-radius: 3px;
+                }
+            </style>
+            <div class="shadow-content">
+                <h3>Shadow DOM Content 1</h3>
+                <button id="shadow-btn-1" class="shadow-button" data-testid="shadow-action">Shadow Button 1 - Click 🎯 to highlight!</button>
+                <input type="text" id="shadow-input-1" class="shadow-input" placeholder="Shadow input - Click 🎯!">
+                <div class="shadow-text" data-role="shadow-container">Shadow text content - Click 🎯!</div>
+            </div>
+        `;
+
+        const shadowHost2 = document.getElementById('shadow-host-2');
+        const shadow2 = shadowHost2.attachShadow({mode: 'open'});
+        shadow2.innerHTML = `
+            <style>
+                .shadow-content { 
+                    background: #e1f5fe; 
+                    padding: 10px; 
+                    border-radius: 5px;
+                    border: 2px dashed #03a9f4;
+                }
+                .nested-element {
+                    background: #fff9c4;
+                    padding: 8px;
+                    margin: 5px 0;
+                    border-radius: 3px;
+                }
+            </style>
+            <div class="shadow-content">
+                <h3>Shadow DOM Content 2</h3>
+                <div class="nested-element">
+                    <button id="nested-shadow-btn" data-testid="nested-shadow-action">Nested Shadow Button - Click 🎯!</button>
+                    <span class="nested-span">Nested span in shadow - Click 🎯!</span>
+                </div>
+                <input type="password" id="shadow-password" placeholder="Shadow password field">
+            </div>
+        `;
+
+        console.log('✅ Highlighting test page loaded successfully');
+        console.log('🎯 Elements available for highlighting:');
+        console.log('   Regular DOM: #test-btn-1, #test-btn-2, #test-input-1, #test-div-1');
+        console.log('   Form elements: #email-input, #select-field, #submit-button');
+        console.log('   Shadow DOM: #shadow-btn-1, #shadow-input-1, #nested-shadow-btn');
+        console.log('   Class selectors: .highlight-test-element, .action-button, .inner-span');
+        console.log('   Table elements: #header-1, #cell-1-1, .important-cell');
+        
+        // Add some console logging for debugging
+        window.addEventListener('message', function(event) {
+            console.log('Page received message:', event.data);
+        });
+        
+        // Function to manually test highlighting (for debugging)
+        window.testHighlight = function(selector) {
+            console.log('Manual test highlight for:', selector);
+            const element = document.querySelector(selector);
+            if (element) {
+                element.style.outline = '3px solid #ff6b35';
+                element.style.boxShadow = '0 0 20px rgba(255, 107, 53, 0.8)';
+                console.log('Element highlighted manually');
+            } else {
+                console.log('Element not found for manual highlight');
+            }
+        };
+    </script>
+</body>
+</html>
+EOF
+
+echo "📄 Created test page: test-highlighting-fix.html"
+
+echo ""
+echo "🔧 Testing Instructions:"
+echo "1. Load the extension in Chrome (Developer mode)"
+echo "2. Navigate to: file://$(pwd)/test-highlighting-fix.html"
+echo "3. Click the extension icon and scan the page"
+echo "4. In the results page, click ANY 🎯 (highlight) button"
+echo "5. Immediately switch back to this test page tab"
+echo "6. Look for the highlighted element with ORANGE outline and glow"
+echo ""
+
+echo "🎯 What to Test:"
+echo "   ✓ Regular DOM elements (buttons, inputs, divs)"
+echo "   ✓ Shadow DOM elements (shadow buttons, shadow inputs)"
+echo "   ✓ Different selector types (ID, class, data-testid)"
+echo "   ✓ Form elements (inputs, selects, buttons)"
+echo "   ✓ Table elements (headers, cells)"
+echo ""
+
+echo "✅ Expected Results:"
+echo "   - Element should be highlighted with ORANGE border (3px solid)"
+echo "   - Element should have orange glow/shadow effect"
+echo "   - Element should have light orange background tint"
+echo "   - Notification should say 'Element highlighted on page'"
+echo "   - No 'Please switch to scanned page tab' message"
+echo ""
+
+echo "🐛 Debugging Tips:"
+echo "   - Check browser console for highlight messages"
+echo "   - Try both regular DOM and Shadow DOM elements"
+echo "   - Test different selector types (ID, class, data attributes)"
+echo "   - Verify URL matching works correctly"
+echo ""
+
+# Open the test page
+if command -v open >/dev/null 2>&1; then
+    echo "🌐 Opening test page..."
+    open "file://$(pwd)/test-highlighting-fix.html"
+else
+    echo "📋 Test page path: file://$(pwd)/test-highlighting-fix.html"
+fi
+
+echo "✅ Highlighting fix test setup complete!"

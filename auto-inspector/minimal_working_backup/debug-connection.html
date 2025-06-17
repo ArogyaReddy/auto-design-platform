@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Connection Issues</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .debug-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .debug-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .test-element {
+            background: #e8f4f8;
+            border: 2px solid #2196F3;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <div class="debug-card">
+        <h1>🔧 Debug Connection Issues</h1>
+        <p>This page helps debug the "Could not establish connection" error.</p>
+        
+        <h3>🧪 Test Elements (Click these during individual scan mode):</h3>
+        
+        <div class="test-element" id="testButton1" data-testid="debug-button-1">
+            <strong>Test Button 1</strong> (data-testid="debug-button-1")
+        </div>
+        
+        <div class="test-element" id="testButton2" aria-label="Debug Button 2">
+            <strong>Test Button 2</strong> (aria-label="Debug Button 2")
+        </div>
+        
+        <input type="text" class="test-element" id="testInput" placeholder="Test Input Field" data-testid="debug-input">
+        
+        <div class="test-element" onclick="logMessage('Clicked test div', 'info')">
+            <strong>Test Div</strong> (onclick handler)
+        </div>
+        
+        <h3>📋 Debug Instructions:</h3>
+        <ol>
+            <li>Open Chrome DevTools (F12) and go to the Console tab</li>
+            <li>Click the Universal Element Locator extension icon</li>
+            <li>Look for these console messages:
+                <ul>
+                    <li><span class="success">"🎯 Universal Element Locator: Content script loaded"</span></li>
+                    <li><span class="success">"🚀 Universal Element Locator: Initializing extension"</span></li>
+                </ul>
+            </li>
+            <li>Try the "🔍 Scan Page Elements" button first (this should work)</li>
+            <li>Then try "🎯 Scan Element" and click on an element above</li>
+            <li>Check the console for error messages</li>
+        </ol>
+        
+        <h3>📊 Live Debug Log:</h3>
+        <div id="debugLog" class="log">Debug log will appear here...\n</div>
+        
+        <div>
+            <button class="debug-button" onclick="clearLog()">Clear Log</button>
+            <button class="debug-button" onclick="testContentScript()">Test Content Script</button>
+            <button class="debug-button" onclick="showPageInfo()">Show Page Info</button>
+        </div>
+    </div>
+
+    <script>
+        const debugLog = document.getElementById('debugLog');
+        
+        function logMessage(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type;
+            debugLog.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            debugLog.scrollTop = debugLog.scrollHeight;
+            console.log(`[DEBUG] ${message}`);
+        }
+        
+        function clearLog() {
+            debugLog.innerHTML = 'Debug log cleared...\n';
+        }
+        
+        function testContentScript() {
+            logMessage('Testing if content script is loaded...', 'info');
+            if (window.universalElementLocatorInjected) {
+                logMessage('✅ Content script global variable found', 'success');
+            } else {
+                logMessage('❌ Content script global variable NOT found', 'error');
+            }
+        }
+        
+        function showPageInfo() {
+            logMessage(`Page URL: ${window.location.href}`, 'info');
+            logMessage(`Page title: ${document.title}`, 'info');
+            logMessage(`Ready state: ${document.readyState}`, 'info');
+            logMessage(`Element count: ${document.querySelectorAll('*').length}`, 'info');
+        }
+        
+        // Add click listeners to test elements
+        document.getElementById('testButton1').addEventListener('click', function() {
+            logMessage('Test Button 1 clicked', 'success');
+        });
+        
+        document.getElementById('testButton2').addEventListener('click', function() {
+            logMessage('Test Button 2 clicked', 'success');
+        });
+        
+        document.getElementById('testInput').addEventListener('focus', function() {
+            logMessage('Test Input focused', 'success');
+        });
+        
+        // Initial log messages
+        logMessage('🔧 Debug page loaded', 'info');
+        logMessage('Ready for extension testing', 'info');
+        
+        // Monitor for content script injection
+        let checkCount = 0;
+        const checkInterval = setInterval(() => {
+            checkCount++;
+            if (window.universalElementLocatorInjected) {
+                logMessage('✅ Content script detected!', 'success');
+                clearInterval(checkInterval);
+            } else if (checkCount > 10) {
+                logMessage('⏰ Content script not detected after 5 seconds', 'error');
+                clearInterval(checkInterval);
+            }
+        }, 500);
+        
+        // Listen for any global errors
+        window.addEventListener('error', function(e) {
+            logMessage(`❌ Global error: ${e.message}`, 'error');
+        });
+        
+        // Listen for unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(e) {
+            logMessage(`❌ Unhandled promise rejection: ${e.reason}`, 'error');
+        });
+    </script>
+</body>
+</html>

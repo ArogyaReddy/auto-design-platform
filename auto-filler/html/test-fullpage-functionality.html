@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Full Page Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #007acc;
+            color: white;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        input, select, textarea {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .highlight-btn {
+            background: #ff6b6b;
+            font-size: 14px;
+        }
+        .simulate-data {
+            background: #e8f4fd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .open-fullpage-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Full Page Mode Testing</h1>
+        <p>This page simulates testing the Element AI Extractor full page functionality</p>
+        
+        <div class="test-section">
+            <h2>1. Simulate Extension Data</h2>
+            <div class="simulate-data">
+                <p><strong>Test Scenario:</strong> Creating sample extracted element data that would be passed to full page view</p>
+                <button id="simulate-data-btn">Generate Sample Data</button>
+                <button id="load-to-storage-btn">Load to Chrome Storage</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>2. Open Full Page View</h2>
+            <button class="open-fullpage-btn" id="open-fullpage-btn">Open Full Page View</button>
+            <p><em>This will open the fullpage.html in a new tab with our test fixes</em></p>
+        </div>
+        
+        <div class="test-section">
+            <h2>3. Test Elements for Extraction</h2>
+            
+            <div>
+                <h3>Interactive Elements</h3>
+                <button id="test-btn-1" class="test-button">Primary Button</button>
+                <button id="test-btn-2" class="test-button secondary">Secondary Button</button>
+                <button id="test-btn-3" disabled>Disabled Button</button>
+            </div>
+            
+            <div>
+                <h3>Form Elements</h3>
+                <input type="text" id="username" name="username" placeholder="Enter username">
+                <input type="email" id="email" name="email" placeholder="Enter email">
+                <select id="country" name="country">
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                </select>
+                <textarea id="comments" name="comments" placeholder="Enter comments"></textarea>
+            </div>
+            
+            <div>
+                <h3>Links</h3>
+                <a href="#home" id="home-link" data-testid="nav-home">Home</a> |
+                <a href="#about" id="about-link" data-testid="nav-about">About</a> |
+                <a href="#contact" id="contact-link" data-testid="nav-contact">Contact</a>
+            </div>
+            
+            <div>
+                <h3>Test Highlight Buttons (Should be disabled in full page)</h3>
+                <button class="hl-btn highlight-btn" title="This should be disabled in full page view">👁️ Highlight Element 1</button>
+                <button class="hl-btn highlight-btn" title="This should be disabled in full page view">👁️ Highlight Element 2</button>
+            </div>
+            
+            <div>
+                <h3>Test Inspect Button (Should be disabled in full page)</h3>
+                <button id="inspectElement" title="This should be disabled in full page view">🔬 Inspect Element</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>4. Expected Fixes to Verify</h2>
+            <ol>
+                <li>✅ <strong>Table Structure:</strong> Columns should be "Name, Type, CSS Selector, XPath, ID, Text Content"</li>
+                <li>✅ <strong>Table Alignment:</strong> Proper column widths and responsive layout</li>
+                <li>✅ <strong>Column Styling:</strong> JetBrains Mono font for selectors, proper spacing</li>
+                <li>✅ <strong>Highlight Button Disabling:</strong> Eye icons should show "🚫 Disabled"</li>
+                <li>✅ <strong>Inspect Button Disabling:</strong> Inspect Element button should be disabled</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Generate sample data that matches the extension's data structure
+        function generateSampleData() {
+            return [
+                {
+                    'Element Name': 'Primary Button',
+                    'Element Type': 'BUTTON',
+                    'Best Locator': '#test-btn-1',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'test-btn-1',
+                    'CSS': '#test-btn-1',
+                    'XPATH': '//*[@id="test-btn-1"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Secondary Button',
+                    'Element Type': 'BUTTON',
+                    'Best Locator': '#test-btn-2',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'test-btn-2',
+                    'CSS': '#test-btn-2.secondary',
+                    'XPATH': '//*[@id="test-btn-2"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Enter username',
+                    'Element Type': 'INPUT',
+                    'Best Locator': '#username',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'username',
+                    'CSS': 'input#username[type="text"]',
+                    'XPATH': '//input[@id="username"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Enter email',
+                    'Element Type': 'INPUT',
+                    'Best Locator': '#email',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'email',
+                    'CSS': 'input#email[type="email"]',
+                    'XPATH': '//input[@id="email"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Home',
+                    'Element Type': 'LINK',
+                    'Best Locator': '[data-testid="nav-home"]',
+                    'Locator Type': 'data-testid',
+                    'Strength': 90,
+                    'ID': 'home-link',
+                    'CSS': 'a#home-link[data-testid="nav-home"]',
+                    'XPATH': '//a[@data-testid="nav-home"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'About',
+                    'Element Type': 'LINK',
+                    'Best Locator': '[data-testid="nav-about"]',
+                    'Locator Type': 'data-testid',
+                    'Strength': 90,
+                    'ID': 'about-link',
+                    'CSS': 'a#about-link[data-testid="nav-about"]',
+                    'XPATH': '//a[@data-testid="nav-about"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'United States',
+                    'Element Type': 'COMBO',
+                    'Best Locator': '#country',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'country',
+                    'CSS': 'select#country',
+                    'XPATH': '//select[@id="country"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Enter comments',
+                    'Element Type': 'INPUT',
+                    'Best Locator': '#comments',
+                    'Locator Type': 'ID',
+                    'Strength': 95,
+                    'ID': 'comments',
+                    'CSS': 'textarea#comments',
+                    'XPATH': '//textarea[@id="comments"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                }
+            ];
+        }
+
+        // Simulate loading data to Chrome storage (for extension context)
+        function loadDataToStorage() {
+            const sampleData = generateSampleData();
+            console.log('Sample data generated:', sampleData);
+            
+            // In real extension, this would be:
+            // chrome.storage.local.set({ fullPageData: sampleData });
+            // For testing, we'll use localStorage
+            localStorage.setItem('fullPageData', JSON.stringify(sampleData));
+            alert('Sample data loaded! You can now open the full page view to test.');
+        }
+
+        // Open full page view (simulated)
+        function openFullPageView() {
+            // In real extension, this would open chrome.runtime.getURL('fullpage.html')
+            const fullPageUrl = './fullpage.html';
+            window.open(fullPageUrl, '_blank');
+        }
+
+        // Event listeners
+        document.getElementById('simulate-data-btn').addEventListener('click', () => {
+            const data = generateSampleData();
+            console.log('Generated sample data:', data);
+            alert(`Generated ${data.length} sample elements for testing`);
+        });
+
+        document.getElementById('load-to-storage-btn').addEventListener('click', loadDataToStorage);
+        document.getElementById('open-fullpage-btn').addEventListener('click', openFullPageView);
+
+        // Test highlight buttons (these should be disabled in full page view)
+        document.querySelectorAll('.hl-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Highlight button clicked - this should be disabled in full page view!');
+            });
+        });
+
+        // Test inspect button (this should be disabled in full page view)
+        document.getElementById('inspectElement').addEventListener('click', () => {
+            alert('Inspect Element clicked - this should be disabled in full page view!');
+        });
+
+        console.log('Test page loaded. Use the buttons to test full page functionality.');
+    </script>
+</body>
+</html>

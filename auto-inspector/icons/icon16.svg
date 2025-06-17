@@ -1,0 +1,9 @@
+<!-- This is a placeholder for icon16.png -->
+<!-- In a real extension, this would be a 16x16 PNG file -->
+<!-- For testing, we'll use a simple colored square -->
+<svg width="16" height="16"
+    xmlns="http://www.w3.org/2000/svg">
+    <rect width="16" height="16" fill="#667eea"/>
+    <circle cx="8" cy="8" r="6" fill="none" stroke="white" stroke-width="1"/>
+    <circle cx="8" cy="8" r="2" fill="white"/>
+</svg>

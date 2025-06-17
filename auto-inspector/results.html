@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Element Locator - Locator Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 8px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 6px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .scan-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .clickable-stat {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            user-select: none;
+        }
+
+        .clickable-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .clickable-stat.active-sort {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+        }
+
+        .sort-indicator {
+            font-size: 10px;
+            margin-top: 2px;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .clickable-stat.active-sort .sort-indicator {
+            opacity: 1;
+        }
+
+        .elements-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex: 1;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 0 0 auto;
+            min-width: 250px;
+            max-width: 300px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 35px 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            color: #6c757d;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .search-clear:hover {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            background: white;
+            min-width: 120px;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .export-btn:hover {
+            background: #5a67d8;
+        }
+
+        .elements-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 11px;
+            table-layout: auto; /* Changed from fixed to auto for more flexibility */
+            min-width: 100%; /* Use 100% instead of fixed pixel width */
+            background: white;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            overflow-y: visible;
+            max-width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-height: 75vh; /* Slightly reduced for more compact layout */
+        }
+
+        .elements-table th,
+        .elements-table td {
+            padding: 8px 6px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            vertical-align: top;
+            word-wrap: break-word;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .elements-table th {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive column widths that adapt to screen size */
+        .elements-table th:nth-child(1) { width: 4%; min-width: 50px; }     /* # */
+        .elements-table th:nth-child(2) { width: 12%; min-width: 120px; }   /* Element Name */
+        .elements-table th:nth-child(3) { width: 8%; min-width: 80px; }     /* Tag */
+        .elements-table th:nth-child(4) { width: 12%; min-width: 150px; }   /* Text Content */
+        .elements-table th:nth-child(5) { width: 15%; min-width: 200px; }   /* Attributes */
+        .elements-table th:nth-child(6) { width: 10%; min-width: 140px; }   /* Context */
+        .elements-table th:nth-child(7) { width: 8%; min-width: 100px; }    /* State */
+        .elements-table th:nth-child(8) { width: 12%; min-width: 200px; }   /* Primary Locators */
+        .elements-table th:nth-child(9) { width: 12%; min-width: 200px; }   /* Secondary Locators */
+        .elements-table th:nth-child(10) { width: 12%; min-width: 180px; }  /* Fallback Locators */
+        .elements-table th:nth-child(11) { width: 8%; min-width: 120px; }   /* Position & Size */
+        .elements-table th:nth-child(12) { width: 10%; min-width: 140px; }  /* Styling */
+
+        .elements-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .element-tag {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-high {
+            background: #10b981;
+            color: white;
+        }
+
+        .confidence-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .confidence-low {
+            background: #ef4444;
+            color: white;
+        }
+
+        .locators-list {
+            max-width: 300px;
+        }
+
+        .locator-item {
+            background: #f3f4f6;
+            margin: 2px 0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .locator-primary {
+            background: #dcfce7;
+            border-left: 3px solid #10b981;
+        }
+
+        .locator-secondary {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .locator-fallback {
+            background: #fee2e2;
+            border-left: 3px solid #ef4444;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background: #f3f4f6;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Override for pagination mode button to ensure visibility */
+        .pagination .pagination-mode-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: white !important;
+            border: 1px solid #10b981 !important;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .pagination .pagination-mode-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(16, 185, 129, 0.4);
+        }
+
+        .view-all-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .view-all-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .view-all-btn.pagination-inline {
+            padding: 8px 16px;
+            font-size: 13px;
+            margin-left: 15px;
+            border: 1px solid #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .view-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .view-all-btn.pagination-inline:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
+        }
+
+        .view-all-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 2px 6px rgba(102, 126, 234, 0.2);
+        }
+
+        /* Pagination mode button styles moved above for specificity */
+
+        .view-mode-info {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .shadow-indicator {
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+
+        /* New styles for enhanced features */
+        .element-name {
+            font-weight: 600;
+            color: #374151;
+            max-width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        /* Enhanced locator list styling - more compact */
+        .locators-list {
+            min-width: 180px;
+            max-width: 180px;
+            position: relative;
+        }
+
+        .locators-header {
+            margin-bottom: 6px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 4px;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 6px;
+            font-weight: 500;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .locator-item {
+            background: #f8fafc;
+            margin: 3px 0;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border-left: 3px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            font-size: 10px;
+            min-height: 24px;
+        }
+
+        .locator-primary {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .locator-secondary {
+            border-left-color: #f59e0b;
+            background: #fffbeb;
+        }
+
+        .locator-fallback {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .locator-content {
+            flex: 1;
+            min-width: 0; /* Allow shrinking */
+        }
+
+        .locator-type {
+            font-weight: 600;
+            font-size: 8px;
+            color: #6b7280;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .locator-value {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 9px;
+            color: #374151;
+            word-break: break-all;
+            line-height: 1.2;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-single-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 8px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.2s;
+            margin-left: 6px;
+            flex-shrink: 0;
+            min-width: 20px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-single-btn:hover {
+            background: #4b5563;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .locator-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            margin-left: 6px;
+        }
+
+        .highlight-btn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 8px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            min-width: 20px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .highlight-btn:hover {
+            background: #d97706;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .highlight-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Animation for copy notifications */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .copy-notification {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Table responsiveness */
+        .elements-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .element-tag {
+            background: #667eea;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .confidence-badge {
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .confidence-high {
+            background: #10b981;
+            color: white;
+        }
+
+        .confidence-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .confidence-low {
+            background: #ef4444;
+            color: white;
+        }
+
+        .shadow-indicator {
+            color: #8b5cf6;
+            font-weight: bold;
+            margin-left: 4px;
+        }
+
+        /* Enhanced table styles for new columns */
+        .element-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .interactive-indicator {
+            color: #3b82f6;
+            margin-left: 4px;
+            font-size: 12px;
+        }
+
+        .form-indicator {
+            color: #10b981;
+            margin-left: 4px;
+            font-size: 12px;
+        }
+
+        .text-content-display {
+            max-width: 200px;
+        }
+
+        .text-summary {
+            font-size: 11px;
+            line-height: 1.3;
+            margin-bottom: 2px;
+        }
+
+        .text-details {
+            font-size: 9px;
+            color: #6b7280;
+        }
+
+        .no-text {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        .attributes-display {
+            max-width: 250px;
+            font-size: 10px;
+        }
+
+        .attr-item {
+            margin-bottom: 2px;
+            padding: 2px 4px;
+            background: #f3f4f6;
+            border-radius: 3px;
+            border-left: 2px solid #d1d5db;
+        }
+
+        .attr-item.important {
+            border-left-color: #3b82f6;
+            background: #dbeafe;
+        }
+
+        .attr-item strong {
+            color: #374151;
+            font-size: 9px;
+        }
+
+        .other-attrs summary {
+            cursor: pointer;
+            font-size: 9px;
+            color: #6b7280;
+            margin: 4px 0;
+        }
+
+        .context-display {
+            max-width: 180px;
+            font-size: 10px;
+        }
+
+        .context-item {
+            margin-bottom: 3px;
+            color: #4b5563;
+        }
+
+        .context-item strong {
+            color: #374151;
+            font-size: 9px;
+        }
+
+        .state-display {
+            max-width: 120px;
+        }
+
+        .state-badge {
+            display: inline-block;
+            font-size: 9px;
+            padding: 2px 4px;
+            margin: 1px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            color: #374151;
+        }
+
+        .no-states {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        .position-display {
+            max-width: 120px;
+            font-size: 10px;
+        }
+
+        .position-coords, .position-size {
+            margin-bottom: 2px;
+            color: #4b5563;
+        }
+
+        .position-coords strong, .position-size strong {
+            color: #374151;
+            font-size: 9px;
+        }
+
+        .styling-display {
+            max-width: 150px;
+            font-size: 10px;
+        }
+
+        .style-item {
+            margin-bottom: 2px;
+            padding: 1px 3px;
+            background: #f9fafb;
+            border-radius: 2px;
+            color: #4b5563;
+        }
+
+        .style-item strong {
+            color: #374151;
+            font-size: 9px;
+        }
+
+        .no-attributes, .no-context, .no-state, .no-position, .no-styling {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 10px;
+        }
+
+        /* Enhanced table controls - more compact */
+        .table-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 35px 8px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 13px;
+            background: white;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 14px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background: white;
+            font-size: 12px;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 6px 10px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .view-btn:hover:not(.active) {
+            background: #f8f9fa;
+        }
+
+        .results-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .export-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .export-btn {
+            padding: 6px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #5a67d8;
+        }
+
+        /* Compact view styles */
+        .elements-table.compact-view {
+            font-size: 10px;
+        }
+
+        .elements-table.compact-view th,
+        .elements-table.compact-view td {
+            padding: 6px 4px;
+        }
+
+        .elements-table.compact-view .locator-item {
+            margin: 1px 0;
+            padding: 3px 4px;
+            font-size: 9px;
+        }
+
+        .elements-table.compact-view .copy-btn {
+            padding: 2px 4px;
+            font-size: 8px;
+        }
+
+        .elements-table.compact-view .copy-single-btn {
+            width: 16px;
+            height: 14px;
+            font-size: 7px;
+        }
+
+        /* Responsive table adjustments */
+        @media (max-width: 1400px) {
+            .elements-table {
+                font-size: 10px;
+            }
+            
+            .text-content-display, .attributes-display {
+                max-width: 150px;
+            }
+            
+            .elements-table th,
+            .elements-table td {
+                padding: 8px 6px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .elements-table {
+                font-size: 10px;
+            }
+            
+            .text-content-display, .attributes-display {
+                max-width: 120px;
+            }
+            
+            .container {
+                padding: 6px;
+            }
+            
+            .table-controls {
+                gap: 6px;
+                padding: 6px;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            .elements-table {
+                font-size: 12px;
+            }
+            
+            .text-content-display, .attributes-display {
+                max-width: 300px;
+            }
+        }
+
+        /* Search text highlighting styles */
+        .search-highlight {
+            background-color: #ffeb3b;
+            color: #000;
+            padding: 1px 2px;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        /* Different highlight colors for better contrast in different contexts */
+        .text-cell .search-highlight {
+            background-color: #fff59d;
+        }
+
+        .attributes-cell .search-highlight {
+            background-color: #ffecb3;
+        }
+
+        .locators-cell .search-highlight {
+            background-color: #fff9c4;
+        }
+
+        /* Ensure highlighted text is readable in tooltips */
+        [title] .search-highlight {
+            background-color: transparent;
+            background: linear-gradient(180deg, transparent 50%, #ffeb3b 50%);
+        }
+
+        /* Dark mode adjustments */
+        @media (prefers-color-scheme: dark) {
+            .search-highlight {
+                background-color: #ff9800;
+                color: #000;
+            }
+
+            .text-cell .search-highlight {
+                background-color: #ffb74d;
+            }
+
+            .attributes-cell .search-highlight {
+                background-color: #ffcc02;
+            }
+
+            .locators-cell .search-highlight {
+                background-color: #ffd54f;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="pageHeader">Locator Results</h1>
+            <div class="subtitle">Detailed analysis of page elements and their locators</div>
+            
+            <div class="scan-info" id="scanInfo">
+                <div class="info-card">
+                    <div class="info-label">Page URL</div>
+                    <div class="info-value" id="pageUrl">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Scan Date</div>
+                    <div class="info-value" id="scanDate">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Duration</div>
+                    <div class="info-value" id="scanDuration">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Page Title</div>
+                    <div class="info-value" id="pageTitle">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2>📊 Statistics</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="elements-section">
+            <h2>📋 Elements</h2>
+            
+            <div class="controls">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchBox" placeholder="Search elements by tag, text, or selector...">
+                    <button id="searchClear" class="search-clear" title="Clear search">✕</button>
+                </div>
+                <select class="filter-select" id="confidenceFilter">
+                    <option value="">All Confidence Levels</option>
+                    <option value="high">High (≥80%)</option>
+                    <option value="medium">Medium (60-79%)</option>
+                    <option value="low">Low (<60%)</option>
+                </select>
+                <select class="filter-select" id="tagFilter">
+                    <option value="">All Tags</option>
+                </select>
+                <select class="filter-select" id="stateFilter">
+                    <option value="">All States</option>
+                    <option value="form">Form Elements</option>
+                    <option value="interactive">Interactive</option>
+                    <option value="static">Static</option>
+                </select>
+                <select class="filter-select" id="locatorFilter">
+                    <option value="">All Locators</option>
+                    <option value="has-id">Has ID</option>
+                    <option value="has-data">Has Data Attrs</option>
+                    <option value="has-class">Has Classes</option>
+                </select>
+                <div class="view-toggle">
+                    <button id="compactView" class="view-btn">Compact</button>
+                    <button id="detailedView" class="view-btn active">Detailed</button>
+                </div>
+                <button class="export-btn" id="exportCSV">💾 Export CSV</button>
+                <button class="export-btn" id="exportJSON">📄 Export JSON</button>
+            </div>
+
+            <div id="elementsContainer">
+                <div class="loading">Loading scan results...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="results.js"></script>
+</body>
+</html>

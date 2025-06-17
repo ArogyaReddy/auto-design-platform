@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Automation Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f7f6;
+        color: #333;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2,
+      h3 {
+        color: #0056b3;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+        margin-top: 25px;
+      }
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 25px;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+      }
+      .controls,
+      .summary,
+      .trend-chart,
+      .flaky-tests,
+      .test-details,
+      .healed-tests-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: #fdfdfd;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .controls button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        margin-right: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.2s ease;
+      }
+      .controls button:hover:not(:disabled) {
+        background-color: #0056b3;
+      }
+      .controls button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+      .status-message {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #e9ecef;
+        color: #495057;
+        font-size: 0.9em;
+      }
+      .log-area {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: "Fira Code", "Cascadia Code", monospace;
+        font-size: 0.9em;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.4;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
+      .summary-item {
+        background-color: #e9f7ef;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s ease;
+      }
+      .summary-item:hover {
+        transform: translateY(-3px);
+      }
+      .summary-item h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #0056b3;
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+      .summary-item p {
+        font-size: 1.8em;
+        font-weight: bold;
+        margin: 0;
+      }
+      .summary-item.passed {
+        color: #28a745;
+      } /* Green */
+      .summary-item.failed {
+        color: #dc3545;
+      } /* Red */
+      .summary-item.skipped {
+        color: #ffc107;
+      } /* Yellow */
+      .summary-item.total {
+        color: #17a2b8;
+      } /* Blue-green */
+      .summary-item.undefined {
+        color: #6c757d;
+      } /* Gray */
+
+      /* Trend Chart */
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      /* Flaky Tests */
+      .flaky-tests-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .flaky-tests-list li {
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 5px;
+        font-size: 0.9em;
+      }
+      .flaky-tests-list li strong {
+        color: #856404;
+      }
+
+      /* Test Details */
+      .feature-details {
+        margin-bottom: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        background-color: #fdfdfd;
+      }
+      .feature-summary,
+      .scenario-summary {
+        padding: 10px 15px;
+        background-color: #e9e9e9;
+        cursor: pointer;
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      .scenario-details {
+        padding: 10px 15px;
+        border-bottom: 1px dashed #eee;
+      }
+      .scenario-details:last-child {
+        border-bottom: none;
+      }
+      .step-details {
+        padding: 8px 0;
+        border-left: 3px solid transparent;
+        padding-left: 10px;
+        margin-left: 10px;
+      }
+      .step-details.passed {
+        border-left-color: #28a745;
+      }
+      .step-details.failed {
+        border-left-color: #dc3545;
+      }
+      .step-details.skipped {
+        border-left-color: #ffc107;
+      }
+      .step-details.pending {
+        border-left-color: #17a2b8;
+      }
+      .step-details.undefined {
+        border-left-color: #6c757d;
+      }
+
+      .error-message {
+        color: #dc3545;
+        font-family: "Courier New", Courier, monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.85em;
+        margin-top: 5px;
+        padding: 5px;
+        background-color: #ffebeb;
+        border: 1px solid #dc3545;
+        border-radius: 3px;
+      }
+      .root-cause-suggestion {
+        font-weight: bold;
+        color: #0056b3;
+        margin-top: 5px;
+        padding: 5px;
+        border-left: 3px solid #0056b3;
+        background-color: #e6f7ff;
+        font-size: 0.9em;
+      }
+      /* Healed Tests */
+      .healed-tests-section {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .healed-tests-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .healed-tests-list li {
+        background-color: #e6ffe6;
+        border: 1px solid #aaffaa;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 5px;
+        font-size: 0.9em;
+      }
+      .healed-tests-list li strong {
+        color: #28a745;
+      }
+      .healed-tests-list li code {
+        background-color: #f0f0f0;
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-family: "Courier New", Courier, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AI-Powered Automation Dashboard</h1>
+
+      <div class="controls">
+        <h2>Controls</h2>
+        <button id="runTestsButton">Run All Tests</button>
+        <button id="exploreAppButton">
+          Explore App (Playwright Inspector)
+        </button>
+        <div class="status-message" id="statusMessage">Awaiting command...</div>
+      </div>
+
+      <div class="summary">
+        <h2>Latest Test Run Summary</h2>
+        <div id="summaryGrid" class="summary-grid">
+          <div class="summary-item total">
+            <h3>Total Scenarios</h3>
+            <p id="totalScenarios">0</p>
+          </div>
+          <div class="summary-item passed">
+            <h3>Passed Scenarios</h3>
+            <p id="passedScenarios">0</p>
+          </div>
+          <div class="summary-item failed">
+            <h3>Failed Scenarios</h3>
+            <p id="failedScenarios">0</p>
+          </div>
+          <div class="summary-item skipped">
+            <h3>Skipped Scenarios</h3>
+            <p id="skippedScenarios">0</p>
+          </div>
+          <div class="summary-item total">
+            <h3>Total Steps</h3>
+            <p id="totalSteps">0</p>
+          </div>
+          <div class="summary-item passed">
+            <h3>Passed Steps</h3>
+            <p id="passedSteps">0</p>
+          </div>
+          <div class="summary-item failed">
+            <h3>Failed Steps</h3>
+            <p id="failedSteps">0</p>
+          </div>
+          <div class="summary-item skipped">
+            <h3>Skipped Steps</h3>
+            <p id="skippedSteps">0</p>
+          </div>
+          <div class="summary-item undefined">
+            <h3>Undefined Steps</h3>
+            <p id="undefinedSteps">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="trend-chart">
+        <h2>Test Run Trend</h2>
+        <div class="chart-container">
+          <canvas id="runTrendChart"></canvas>
+        </div>
+      </div>
+
+      <div class="flaky-tests">
+        <div class="section-header">
+          <h2>Flaky Tests (Last 10 Runs)</h2>
+          <span id="flakyTestsStatus"></span>
+        </div>
+        <div id="flakyTestsList">
+          <p>No flakiness data available.</p>
+        </div>
+      </div>
+
+      <div class="test-details">
+        <h2>Latest Test Run Details</h2>
+        <div id="latestReportDetails">
+          <p>No detailed report loaded. Run tests first.</p>
+        </div>
+      </div>
+
+      <div class="healed-tests-section">
+        <h2>Healed Tests / Locator Update Suggestions</h2>
+        <div id="healedTestsList">
+          <p>No healed locators from the last run.</p>
+        </div>
+      </div>
+
+      <div class="log-area">
+        <h2>Console Log</h2>
+        <pre id="logOutput"></pre>
+      </div>
+    </div>
+
+    <script>
+      const logOutput = document.getElementById("logOutput");
+      const statusMessage = document.getElementById("statusMessage");
+      const runTestsButton = document.getElementById("runTestsButton");
+      const exploreAppButton = document.getElementById("exploreAppButton");
+      const totalScenariosElem = document.getElementById("totalScenarios");
+      const passedScenariosElem = document.getElementById("passedScenarios");
+      const failedScenariosElem = document.getElementById("failedScenarios");
+      const skippedScenariosElem = document.getElementById("skippedScenarios");
+      const totalStepsElem = document.getElementById("totalSteps");
+      const passedStepsElem = document.getElementById("passedSteps");
+      const failedStepsElem = document.getElementById("failedSteps");
+      const skippedStepsElem = document.getElementById("skippedSteps");
+      const undefinedStepsElem = document.getElementById("undefinedSteps");
+      const runTrendChartCanvas = document
+        .getElementById("runTrendChart")
+        .getContext("2d");
+      const latestReportDetailsElem = document.getElementById(
+        "latestReportDetails"
+      );
+      const flakyTestsListElem = document.getElementById("flakyTestsList");
+      const flakyTestsStatusElem = document.getElementById("flakyTestsStatus");
+
+      let ws;
+      let runTrendChart;
+
+      function getStatusClass(status) {
+        switch (status) {
+          case "passed":
+            return "passed";
+          case "failed":
+            return "failed";
+          case "skipped":
+            return "skipped";
+          case "pending":
+            return "pending";
+          case "undefined":
+            return "undefined";
+          default:
+            return "";
+        }
+      }
+
+      function setButtonsState(enabled) {
+        runTestsButton.disabled = !enabled;
+        exploreAppButton.disabled = !enabled;
+        // Disable/enable other buttons as needed
+      }
+
+      function connectWebSocket() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          return;
+        }
+
+        ws = new WebSocket(`ws://${window.location.host}`);
+
+        ws.onopen = () => {
+          statusMessage.textContent = "Connected to dashboard server.";
+          setButtonsState(true);
+        };
+
+        ws.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          if (data.type === "log") {
+            logOutput.textContent += data.message;
+            logOutput.scrollTop = logOutput.scrollHeight; // Auto-scroll to bottom
+          } else if (data.type === "status") {
+            statusMessage.textContent = data.message;
+            if (
+              data.message.includes("completed") ||
+              data.message.includes("failed to start")
+            ) {
+              setButtonsState(true);
+              loadSummaryData();
+              loadTrendData();
+              loadFlakinessReport();
+              loadLatestReportDetails();
+              loadHealedTests(); // NEW: Load healed tests after a run completes
+            }
+          } else if (data.type === "summary") {
+            updateSummaryDashboard(data.summary);
+          } else if (data.type === "error") {
+            statusMessage.textContent = `Error: ${data.message}`;
+            setButtonsState(true);
+          }
+        };
+
+        ws.onclose = () => {
+          statusMessage.textContent =
+            "Disconnected from dashboard server. Retrying in 5 seconds...";
+          setButtonsState(false);
+          setTimeout(connectWebSocket, 5000);
+        };
+
+        ws.onerror = (error) => {
+          console.error("WebSocket Error:", error);
+          statusMessage.textContent =
+            "WebSocket error. Check console for details.";
+        };
+      }
+
+      function sendMessage(command) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          setButtonsState(false);
+          logOutput.textContent = ""; // Clear log on new command
+          statusMessage.textContent = `Sending command: ${command}...`;
+          ws.send(JSON.stringify({ command: command }));
+        } else {
+          statusMessage.textContent =
+            "Not connected to server. Please wait or refresh.";
+        }
+      }
+
+      runTestsButton.addEventListener("click", () => {
+        sendMessage("test");
+      });
+
+      exploreAppButton.addEventListener("click", () => {
+        sendMessage("explore:app");
+      });
+
+      async function loadSummaryData() {
+        try {
+          const response = await fetch("/api/summary");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const summary = await response.json();
+          if (summary) {
+            updateSummaryDashboard(summary);
+            statusMessage.textContent = "Latest summary loaded.";
+          } else {
+            statusMessage.textContent = "No summary data available yet.";
+            updateSummaryDashboard({
+              totalScenarios: 0,
+              passedScenarios: 0,
+              failedScenarios: 0,
+              skippedScenarios: 0,
+              totalSteps: 0,
+              passedSteps: 0,
+              failedSteps: 0,
+              skippedSteps: 0,
+              undefinedSteps: 0,
+            });
+          }
+        } catch (error) {
+          console.error("Error loading summary:", error);
+          statusMessage.textContent = `Error loading summary: ${error.message}`;
+        }
+      }
+
+      function updateSummaryDashboard(summary) {
+        totalScenariosElem.textContent = summary.totalScenarios;
+        passedScenariosElem.textContent = summary.passedScenarios;
+        failedScenariosElem.textContent = summary.failedScenarios;
+        skippedScenariosElem.textContent = summary.skippedScenarios;
+        totalStepsElem.textContent = summary.totalSteps;
+        passedStepsElem.textContent = summary.passedSteps;
+        failedStepsElem.textContent = summary.failedSteps;
+        skippedStepsElem.textContent = summary.skippedSteps;
+        undefinedStepsElem.textContent = summary.undefinedSteps;
+      }
+
+      async function loadTrendData() {
+        try {
+          const response = await fetch("/api/trend");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const history = await response.json();
+
+          if (runTrendChart) {
+            runTrendChart.destroy();
+          }
+
+          if (history.length > 0) {
+            const labels = history.map((_, index) => `Run ${index + 1}`);
+            const passedData = history.map((s) => s.passedScenarios);
+            const failedData = history.map((s) => s.failedScenarios);
+            const skippedData = history.map((s) => s.skippedScenarios);
+
+            runTrendChart = new Chart(runTrendChartCanvas, {
+              type: "line",
+              data: {
+                labels: labels,
+                datasets: [
+                  {
+                    label: "Passed Scenarios",
+                    data: passedData,
+                    borderColor: "#28a745",
+                    backgroundColor: "rgba(40, 167, 69, 0.2)",
+                    fill: true,
+                    tension: 0.1,
+                  },
+                  {
+                    label: "Failed Scenarios",
+                    data: failedData,
+                    borderColor: "#dc3545",
+                    backgroundColor: "rgba(220, 53, 69, 0.2)",
+                    fill: true,
+                    tension: 0.1,
+                  },
+                  {
+                    label: "Skipped Scenarios",
+                    data: skippedData,
+                    borderColor: "#ffc107",
+                    backgroundColor: "rgba(255, 193, 7, 0.2)",
+                    fill: true,
+                    tension: 0.1,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    title: {
+                      display: true,
+                      text: "Number of Scenarios",
+                    },
+                    ticks: {
+                      precision: 0,
+                    },
+                  },
+                },
+                plugins: {
+                  title: {
+                    display: true,
+                    text: "Scenario Pass/Fail Trend Over Time",
+                  },
+                },
+              },
+            });
+          } else {
+            runTrendChartCanvas.clearRect(
+              0,
+              0,
+              runTrendChartCanvas.canvas.width,
+              runTrendChartCanvas.canvas.height
+            );
+          }
+        } catch (error) {
+          console.error("Error loading trend data:", error);
+        }
+      }
+
+      async function loadFlakinessReport() {
+        flakyTestsListElem.innerHTML = "<p>Loading flakiness report...</p>";
+        try {
+          const response = await fetch("/api/flakiness");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const report = await response.json();
+
+          if (report.length === 0) {
+            flakyTestsListElem.innerHTML =
+              "<p>No flakiness data available.</p>";
+            flakyTestsStatusElem.textContent = "";
+          } else {
+            const ul = document.createElement("ul");
+            ul.className = "flaky-tests-list";
+            report.forEach((item) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>Scenario:</strong> ${item.scenarioName} - Failed ${item.failureCount} times in last ${item.totalRuns} runs.`;
+              ul.appendChild(li);
+            });
+            flakyTestsListElem.innerHTML = "";
+            flakyTestsListElem.appendChild(ul);
+            flakyTestsStatusElem.textContent = `Found ${report.length} potentially flaky scenarios.`;
+          }
+        } catch (error) {
+          console.error("Error loading flakiness report:", error);
+          flakyTestsListElem.innerHTML = `<p style="color: red;">Error loading flakiness report: ${error.message}</p>`;
+        }
+      }
+
+      async function loadLatestReportDetails() {
+        latestReportDetailsElem.innerHTML = "Loading latest report details...";
+        try {
+          const response = await fetch("/api/latest-full-report");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const report = await response.json();
+
+          latestReportDetailsElem.innerHTML = "";
+
+          if (report.length === 0) {
+            latestReportDetailsElem.innerHTML =
+              "<p>No detailed report found. Run tests first.</p>";
+            return;
+          }
+
+          report.forEach((feature) => {
+            const featureDetails = document.createElement("details");
+            featureDetails.className = "feature-details";
+            const featureSummary = document.createElement("summary");
+            featureSummary.className = "feature-summary";
+            featureSummary.textContent = `Feature: ${feature.name || "Unnamed Feature"}`;
+            featureDetails.appendChild(featureSummary);
+
+            feature.elements.forEach((scenario) => {
+              const scenarioDetails = document.createElement("details");
+              const scenarioStatus = scenario.steps.some(
+                (step) =>
+                  step.result &&
+                  (step.result.status === "failed" ||
+                    step.result.status === "undefined")
+              )
+                ? "failed"
+                : scenario.steps.some(
+                      (step) => step.result && step.result.status === "skipped"
+                    )
+                  ? "skipped"
+                  : scenario.steps.every(
+                        (step) => step.result && step.result.status === "passed"
+                      )
+                    ? "passed"
+                    : "pending";
+              scenarioDetails.className = `scenario-details ${getStatusClass(scenarioStatus)}`;
+              const scenarioSummary = document.createElement("summary");
+              scenarioSummary.className = "scenario-summary";
+              scenarioSummary.textContent = `Scenario: ${scenario.name || "Unnamed Scenario"} (${scenarioStatus.toUpperCase()})`;
+              scenarioDetails.appendChild(scenarioSummary);
+
+              scenario.steps.forEach((step) => {
+                const stepDiv = document.createElement("div");
+                const stepStatus =
+                  (step.result && step.result.status) || "pending";
+                stepDiv.className = `step-details ${getStatusClass(stepStatus)}`;
+                stepDiv.innerHTML = `
+                                <strong>${step.keyword} ${step.name || "Unnamed Step"}</strong> (${stepStatus.toUpperCase()})
+                            `;
+                if (step.result && step.result.error_message) {
+                  const errorDiv = document.createElement("div");
+                  errorDiv.className = "error-message";
+                  errorDiv.textContent = step.result.error_message;
+                  stepDiv.appendChild(errorDiv);
+                }
+                if (step.result && step.result.rootCause) {
+                  const rootCauseDiv = document.createElement("div");
+                  rootCauseDiv.className = "root-cause-suggestion";
+                  rootCauseDiv.textContent = `AI Suggestion: ${step.result.rootCause}`;
+                  stepDiv.appendChild(rootCauseDiv);
+                }
+                scenarioDetails.appendChild(stepDiv);
+              });
+              featureDetails.appendChild(scenarioDetails);
+            });
+            latestReportDetailsElem.appendChild(featureDetails);
+          });
+
+          statusMessage.textContent =
+            "Latest report details loaded with AI analysis.";
+        } catch (error) {
+          console.error("Error loading latest report details:", error);
+          latestReportDetailsElem.innerHTML = `<p style="color: red;">Error loading detailed report: ${error.message}</p>`;
+        }
+      }
+
+      async function loadHealedTests() {
+        const healedTestsListElem = document.getElementById("healedTestsList");
+        healedTestsListElem.innerHTML =
+          "<p>Loading healed test suggestions...</p>";
+        try {
+          const response = await fetch("/api/healed-tests");
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const healedData = await response.json();
+
+          if (healedData.length === 0) {
+            healedTestsListElem.innerHTML =
+              "<p>No healed locators from the last run.</p>";
+          } else {
+            const ul = document.createElement("ul");
+            ul.className = "healed-tests-list";
+            healedData.forEach((item) => {
+              const li = document.createElement("li");
+              li.innerHTML = `
+                            <strong>Element:</strong> ${item.elementName}<br>
+                            <strong>Original Locator:</strong> <code>${item.originalLocator}</code><br>
+                            <strong>Healed Locator:</strong> <code>${item.healedLocator}</code> (via ${item.strategyUsed})<br>
+                            <span style="color: #888; font-size: 0.9em;">(Discovered: ${new Date(item.timestamp).toLocaleString()})</span><br>
+                            <span style="font-weight: bold; color: #d9534f;">ACTION REQUIRED: Consider updating your test code with the new locator.</span>
+                        `;
+              ul.appendChild(li);
+            });
+            healedTestsListElem.innerHTML = "";
+            healedTestsListElem.appendChild(ul);
+          }
+        } catch (error) {
+          console.error("Error loading healed test data:", error);
+          healedTestsListElem.innerHTML = `<p style="color: red;">Error loading healed test data: ${error.message}</p>`;
+        }
+      }
+
+      // Initial load on page load
+      window.onload = () => {
+        connectWebSocket();
+        loadSummaryData();
+        loadTrendData();
+        loadFlakinessReport();
+        loadLatestReportDetails();
+        loadHealedTests(); // Load healed tests on initial page load
+      };
+
+      // Event listener for the "Explore App (Playwright Inspector)" button
+      document.getElementById("exploreAppButton").addEventListener("click", () => {
+        fetch("/launch-inspector", { method: "POST" })
+          .then((response) => response.text()) // or response.json()
+          .then((data) => {
+            console.log("Launch Inspector response:", data);
+            // Update UI based on response (e.g., show a message)
+            alert(
+              "Inspector launch initiated! Check your terminal/console where the dashboard server is running, and look for new browser windows."
+            );
+          })
+          .catch((error) => {
+            console.error("Error launching inspector:", error);
+            alert("Error trying to launch inspector. Check server console.");
+          });
+      });
+
+
+    </script>
+  </body>
+</html>

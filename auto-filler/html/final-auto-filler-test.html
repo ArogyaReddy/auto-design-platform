@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Auto-Filler Communication Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-form {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 2px solid #28a745;
+            color: #28a745;
+        }
+
+        .status.error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 2px solid #dc3545;
+            color: #dc3545;
+        }
+
+        .status.info {
+            background: rgba(23, 162, 184, 0.2);
+            border: 2px solid #17a2b8;
+            color: #17a2b8;
+        }
+
+        .interactive-elements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .checkbox-group, .radio-group {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .checkbox-group label, .radio-group label {
+            color: white;
+            font-weight: normal;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-group input, .radio-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .extension-hint {
+            background: rgba(255, 193, 7, 0.2);
+            border: 2px solid #ffc107;
+            color: #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .test-results {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Final Auto-Filler Communication Test</h1>
+    
+    <div class="extension-hint">
+        📌 Make sure the Element AI Extractor extension is loaded and active!<br>
+        Use the popup to test Auto-Fill and Auto-Interact features.
+    </div>
+
+    <div class="test-container">
+        <h2>📋 Test Form for Auto-Fill</h2>
+        <form class="test-form" id="testForm">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+            </div>
+
+            <div class="form-group">
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="company" placeholder="Enter your company">
+            </div>
+
+            <div class="form-group">
+                <label for="jobTitle">Job Title:</label>
+                <input type="text" id="jobTitle" name="jobTitle" placeholder="Enter your job title">
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" rows="3" placeholder="Enter your address"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" placeholder="Enter your city">
+            </div>
+
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state">
+                    <option value="">Select State</option>
+                    <option value="CA">California</option>
+                    <option value="NY">New York</option>
+                    <option value="TX">Texas</option>
+                    <option value="FL">Florida</option>
+                    <option value="WA">Washington</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="zipCode">ZIP Code:</label>
+                <input type="text" id="zipCode" name="zipCode" placeholder="Enter ZIP code">
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country">
+                    <option value="">Select Country</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div class="test-container">
+        <h2>🎯 Interactive Elements for Auto-Interact</h2>
+        <div class="interactive-elements">
+            <div class="checkbox-group">
+                <h3 style="color: white; margin-top: 0;">Preferences</h3>
+                <label>
+                    <input type="checkbox" id="newsletter" name="preferences" value="newsletter">
+                    Subscribe to Newsletter
+                </label>
+                <label>
+                    <input type="checkbox" id="updates" name="preferences" value="updates">
+                    Receive Updates
+                </label>
+                <label>
+                    <input type="checkbox" id="marketing" name="preferences" value="marketing">
+                    Marketing Emails
+                </label>
+            </div>
+
+            <div class="radio-group">
+                <h3 style="color: white; margin-top: 0;">Contact Method</h3>
+                <label>
+                    <input type="radio" id="contactEmail" name="contactMethod" value="email">
+                    Email
+                </label>
+                <label>
+                    <input type="radio" id="contactPhone" name="contactMethod" value="phone">
+                    Phone
+                </label>
+                <label>
+                    <input type="radio" id="contactSms" name="contactMethod" value="sms">
+                    SMS
+                </label>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 20px 0;">
+            <button type="button" class="btn" id="clearForm">🗑️ Clear Form</button>
+            <button type="button" class="btn btn-success" id="validateForm">✅ Validate Form</button>
+            <button type="button" class="btn" id="showAlert">🔔 Show Alert</button>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Test Results</h2>
+        <div id="testResults" class="test-results">
+            Ready for testing...<br>
+            1. Open the Element AI Extractor popup<br>
+            2. Try the Auto-Fill button to fill the form<br>
+            3. Try the Auto-Interact button to interact with elements<br>
+            4. Watch this area for any communication logs
+        </div>
+    </div>
+
+    <script>
+        // Test page functionality
+        let testLog = [];
+
+        function logTest(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            testLog.push(logEntry);
+            
+            const resultsDiv = document.getElementById('testResults');
+            resultsDiv.innerHTML = testLog.join('<br>');
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+            
+            console.log(`Test Page: ${logEntry}`);
+        }
+
+        // Form interaction buttons
+        document.getElementById('clearForm').addEventListener('click', () => {
+            document.getElementById('testForm').reset();
+            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+            logTest('Form cleared manually', 'action');
+        });
+
+        document.getElementById('validateForm').addEventListener('click', () => {
+            const form = document.getElementById('testForm');
+            const formData = new FormData(form);
+            let filledFields = 0;
+            
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) filledFields++;
+            }
+            
+            // Check checkboxes and radios
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const radios = document.querySelectorAll('input[type="radio"]:checked');
+            
+            logTest(`Form validation: ${filledFields} text fields filled, ${checkboxes.length} checkboxes checked, ${radios.length} radio selected`, 'success');
+        });
+
+        document.getElementById('showAlert').addEventListener('click', () => {
+            alert('Test alert triggered!');
+            logTest('Alert shown and dismissed', 'action');
+        });
+
+        // Listen for form changes
+        document.addEventListener('change', (e) => {
+            if (e.target.form || e.target.type === 'checkbox' || e.target.type === 'radio') {
+                logTest(`Field changed: ${e.target.name || e.target.id} = ${e.target.value || e.target.checked}`, 'info');
+            }
+        });
+
+        // Monitor for extension activity
+        logTest('Test page loaded and ready', 'info');
+        logTest('Monitoring for auto-filler activity...', 'info');
+
+        // Report page stats
+        setTimeout(() => {
+            const inputs = document.querySelectorAll('input, select, textarea').length;
+            const buttons = document.querySelectorAll('button').length;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]').length;
+            const radios = document.querySelectorAll('input[type="radio"]').length;
+            
+            logTest(`Page analysis: ${inputs} form fields, ${buttons} buttons, ${checkboxes} checkboxes, ${radios} radios`, 'info');
+        }, 1000);
+
+        // Test communication detection
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            if (args.some(arg => String(arg).includes('Auto-filler') || String(arg).includes('Element AI Extractor'))) {
+                logTest(`Extension activity detected: ${args.join(' ')}`, 'success');
+            }
+            originalConsoleLog.apply(console, args);
+        };
+    </script>
+</body>
+</html>

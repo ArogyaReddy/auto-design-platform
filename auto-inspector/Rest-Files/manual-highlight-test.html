@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Highlighting Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f8f9fa;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .action-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .container {
+            border: 2px dashed #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+        .test-controls {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        .test-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-controls">
+        <h2>🔧 Manual Highlighting Test</h2>
+        <p><strong>Purpose:</strong> Test if highlighting works directly through JavaScript console</p>
+        <div>
+            <button class="test-button" onclick="testBasicSelector()">Test Basic Selector</button>
+            <button class="test-button" onclick="testContextualSelector()">Test Contextual Selector</button>
+            <button class="test-button" onclick="testExtensionHighlight()">Test Extension Highlight</button>
+            <button class="test-button" onclick="clearAllHighlights()">Clear Highlights</button>
+        </div>
+        <div style="margin-top: 10px;">
+            <small>Check browser console for detailed logs and error messages.</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Test Elements</h2>
+        
+        <div id="user-1-container" class="container">
+            <h3>User 1 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 1</button>
+            <span>User: john_doe</span>
+        </div>
+        
+        <div id="user-2-container" class="container">
+            <h3>User 2 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 2</button>
+            <span>User: jane_smith</span>
+        </div>
+        
+        <div id="user-3-container" class="container">
+            <h3>User 3 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 3</button>
+            <span>User: admin_user</span>
+        </div>
+    </div>
+
+    <script>
+        // Test functions to debug highlighting issues
+        
+        function testBasicSelector() {
+            console.log('🔍 Testing basic selector: [data-testid="action-menu-button"]');
+            const selector = '[data-testid="action-menu-button"]';
+            const elements = document.querySelectorAll(selector);
+            console.log(`Found ${elements.length} elements:`, elements);
+            
+            if (elements.length > 0) {
+                highlightElements(Array.from(elements));
+                console.log('✅ Applied highlighting to all elements');
+            } else {
+                console.log('❌ No elements found');
+            }
+        }
+        
+        function testContextualSelector() {
+            console.log('🔍 Testing contextual selector: #user-1-container [data-testid="action-menu-button"]');
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            const elements = document.querySelectorAll(selector);
+            console.log(`Found ${elements.length} elements:`, elements);
+            
+            if (elements.length > 0) {
+                highlightElements(Array.from(elements));
+                console.log('✅ Applied highlighting to contextual element');
+                
+                // Scroll to element
+                elements[0].scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center', 
+                    inline: 'center' 
+                });
+            } else {
+                console.log('❌ No elements found with contextual selector');
+            }
+        }
+        
+        function testExtensionHighlight() {
+            console.log('🔍 Testing extension highlight message...');
+            
+            // Test if extension content script is available
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action: 'highlightElement',
+                    selector: '#user-1-container [data-testid="action-menu-button"]'
+                }, function(response) {
+                    console.log('📨 Extension response:', response);
+                    if (chrome.runtime.lastError) {
+                        console.error('❌ Extension error:', chrome.runtime.lastError);
+                    }
+                });
+            } else {
+                console.log('⚠️ Extension not available or not loaded');
+                
+                // Try to send message to content script directly
+                window.postMessage({
+                    type: 'HIGHLIGHT_ELEMENT',
+                    selector: '#user-1-container [data-testid="action-menu-button"]'
+                }, '*');
+            }
+        }
+        
+        function highlightElements(elements) {
+            elements.forEach((element, index) => {
+                console.log(`🎯 Highlighting element ${index + 1}:`, element);
+                
+                // Apply highlighting styles
+                element.style.outline = '4px solid #ff1744';
+                element.style.border = '3px solid #ff1744';
+                element.style.boxShadow = '0 0 15px rgba(255, 23, 68, 0.8), inset 0 0 10px rgba(255, 23, 68, 0.3)';
+                element.style.zIndex = '999999';
+                element.style.backgroundColor = 'rgba(255, 255, 0, 0.15)';
+                element.style.borderRadius = '4px';
+                element.style.transition = 'all 0.2s ease';
+                
+                console.log('✅ Applied styles to element:', element.tagName, element.id || element.className);
+            });
+        }
+        
+        function clearAllHighlights() {
+            console.log('🧹 Clearing all manual highlights...');
+            const highlightedElements = document.querySelectorAll('[data-testid="action-menu-button"]');
+            
+            highlightedElements.forEach(element => {
+                element.style.outline = '';
+                element.style.border = '';
+                element.style.boxShadow = '';
+                element.style.zIndex = '';
+                element.style.backgroundColor = '';
+                element.style.borderRadius = '';
+                element.style.transition = '';
+            });
+            
+            console.log('✅ Cleared highlights from', highlightedElements.length, 'elements');
+        }
+        
+        // Page loaded
+        console.log('🔧 Manual Highlighting Test Page loaded');
+        console.log('📊 Available elements:');
+        console.log('  Basic selector [data-testid="action-menu-button"]:', document.querySelectorAll('[data-testid="action-menu-button"]').length, 'elements');
+        console.log('  Contextual #user-1-container [data-testid="action-menu-button"]:', document.querySelectorAll('#user-1-container [data-testid="action-menu-button"]').length, 'elements');
+        console.log('  Contextual #user-2-container [data-testid="action-menu-button"]:', document.querySelectorAll('#user-2-container [data-testid="action-menu-button"]').length, 'elements');
+        
+        // Listen for messages from extension
+        window.addEventListener('message', function(event) {
+            if (event.data.type === 'HIGHLIGHT_ELEMENT') {
+                console.log('📨 Received highlight message:', event.data);
+                const elements = document.querySelectorAll(event.data.selector);
+                if (elements.length > 0) {
+                    highlightElements(Array.from(elements));
+                }
+            }
+        });
+    </script>
+</body>
+</html>

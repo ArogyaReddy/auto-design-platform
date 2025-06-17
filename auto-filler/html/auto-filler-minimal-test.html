@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Filler Minimal Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin: 10px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Auto-Filler Minimal Test</h1>
+    
+    <div class="section">
+        <h2>Direct Script Test</h2>
+        <button onclick="loadAutoFillerScript()">Load Auto-Filler Script</button>
+        <button onclick="testAutoFiller()">Test Auto-Filler</button>
+        <button onclick="runAutoFill()">Run Auto Fill</button>
+        <div id="status" class="status info">Ready to test...</div>
+    </div>
+    
+    <div class="section">
+        <h2>Test Form</h2>
+        <form id="testForm">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName">
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="company">
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="newsletter" name="newsletter"> Newsletter
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            console.log(`[TEST] ${message}`);
+        }
+        
+        function loadAutoFillerScript() {
+            showStatus('Loading auto-filler script...', 'info');
+            
+            // Load the script dynamically
+            const script = document.createElement('script');
+            script.src = './autoFiller.js';
+            script.onload = function() {
+                showStatus('Auto-filler script loaded successfully!', 'success');
+                setTimeout(testAutoFiller, 500);
+            };
+            script.onerror = function() {
+                showStatus('Failed to load auto-filler script', 'error');
+            };
+            
+            document.head.appendChild(script);
+        }
+        
+        function testAutoFiller() {
+            showStatus('Testing auto-filler availability...', 'info');
+            
+            // Check if auto-filler is available
+            if (window.aiExtractorAutoFiller) {
+                showStatus('✅ Auto-filler is available and ready!', 'success');
+                console.log('Auto-filler instance:', window.aiExtractorAutoFiller);
+                console.log('Auto-filler methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(window.aiExtractorAutoFiller)));
+            } else {
+                showStatus('❌ Auto-filler not found. Check console for errors.', 'error');
+                console.log('Window auto-filler vars:', {
+                    aiExtractorAutoFiller: window.aiExtractorAutoFiller,
+                    aiExtractorAutoFillerLoaded: window.aiExtractorAutoFillerLoaded,
+                    aiExtractorAutoFillerInitialized: window.aiExtractorAutoFillerInitialized,
+                    aiExtractorAutoFillerError: window.aiExtractorAutoFillerError,
+                    aiExtractorAutoFillerScript: window.aiExtractorAutoFillerScript
+                });
+            }
+        }
+        
+        async function runAutoFill() {
+            if (!window.aiExtractorAutoFiller) {
+                showStatus('❌ Auto-filler not available. Load script first.', 'error');
+                return;
+            }
+            
+            try {
+                showStatus('Running auto-fill...', 'info');
+                await window.aiExtractorAutoFiller.autoFillForms();
+                showStatus('✅ Auto-fill completed successfully!', 'success');
+                
+                // Show filled values
+                const form = document.getElementById('testForm');
+                const inputs = form.querySelectorAll('input');
+                let filledCount = 0;
+                
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox' ? input.checked : input.value.trim()) {
+                        filledCount++;
+                    }
+                });
+                
+                console.log(`Filled ${filledCount} out of ${inputs.length} form fields`);
+                
+            } catch (error) {
+                showStatus(`❌ Auto-fill failed: ${error.message}`, 'error');
+                console.error('Auto-fill error:', error);
+            }
+        }
+        
+        // Auto-test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showStatus('Page loaded. Click "Load Auto-Filler Script" to begin.', 'info');
+        });
+    </script>
+</body>
+</html>

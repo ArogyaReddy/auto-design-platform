@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Improvements Test</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: radial-gradient(ellipse at 70% 15%, #21264a 60%, #121327 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #e0e7ff;
+            min-height: 100vh;
+        }
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: rgba(24, 26, 57, 0.98);
+            border-radius: 26px;
+            padding: 20px;
+            box-shadow: 0 4px 22px 0 #12132790, 0 0 0 2px #396be6a0;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-header h1 {
+            background: linear-gradient(90deg, #59f9d6 20%, #18aaff 60%, #ffc366 95%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            margin: 0;
+        }
+        .test-instructions {
+            background: rgba(89, 249, 214, 0.1);
+            border: 1px solid rgba(89, 249, 214, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .test-instructions h3 {
+            margin-top: 0;
+            color: #59f9d6;
+        }
+        .test-instructions ul {
+            margin-bottom: 0;
+        }
+        .test-instructions li {
+            margin-bottom: 5px;
+        }
+        .render-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #396be6 0%, #4c7aff 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+        }
+        .render-btn:hover {
+            background: linear-gradient(135deg, #4c7aff 0%, #5a86ff 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(57, 107, 230, 0.4);
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            background: rgba(57, 107, 230, 0.1);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧪 Table Improvements Test</h1>
+            <p>Testing horizontal scrolling, hover-to-expand, and button improvements</p>
+        </div>
+
+        <div class="test-instructions">
+            <h3>🎯 Test Features:</h3>
+            <ul>
+                <li>✅ Horizontal scrolling with enhanced scrollbar</li>
+                <li>✅ Hover-to-expand text for long locators</li>
+                <li>✅ Sticky table headers</li>
+                <li>✅ Improved button styling (no more text disappearing)</li>
+                <li>✅ Scroll indicator showing "⟷ Scroll horizontally"</li>
+                <li>✅ Better visual feedback for interactive elements</li>
+            </ul>
+        </div>
+
+        <button class="render-btn" onclick="renderTestTable()">🚀 Render Test Table</button>
+        <div class="status" id="status">Click button to render table with test data</div>
+        
+        <div id="preview" class="preview-table"></div>
+    </div>
+
+    <script>
+        function renderTestTable() {
+            const status = document.getElementById('status');
+            const preview = document.getElementById('preview');
+            
+            status.textContent = '⚡ Rendering table with long locators and multiple columns...';
+            
+            // Sample data with very long locators to test scrolling and hover
+            const testData = [
+                {
+                    'Element Name': 'Very Long Button Name That Should Truncate Nicely',
+                    'Element Type': 'BUTTON',
+                    'Best Locator': '#very-long-complex-id-that-should-show-hover-expansion-functionality',
+                    'Strength': 95,
+                    'ID': 'very-long-complex-id-that-should-show-hover-expansion-functionality',
+                    'CSS': 'div.container > section.main-content > form#registration-form > div.button-group > button#very-long-complex-id-that-should-show-hover-expansion-functionality',
+                    'XPATH': '/html/body/div[1]/main/section[@class="main-content"]/form[@id="registration-form"]/div[@class="button-group"]/button[@id="very-long-complex-id-that-should-show-hover-expansion-functionality"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Login Form Input Field',
+                    'Element Type': 'INPUT',
+                    'Best Locator': 'input[data-testid="login-username-field-with-very-long-test-id"]',
+                    'Strength': 88,
+                    'ID': 'login-username-field-with-very-long-test-id',
+                    'CSS': 'form#login-form > div.form-group > input[data-testid="login-username-field-with-very-long-test-id"]',
+                    'XPATH': '//form[@id="login-form"]//input[@data-testid="login-username-field-with-very-long-test-id"]',
+                    'In Shadow DOM': 'Yes',
+                    'Host Element Path': 'div.shadow-host > login-component'
+                },
+                {
+                    'Element Name': 'Navigation Menu Item',
+                    'Element Type': 'LINK',
+                    'Best Locator': 'a[href="/dashboard/analytics/reports/monthly-summary"]',
+                    'Strength': 75,
+                    'ID': '',
+                    'CSS': 'nav.main-navigation > ul.nav-list > li.nav-item > a[href="/dashboard/analytics/reports/monthly-summary"]',
+                    'XPATH': '//nav[@class="main-navigation"]//a[@href="/dashboard/analytics/reports/monthly-summary"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                },
+                {
+                    'Element Name': 'Data Table Cell',
+                    'Element Type': 'CELL',
+                    'Best Locator': 'td[data-column="employee-salary-information"]',
+                    'Strength': 82,
+                    'ID': 'employee-salary-cell-row-15-column-8',
+                    'CSS': 'table#employee-data-table > tbody > tr:nth-child(15) > td[data-column="employee-salary-information"]',
+                    'XPATH': '//table[@id="employee-data-table"]//tr[15]/td[@data-column="employee-salary-information"]',
+                    'In Shadow DOM': 'No',
+                    'Host Element Path': ''
+                }
+            ];
+
+            let previewHTML = '<b>Test Table (4 elements with long locators):</b>';
+            previewHTML += `
+                <table><tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Best</th>
+                <th>Strength</th>
+                <th>ID</th>
+                <th>CSS</th>
+                <th>XPATH</th>
+                <th>Shadow</th>
+                <th>Host Path</th>
+                <th>Copy</th>
+                <th>Highlight</th></tr>`;
+                
+            testData.forEach((r, index) => {
+                const isInShadow = r['In Shadow DOM'] === 'Yes';
+                const hostPath = r['Host Element Path'] || '';
+                
+                previewHTML += `<tr>
+                  <td class="element-name" title="${r['Element Name']}">${r['Element Name']}</td>
+                  <td><span class="el-badge">${r['Element Type']}</span></td>
+                  <td class="locator-text" title="${r['Best Locator']}">${r['Best Locator']}</td>
+                  <td><span class="strength-badge strength-${getStrengthClass(r['Strength'])}">${r['Strength']}%</span></td>
+                  <td class="element-id" title="${r['ID']}">${r['ID']}</td>
+                  <td class="locator-text" title="${r['CSS']}">${r['CSS']}</td>
+                  <td class="locator-text" title="${r['XPATH']}">${r['XPATH']}</td>
+                  <td>${isInShadow ? `<span class="shadow-badge" title="Host Path: ${hostPath}">Shadow</span>` : ''}</td>
+                  <td title="${hostPath}" class="host-path">${hostPath ? hostPath.substring(0, 25) + (hostPath.length > 25 ? '...' : '') : ''}</td>
+                  <td><button class="copy-btn" onclick="testCopy('${r['Best Locator']}')" title="Copy to clipboard">📋 Copy</button></td>
+                  <td><button class="hl-btn" onclick="testHighlight('${r['Best Locator']}')" title="Test highlight">👁️ Highlight</button></td>
+                </tr>`;
+            });
+            
+            previewHTML += '</table>';
+            preview.innerHTML = previewHTML;
+            
+            status.innerHTML = '✅ <strong>Table rendered!</strong> Try:<br/>• Scroll horizontally<br/>• Hover over long text<br/>• Click Copy/Highlight buttons';
+        }
+
+        function getStrengthClass(strength) {
+            if (strength >= 90) return 'excellent';
+            if (strength >= 80) return 'very-good';
+            if (strength >= 70) return 'good';
+            if (strength >= 60) return 'fair';
+            return 'poor';
+        }
+
+        function testCopy(locator) {
+            navigator.clipboard.writeText(locator).then(() => {
+                const status = document.getElementById('status');
+                status.innerHTML = `✅ <strong>Copied to clipboard:</strong><br/><code style="font-size:0.8em;">${locator}</code>`;
+            }).catch(() => {
+                const status = document.getElementById('status');
+                status.innerHTML = `⚠️ <strong>Copy test:</strong> ${locator.substring(0, 30)}...`;
+            });
+        }
+
+        function testHighlight(locator) {
+            const status = document.getElementById('status');
+            status.innerHTML = `👁️ <strong>Highlight test:</strong><br/><code style="font-size:0.8em;">${locator}</code>`;
+        }
+
+        // Auto-render table on page load
+        window.addEventListener('load', () => {
+            setTimeout(renderTestTable, 500);
+        });
+    </script>
+</body>
+</html>

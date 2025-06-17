@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Filler Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            background: #e8f5e8;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        
+        .form-group {
+            margin: 10px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: #2e7d32;
+            background: #e8f5e8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Auto-Filler Debug Test Page</h1>
+    
+    <div class="debug-section">
+        <h2>Debug Information</h2>
+        <div id="debug-info" class="debug-info">Loading debug information...</div>
+        <button onclick="refreshDebugInfo()">🔄 Refresh Debug Info</button>
+        <button onclick="testAutoFiller()">🧪 Test Auto-Filler</button>
+        <button onclick="clearDebugLog()">🗑️ Clear Log</button>
+    </div>
+    
+    <div class="form-section">
+        <h2>Test Form for Auto-Filler</h2>
+        <p>Use the extension's auto-filler feature to fill this form automatically.</p>
+        
+        <form id="testForm">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter first name">
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter last name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter email address">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
+            </div>
+            
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" placeholder="Enter street address">
+            </div>
+            
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" placeholder="Enter city">
+            </div>
+            
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state">
+                    <option value="">Select State</option>
+                    <option value="CA">California</option>
+                    <option value="NY">New York</option>
+                    <option value="TX">Texas</option>
+                    <option value="FL">Florida</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="zip">ZIP Code:</label>
+                <input type="text" id="zip" name="zip" placeholder="Enter ZIP code">
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company:</label>
+                <input type="text" id="company" name="company" placeholder="Enter company name">
+            </div>
+            
+            <div class="form-group">
+                <label for="jobTitle">Job Title:</label>
+                <input type="text" id="jobTitle" name="jobTitle" placeholder="Enter job title">
+            </div>
+            
+            <div class="form-group">
+                <label for="website">Website:</label>
+                <input type="url" id="website" name="website" placeholder="Enter website URL">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Biography:</label>
+                <textarea id="bio" name="bio" rows="3" placeholder="Enter biography"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="newsletter" name="newsletter"> Subscribe to newsletter
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="terms" name="terms"> I agree to the terms and conditions
+                </label>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" onclick="manualFillForm()">✏️ Manual Fill (Test)</button>
+                <button type="button" onclick="clearForm()">🗑️ Clear Form</button>
+                <button type="button" onclick="validateForm()">✅ Validate Form</button>
+            </div>
+        </form>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Test Log</h2>
+        <div id="test-log" class="debug-info" style="min-height: 100px; max-height: 300px; overflow-y: auto;">
+            Test log will appear here...
+        </div>
+    </div>
+
+    <script>
+        let logCount = 0;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('test-log');
+            const colorMap = {
+                'info': '#333',
+                'success': '#2e7d32', 
+                'error': '#d32f2f',
+                'warning': '#f57c00'
+            };
+            
+            logCount++;
+            const entry = `<div style="color: ${colorMap[type] || '#333'}; margin: 2px 0;">
+                [${timestamp}] #${logCount} ${message}
+            </div>`;
+            
+            logElement.innerHTML += entry;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[AUTO-FILLER-DEBUG ${type.toUpperCase()}] ${message}`);
+        }
+        
+        function clearDebugLog() {
+            document.getElementById('test-log').innerHTML = 'Test log cleared...';
+            logCount = 0;
+            log('Debug log cleared', 'info');
+        }
+        
+        function refreshDebugInfo() {
+            const debugElement = document.getElementById('debug-info');
+            
+            const info = {
+                'Auto-Filler Loaded': !!window.aiExtractorAutoFillerLoaded,
+                'Auto-Filler Initialized': !!window.aiExtractorAutoFillerInitialized,
+                'Auto-Filler Instance': !!window.aiExtractorAutoFiller,
+                'Auto-Filler Methods': window.aiExtractorAutoFiller ? 
+                    Object.getOwnPropertyNames(Object.getPrototypeOf(window.aiExtractorAutoFiller)) : [],
+                'SmartAutoFiller Class': !!window.SmartAutoFiller,
+                'Auto-Filler Error': window.aiExtractorAutoFillerError || 'None',
+                'User Agent': navigator.userAgent,
+                'Page Title': document.title,
+                'Form Elements': document.querySelectorAll('input, select, textarea').length
+            };
+            
+            let debugHTML = '<h3>🔍 Current State:</h3>';
+            
+            for (const [key, value] of Object.entries(info)) {
+                const status = Array.isArray(value) ? `[${value.length} items]` : 
+                             typeof value === 'boolean' ? (value ? '✅' : '❌') : 
+                             value;
+                debugHTML += `<div><strong>${key}:</strong> ${status}</div>`;
+            }
+            
+            debugElement.innerHTML = debugHTML;
+            log('Debug information refreshed', 'info');
+        }
+        
+        function testAutoFiller() {
+            log('Testing auto-filler availability...', 'info');
+            
+            if (!window.aiExtractorAutoFiller) {
+                log('❌ Auto-filler not available', 'error');
+                return;
+            }
+            
+            log('✅ Auto-filler instance found', 'success');
+            
+            try {
+                // Test basic functionality
+                const methods = ['autoFillForms', 'autoInteract', 'setTestMode', 'log'];
+                let methodsFound = 0;
+                
+                methods.forEach(method => {
+                    if (typeof window.aiExtractorAutoFiller[method] === 'function') {
+                        methodsFound++;
+                        log(`✅ Method ${method} available`, 'success');
+                    } else {
+                        log(`❌ Method ${method} missing`, 'error');
+                    }
+                });
+                
+                log(`Methods found: ${methodsFound}/${methods.length}`, methodsFound === methods.length ? 'success' : 'warning');
+                
+                // Test logging
+                if (typeof window.aiExtractorAutoFiller.log === 'function') {
+                    window.aiExtractorAutoFiller.log('Test log message from debug page', 'info');
+                    log('✅ Auto-filler logging test completed', 'success');
+                }
+                
+            } catch (error) {
+                log(`❌ Error testing auto-filler: ${error.message}`, 'error');
+            }
+        }
+        
+        function manualFillForm() {
+            log('Manually filling form with test data...', 'info');
+            
+            const testData = {
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john.doe@example.com',
+                phone: '+1-555-123-4567',
+                address: '123 Main Street',
+                city: 'New York',
+                state: 'NY',
+                zip: '10001',
+                company: 'Example Corp',
+                jobTitle: 'Software Engineer',
+                website: 'https://example.com',
+                bio: 'This is a test biography for form filling purposes.'
+            };
+            
+            let filledCount = 0;
+            
+            for (const [field, value] of Object.entries(testData)) {
+                const element = document.getElementById(field);
+                if (element) {
+                    element.value = value;
+                    filledCount++;
+                    log(`Filled ${field}: ${value}`, 'info');
+                }
+            }
+            
+            // Handle checkboxes
+            document.getElementById('newsletter').checked = true;
+            document.getElementById('terms').checked = true;
+            filledCount += 2;
+            
+            log(`✅ Manual fill completed: ${filledCount} fields filled`, 'success');
+        }
+        
+        function clearForm() {
+            log('Clearing form...', 'info');
+            
+            const form = document.getElementById('testForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            
+            log(`✅ Form cleared: ${inputs.length} fields reset`, 'success');
+        }
+        
+        function validateForm() {
+            log('Validating form data...', 'info');
+            
+            const form = document.getElementById('testForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            let filledCount = 0;
+            let emptyCount = 0;
+            
+            inputs.forEach(input => {
+                const hasValue = input.type === 'checkbox' || input.type === 'radio' ? 
+                                input.checked : 
+                                input.value.trim() !== '';
+                
+                if (hasValue) {
+                    filledCount++;
+                    log(`✅ ${input.name || input.id}: ${input.value || 'checked'}`, 'success');
+                } else {
+                    emptyCount++;
+                    log(`⭕ ${input.name || input.id}: empty`, 'warning');
+                }
+            });
+            
+            log(`Form validation: ${filledCount} filled, ${emptyCount} empty`, filledCount > 0 ? 'success' : 'warning');
+        }
+        
+        // Initialize debug info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🔧 Auto-Filler Debug Test Page loaded', 'info');
+            
+            // Add form event listeners
+            const form = document.getElementById('testForm');
+            form.addEventListener('input', function(e) {
+                log(`Input changed: ${e.target.name || e.target.id} = ${e.target.value}`, 'info');
+            });
+            
+            form.addEventListener('change', function(e) {
+                log(`Field changed: ${e.target.name || e.target.id} = ${e.target.value || e.target.checked}`, 'info');
+            });
+            
+            // Refresh debug info after a short delay
+            setTimeout(refreshDebugInfo, 1000);
+            
+            // Auto-refresh debug info every 10 seconds
+            setInterval(refreshDebugInfo, 10000);
+        });
+    </script>
+</body>
+</html>

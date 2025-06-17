@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSP Test for Results Page</title>
+    <!-- Strict CSP that disallows inline scripts and event handlers -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self'; object-src 'none'; style-src 'self' 'unsafe-inline';">
+</head>
+<body>
+    <h1>CSP Compliance Test</h1>
+    <p>This page tests if our results.html is CSP compliant.</p>
+    <iframe src="results.html" width="100%" height="600px" style="border: 1px solid #ccc;"></iframe>
+    
+    <script>
+        // This script should load fine since it's external
+        console.log('CSP Test: External script loaded successfully');
+        
+        // Set up some test data for the results page
+        const testData = {
+            url: 'https://example.com',
+            title: 'Example Page',
+            timestamp: Date.now(),
+            duration: 150,
+            totalElements: 25,
+            elementsWithPrimary: 15,
+            elementsWithSecondary: 8,
+            shadowDOMElements: 2,
+            elements: [
+                {
+                    tagName: 'button',
+                    text: 'Click me',
+                    confidence: 0.95,
+                    isShadowDOM: false,
+                    locators: {
+                        primary: [{ type: 'data-testid', selector: '[data-testid="submit-btn"]' }],
+                        secondary: [{ type: 'text', selector: 'button:contains("Click me")' }],
+                        fallback: [{ type: 'xpath', selector: '//button[text()="Click me"]' }]
+                    },
+                    position: { x: 100, y: 200 },
+                    xpath: '//button[text()="Click me"]'
+                },
+                {
+                    tagName: 'input',
+                    text: '',
+                    confidence: 0.85,
+                    isShadowDOM: false,
+                    locators: {
+                        primary: [{ type: 'id', selector: '#email' }],
+                        secondary: [{ type: 'name', selector: '[name="email"]' }],
+                        fallback: [{ type: 'xpath', selector: '//input[@type="email"]' }]
+                    },
+                    position: { x: 50, y: 150 },
+                    xpath: '//input[@type="email"]'
+                }
+            ]
+        };
+        
+        // Store test data for the results page
+        if (chrome && chrome.storage) {
+            chrome.storage.local.set({ scanResults: testData });
+        } else {
+            // Fallback for testing outside extension context
+            localStorage.setItem('scanResults', JSON.stringify(testData));
+        }
+    </script>
+</body>
+</html>

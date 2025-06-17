@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Filler Conflict Fix Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            background-color: #fff5f5;
+        }
+        .test-section h2 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .instructions {
+            background-color: #e8f4fd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+        }
+        .status {
+            background-color: #d1ecf1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #bee5eb;
+            margin-top: 20px;
+        }
+        .clickable-elements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .clickable-elements button, .clickable-elements a {
+            flex: 0 0 auto;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #3498db;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .checkbox-group label, .radio-group label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            margin-bottom: 0;
+        }
+        .checkbox-group input, .radio-group input {
+            width: auto;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Auto-Filler Conflict Fix Test</h1>
+        
+        <div class="instructions">
+            <h3>🧪 Test Instructions:</h3>
+            <ol>
+                <li><strong>Open Extension:</strong> Click the Element AI Extractor extension icon</li>
+                <li><strong>Check Status:</strong> Look for "✅ Auto-filler ready" status (not "❌ Auto-filler failed to initialize properly")</li>
+                <li><strong>Test Auto-Fill:</strong> Click the "Auto-Fill Forms" button - should work without "Connection failed" errors</li>
+                <li><strong>Test Inspector:</strong> Click "Start Inspection" - should work alongside auto-filler</li>
+                <li><strong>Test Both:</strong> Try using both features together without conflicts</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h2>📝 User Registration Form</h2>
+            <form>
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+                </div>
+                
+                <div class="form-group">
+                    <label for="company">Company:</label>
+                    <input type="text" id="company" name="company" placeholder="Your company name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="jobTitle">Job Title:</label>
+                    <input type="text" id="jobTitle" name="jobTitle" placeholder="Your job title">
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Country:</label>
+                    <select id="country" name="country">
+                        <option value="">Select a country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="AU">Australia</option>
+                        <option value="JP">Japan</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="comments">Comments:</label>
+                    <textarea id="comments" name="comments" rows="4" placeholder="Any additional comments..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Interests:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="interests" value="tech"> Technology</label>
+                        <label><input type="checkbox" name="interests" value="design"> Design</label>
+                        <label><input type="checkbox" name="interests" value="marketing"> Marketing</label>
+                        <label><input type="checkbox" name="interests" value="sales"> Sales</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Preferred Contact Method:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="contact" value="email"> Email</label>
+                        <label><input type="radio" name="contact" value="phone"> Phone</label>
+                        <label><input type="radio" name="contact" value="sms"> SMS</label>
+                    </div>
+                </div>
+                
+                <div class="clickable-elements">
+                    <button type="button">Save Draft</button>
+                    <button type="submit">Submit Form</button>
+                    <button type="reset">Clear Form</button>
+                    <a href="#terms">Terms & Conditions</a>
+                    <a href="#privacy">Privacy Policy</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="status">
+            <h3>🔍 Expected Behavior After Fix:</h3>
+            <ul>
+                <li>✅ Extension shows "Auto-filler ready" status immediately</li>
+                <li>✅ No "Auto-filler failed to initialize properly" errors</li>
+                <li>✅ No "Connection failed" errors</li>
+                <li>✅ Auto-fill button works without conflicts</li>
+                <li>✅ Inspector works alongside auto-filler</li>
+                <li>✅ Both features can be used together seamlessly</li>
+            </ul>
+            
+            <h3>🐛 Previous Issues (Now Fixed):</h3>
+            <ul>
+                <li>❌ "Auto-filler failed to initialize properly"</li>
+                <li>❌ "Connection failed. Please reload the page and try again"</li>
+                <li>❌ Conflicts between inspector and auto-filler initialization</li>
+                <li>❌ Multiple content script injection attempts</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive elements for testing
+        document.querySelectorAll('button[type="button"]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log(`Button clicked: ${this.textContent}`);
+                this.style.backgroundColor = '#27ae60';
+                setTimeout(() => {
+                    this.style.backgroundColor = '#3498db';
+                }, 1000);
+            });
+        });
+
+        // Prevent actual form submission for testing
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submission prevented for testing');
+            alert('Form submission prevented for testing purposes');
+        });
+
+        // Add some console logging for debugging
+        console.log('Auto-Filler Conflict Fix Test page loaded');
+        console.log('Forms available:', document.querySelectorAll('form').length);
+        console.log('Input fields available:', document.querySelectorAll('input').length);
+        console.log('Clickable elements available:', document.querySelectorAll('button, a').length);
+    </script>
+</body>
+</html>

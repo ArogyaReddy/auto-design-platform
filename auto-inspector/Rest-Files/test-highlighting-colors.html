@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highlighting Colors Test - Universal Element Locator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-card {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .highlight-demo {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f0f0f0;
+        }
+        
+        .scan-highlight-demo {
+            outline: 2px solid #00ff00;
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.6), inset 0 0 8px rgba(0, 255, 0, 0.1);
+            background-color: rgba(0, 255, 0, 0.05);
+        }
+        
+        .ui-highlight-demo {
+            outline: 4px solid #ff4500;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.9), inset 0 0 25px rgba(255, 69, 0, 0.3);
+            background-color: rgba(255, 69, 0, 0.15);
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #2196f3;
+            margin: 20px 0;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .shadow-host {
+            border: 2px dashed #9c27b0;
+            padding: 15px;
+            margin: 15px 0;
+            background: #f3e5f5;
+            border-radius: 8px;
+        }
+        
+        .color-comparison {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .color-demo {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .green-demo {
+            background: rgba(0, 255, 0, 0.1);
+            border: 3px solid #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        .orange-demo {
+            background: rgba(255, 69, 0, 0.15);
+            border: 4px solid #ff4500;
+            box-shadow: 0 0 25px rgba(255, 69, 0, 0.7);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .nested-content {
+            padding: 15px;
+            margin: 10px;
+            background: linear-gradient(45deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 8px;
+        }
+        
+        .deeply-nested {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 Highlighting Colors Test Page</h1>
+            <p>Test both scan-time (green) and UI-triggered (orange) highlighting</p>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Test Instructions:</h3>
+            <ol>
+                <li><strong>Scan Test:</strong> Use the extension to scan this page with highlighting enabled</li>
+                <li><strong>Observe:</strong> Elements should be highlighted in <span style="color: #00ff00; font-weight: bold;">GREEN</span> during the scan</li>
+                <li><strong>Results Test:</strong> Open the results page and click the 🎯 buttons</li>
+                <li><strong>Observe:</strong> Elements should be highlighted in <span style="color: #ff4500; font-weight: bold;">ORANGE/RED</span> when clicking 🎯</li>
+                <li><strong>Switch Tabs:</strong> Make sure you can see the highlighted elements by switching between tabs</li>
+            </ol>
+        </div>
+        
+        <div class="color-comparison">
+            <div class="color-demo green-demo">
+                <h4>🟢 Scan-Time Highlighting</h4>
+                <p>Green outline, subtle glow</p>
+                <p>Used during element scanning</p>
+            </div>
+            <div class="color-demo orange-demo">
+                <h4>🟠 UI-Triggered Highlighting</h4>
+                <p>Orange/red outline, strong glow</p>
+                <p>Used when clicking 🎯 buttons</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 Basic Elements to Test</h2>
+            <div class="test-grid">
+                <div class="test-card" id="card-1">
+                    <h3>Test Card 1</h3>
+                    <p>This is a basic card with an ID for easy targeting.</p>
+                    <button onclick="alert('Button 1 clicked!')">Click Me</button>
+                </div>
+                
+                <div class="test-card" id="card-2" data-test="special">
+                    <h3>Test Card 2</h3>
+                    <p>This card has a data attribute for selector testing.</p>
+                    <button onclick="alert('Button 2 clicked!')">Special Button</button>
+                </div>
+                
+                <div class="test-card">
+                    <h3>Test Card 3</h3>
+                    <p>This card has no ID - tests class-based selectors.</p>
+                    <input type="text" placeholder="Enter text here" class="test-input">
+                </div>
+                
+                <div class="test-card">
+                    <h3>Test Card 4</h3>
+                    <p>Another card for comprehensive testing.</p>
+                    <select class="test-select">
+                        <option>Option 1</option>
+                        <option>Option 2</option>
+                        <option>Option 3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 Nested Content Test</h2>
+            <div class="nested-content">
+                <h4>Parent Container</h4>
+                <p>This tests highlighting of nested elements.</p>
+                <div class="deeply-nested">
+                    <span>Deeply nested span</span>
+                    <a href="#" onclick="event.preventDefault(); alert('Link clicked!')">Nested Link</a>
+                    <div class="deeply-nested">
+                        <button onclick="alert('Deeply nested button!')">Deep Button</button>
+                        <input type="checkbox" id="deep-checkbox"> 
+                        <label for="deep-checkbox">Deep Checkbox</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🌙 Shadow DOM Test Area</h2>
+            <div class="shadow-host" id="shadow-host">
+                <p>This will contain Shadow DOM elements (created by JavaScript)</p>
+                <div id="shadow-placeholder">Shadow DOM will be added here...</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 Form Elements Test</h2>
+            <form id="test-form" onsubmit="event.preventDefault(); alert('Form submitted!');">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div>
+                        <label for="test-email">Email:</label>
+                        <input type="email" id="test-email" name="email" placeholder="test@example.com">
+                    </div>
+                    <div>
+                        <label for="test-password">Password:</label>
+                        <input type="password" id="test-password" name="password" placeholder="Password">
+                    </div>
+                    <div>
+                        <label for="test-date">Date:</label>
+                        <input type="date" id="test-date" name="date">
+                    </div>
+                    <div>
+                        <label for="test-range">Range:</label>
+                        <input type="range" id="test-range" name="range" min="0" max="100" value="50">
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button type="submit">Submit Form</button>
+                    <button type="reset">Reset Form</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="code-block">
+            Expected Behavior:
+            1. Scan Highlighting: Green outline (#00ff00) with subtle glow
+            2. UI Highlighting: Orange/red outline (#ff4500) with strong glow and scrolling
+            3. Highlighting should work for all element types including Shadow DOM
+            4. Only one element should be highlighted at a time for UI triggering
+            5. Scan highlighting can highlight multiple elements simultaneously
+        </div>
+    </div>
+    
+    <script>
+        // Create Shadow DOM for testing
+        document.addEventListener('DOMContentLoaded', function() {
+            const shadowHost = document.getElementById('shadow-host');
+            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+            
+            shadowRoot.innerHTML = `
+                <style>
+                    .shadow-content {
+                        padding: 15px;
+                        background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
+                        border-radius: 8px;
+                        margin: 10px 0;
+                    }
+                    .shadow-button {
+                        background: #e91e63;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 20px;
+                        cursor: pointer;
+                        margin: 5px;
+                    }
+                    .shadow-input {
+                        padding: 8px;
+                        border: 2px solid #e91e63;
+                        border-radius: 5px;
+                        margin: 5px;
+                    }
+                </style>
+                <div class="shadow-content">
+                    <h4>🌙 Shadow DOM Content</h4>
+                    <p>This content is inside a Shadow DOM and should be detectable!</p>
+                    <button class="shadow-button" onclick="alert('Shadow button clicked!')">Shadow Button</button>
+                    <input type="text" class="shadow-input" placeholder="Shadow input field">
+                    <div class="shadow-content">
+                        <span>Nested shadow element</span>
+                        <a href="#" onclick="event.preventDefault(); alert('Shadow link!')">Shadow Link</a>
+                    </div>
+                </div>
+            `;
+            
+            // Update placeholder
+            document.getElementById('shadow-placeholder').textContent = '✅ Shadow DOM created successfully!';
+        });
+        
+        // Add some interactive behavior
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' && !e.target.onclick) {
+                e.target.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    e.target.style.transform = '';
+                }, 150);
+            }
+        });
+        
+        // Log page readiness
+        console.log('🎨 Highlighting Colors Test Page loaded successfully!');
+        console.log('🔍 Ready for Universal Element Locator testing');
+        console.log('✅ Shadow DOM elements created');
+        console.log('🎯 Test both scan highlighting (green) and UI highlighting (orange)');
+    </script>
+</body>
+</html>

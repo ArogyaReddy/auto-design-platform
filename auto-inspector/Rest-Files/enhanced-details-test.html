@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Element Details Test Page</title>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        
+        .form-section {
+            background-color: #e8f4fd;
+        }
+        
+        .interactive-section {
+            background-color: #fff2e8;
+        }
+        
+        .content-section {
+            background-color: #f0f8f0;
+        }
+        
+        .button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .primary-btn {
+            background-color: #007cba;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .danger-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .form-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .rich-text {
+            line-height: 1.6;
+            color: #444;
+        }
+        
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 15px 0;
+        }
+        
+        .hidden { display: none; }
+        .invisible { visibility: hidden; }
+        .transparent { opacity: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="main-heading" class="primary-heading page-title" data-testid="main-title" aria-label="Main page heading">
+                Enhanced Element Details Test
+            </h1>
+            <p class="subtitle description-text" data-section="header">
+                This page demonstrates enhanced element capturing with detailed attributes, context, and state information.
+            </p>
+        </header>
+
+        <div class="section form-section" data-testid="user-form-section">
+            <h2 id="form-heading" class="section-title form-title" data-section="forms">
+                User Registration Form
+            </h2>
+            
+            <form id="registration-form" class="user-form" data-form="registration" novalidate>
+                <div class="form-group" data-group="personal-info">
+                    <label for="firstName" class="label required-field">First Name</label>
+                    <input 
+                        type="text" 
+                        id="firstName" 
+                        name="firstName" 
+                        class="form-input required-field" 
+                        placeholder="Enter your first name"
+                        data-field="personal"
+                        data-validation="required"
+                        aria-required="true"
+                        maxlength="50"
+                        autocomplete="given-name"
+                    >
+                </div>
+
+                <div class="form-group" data-group="personal-info">
+                    <label for="lastName" class="label required-field">Last Name</label>
+                    <input 
+                        type="text" 
+                        id="lastName" 
+                        name="lastName" 
+                        class="form-input required-field" 
+                        placeholder="Enter your last name"
+                        data-field="personal"
+                        data-validation="required"
+                        aria-required="true"
+                        maxlength="50"
+                        autocomplete="family-name"
+                    >
+                </div>
+
+                <div class="form-group" data-group="contact-info">
+                    <label for="email" class="label required-field">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input required-field" 
+                        placeholder="your.email@example.com"
+                        data-field="contact"
+                        data-validation="email,required"
+                        aria-required="true"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group" data-group="preferences">
+                    <label for="country" class="label">Country</label>
+                    <select 
+                        id="country" 
+                        name="country" 
+                        class="form-input country-selector" 
+                        data-field="location"
+                        data-default="us"
+                        aria-label="Select your country"
+                    >
+                        <option value="">Choose a country</option>
+                        <option value="us" selected>United States</option>
+                        <option value="ca">Canada</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="de">Germany</option>
+                        <option value="fr">France</option>
+                    </select>
+                </div>
+
+                <div class="form-group" data-group="preferences">
+                    <label for="newsletter" class="label">
+                        <input 
+                            type="checkbox" 
+                            id="newsletter" 
+                            name="newsletter" 
+                            class="checkbox-input" 
+                            data-field="marketing"
+                            value="yes"
+                            checked
+                        >
+                        Subscribe to newsletter
+                    </label>
+                </div>
+
+                <div class="form-group" data-group="additional">
+                    <label for="comments" class="label">Additional Comments</label>
+                    <textarea 
+                        id="comments" 
+                        name="comments" 
+                        class="form-input textarea-large" 
+                        placeholder="Tell us more about yourself..."
+                        data-field="feedback"
+                        rows="4"
+                        maxlength="500"
+                    ></textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class="section interactive-section" data-testid="actions-section">
+            <h2 id="actions-heading" class="section-title actions-title" data-section="actions">
+                Interactive Elements
+            </h2>
+            
+            <div class="button-group" data-group="primary-actions">
+                <button 
+                    id="submit-btn" 
+                    type="submit" 
+                    class="button primary-btn action-button" 
+                    data-action="submit"
+                    data-form="registration"
+                    aria-label="Submit registration form"
+                    onclick="alert('Form submitted!')"
+                >
+                    🚀 Submit Registration
+                </button>
+                
+                <button 
+                    id="reset-btn" 
+                    type="reset" 
+                    class="button secondary-btn action-button" 
+                    data-action="reset"
+                    data-form="registration"
+                    aria-label="Reset form fields"
+                >
+                    🔄 Reset Form
+                </button>
+                
+                <button 
+                    id="cancel-btn" 
+                    type="button" 
+                    class="button danger-btn action-button" 
+                    data-action="cancel"
+                    data-confirm="true"
+                    aria-label="Cancel registration"
+                >
+                    ❌ Cancel
+                </button>
+            </div>
+
+            <div class="link-group" data-group="navigation">
+                <a 
+                    href="#help" 
+                    id="help-link" 
+                    class="help-link navigation-link" 
+                    data-target="help-section"
+                    data-testid="help-link"
+                    role="button"
+                    aria-label="Get help with registration"
+                >
+                    ❓ Need Help?
+                </a>
+                
+                <a 
+                    href="https://example.com/privacy" 
+                    id="privacy-link" 
+                    class="privacy-link external-link" 
+                    data-external="true"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    🔒 Privacy Policy
+                </a>
+            </div>
+        </div>
+
+        <div class="section content-section" data-testid="content-showcase">
+            <h2 id="content-heading" class="section-title content-title" data-section="content">
+                Content Examples
+            </h2>
+            
+            <div class="card" data-card="feature-list">
+                <h3 class="card-title feature-title" data-testid="features-heading">
+                    Key Features
+                </h3>
+                <ul class="feature-list" data-list="features" role="list">
+                    <li class="feature-item" data-feature="attributes" data-priority="high">
+                        <strong>Comprehensive Attributes:</strong> Captures all element attributes including data-*, aria-*, and custom properties
+                    </li>
+                    <li class="feature-item" data-feature="context" data-priority="high">
+                        <strong>Element Context:</strong> Shows parent relationships, nesting levels, and sibling positions
+                    </li>
+                    <li class="feature-item" data-feature="state" data-priority="medium">
+                        <strong>Element State:</strong> Identifies interactive elements, form fields, and empty elements
+                    </li>
+                    <li class="feature-item" data-feature="styling" data-priority="medium">
+                        <strong>Styling Information:</strong> Extracts relevant CSS properties and computed styles
+                    </li>
+                    <li class="feature-item" data-feature="text" data-priority="low">
+                        <strong>Enhanced Text:</strong> Multiple text extraction methods with clean filtering
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card" data-card="text-examples">
+                <h3 class="card-title text-title" data-testid="text-examples-heading">
+                    Text Content Examples
+                </h3>
+                <p class="rich-text sample-paragraph" data-text="sample-1">
+                    This is a <em>rich text paragraph</em> with <strong>formatted content</strong> and a 
+                    <span class="highlight" data-highlight="important">highlighted section</span>. 
+                    It demonstrates how the extension captures different types of text content.
+                </p>
+                
+                <blockquote class="quote-text sample-quote" data-text="sample-2" cite="https://example.com">
+                    "This is a sample quote that shows how blockquote elements are captured with their semantic meaning."
+                </blockquote>
+                
+                <div class="code-snippet" data-text="sample-3" data-type="code">
+                    <code>const example = 'This looks like code but should still be captured as visible text';</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden elements that should NOT be captured -->
+        <div class="hidden">
+            <p>This text is hidden with display: none</p>
+            <button class="button">Hidden button</button>
+        </div>
+
+        <div class="invisible">
+            <p>This text is hidden with visibility: hidden</p>
+            <input type="text" value="Hidden input">
+        </div>
+
+        <div class="transparent">
+            <p>This text is hidden with opacity: 0</p>
+            <span>Transparent span</span>
+        </div>
+
+        <footer data-section="footer" data-testid="page-footer">
+            <p class="footer-text copyright-notice" data-text="copyright">
+                © 2024 Enhanced Element Test Page - Demonstrating comprehensive element analysis
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // This script content should not appear in results
+        console.log('Page loaded with enhanced element analysis');
+        
+        function initializeForm() {
+            const form = document.getElementById('registration-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Form submission prevented for demo');
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Visibility Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Copy the exact CSS from results.html to test */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background: #f3f4f6;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Override for pagination mode button to ensure visibility */
+        .pagination .pagination-mode-btn {
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: white !important;
+            border: 1px solid #10b981 !important;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .pagination .pagination-mode-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 14px rgba(16, 185, 129, 0.4);
+        }
+        
+        .comparison {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Back to Pagination Button Visibility Test</h1>
+    
+    <div class="test-section">
+        <h2>Button Visibility Comparison</h2>
+        
+        <div class="comparison">
+            <div>
+                <div class="label">BEFORE (Generic Button):</div>
+                <div class="pagination">
+                    <button>Back to Pagination</button>
+                </div>
+                <small>White background, hard to see</small>
+            </div>
+            
+            <div>
+                <div class="label">AFTER (Fixed Button):</div>
+                <div class="pagination">
+                    <button id="paginationModeBtn" class="pagination-mode-btn">
+                        📑 Back to Pagination
+                    </button>
+                </div>
+                <small>Green background, clearly visible</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Full Pagination Context</h2>
+        <p>This shows how the button appears in the actual pagination context:</p>
+        
+        <div class="pagination">
+            <button>← Previous</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>Next →</button>
+            <button class="pagination-mode-btn">📑 Back to Pagination</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Hover Effects Test</h2>
+        <p>Hover over the buttons below to see the effects:</p>
+        
+        <div class="pagination">
+            <button class="pagination-mode-btn">Hover me - Green Button</button>
+            <button>Hover me - Regular Button</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>CSS Specificity Explanation</h2>
+        <p><strong>Problem:</strong> The generic <code>.pagination button</code> selector was overriding the specific <code>.pagination-mode-btn</code> styles.</p>
+        <p><strong>Solution:</strong> Used <code>.pagination .pagination-mode-btn</code> with <code>!important</code> to ensure proper styling.</p>
+        
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 14px;">
+            <div>/* OLD - Lower specificity */</div>
+            <div>.pagination-mode-btn { background: green; }</div>
+            <div>.pagination button { background: white; } ← This won</div>
+            <br>
+            <div>/* NEW - Higher specificity */</div>
+            <div>.pagination .pagination-mode-btn { background: green !important; } ← This wins</div>
+            <div>.pagination button { background: white; }</div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Button visibility test page loaded');
+        console.log('The "Back to Pagination" button should now have:');
+        console.log('- Green background');
+        console.log('- White text');
+        console.log('- Hover effects');
+        console.log('- Clear visibility');
+    </script>
+</body>
+</html>

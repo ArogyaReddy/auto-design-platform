@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Features Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .before, .after {
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .before {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+        .after {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .table-demo {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .table-demo table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .table-demo th {
+            background: #f3f4f6;
+            padding: 8px;
+            border-bottom: 1px solid #d1d5db;
+            font-weight: 600;
+        }
+        .table-demo td {
+            padding: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+        }
+        .locator-item {
+            background: #f8f9fa;
+            padding: 4px 6px;
+            border-radius: 3px;
+            margin: 2px 0;
+            font-family: Monaco, Consolas, monospace;
+            font-size: 10px;
+        }
+        .truncated {
+            color: #ef4444;
+        }
+        .full {
+            color: #10b981;
+        }
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #3b82f6;
+        }
+        .missing {
+            opacity: 0.5;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Universal Element Locator - Enhanced Features Demo</h1>
+        <p>Visual comparison showing the improvements made to the extension</p>
+
+        <div class="comparison">
+            <div class="before">
+                <div class="section-title">❌ Before Enhancement</div>
+                
+                <h3>Table Structure:</h3>
+                <div class="table-demo">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tag</th>
+                                <th>Confidence</th>
+                                <th>Primary Locators</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>BUTTON</td>
+                                <td>90%</td>
+                                <td>
+                                    <div class="locator-item truncated">data-testid: [data-testid="submit...</div>
+                                    <div class="locator-item truncated">aria-label: [aria-label="Submit reg...</div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Limitations:</h3>
+                <ul class="feature-list">
+                    <li class="missing">No meaningful element names</li>
+                    <li class="missing">Truncated locators with "..."</li>
+                    <li class="missing">No copy functionality</li>
+                    <li class="missing">Manual copy-paste required</li>
+                    <li class="missing">Hard to identify elements</li>
+                </ul>
+            </div>
+
+            <div class="after">
+                <div class="section-title">✅ After Enhancement</div>
+                
+                <h3>Enhanced Table Structure:</h3>
+                <div class="table-demo">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><span class="highlight">Element Name</span></th>
+                                <th>Tag</th>
+                                <th>Confidence</th>
+                                <th>Primary Locators</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>submit-btn</strong></td>
+                                <td>BUTTON</td>
+                                <td>90%</td>
+                                <td>
+                                    <button class="copy-btn">📋 Copy All</button>
+                                    <div class="locator-item full">
+                                        data-testid: [data-testid="submit-btn"] 
+                                        <button class="copy-btn">📋</button>
+                                    </div>
+                                    <div class="locator-item full">
+                                        aria-label: [aria-label="Submit registration form"] 
+                                        <button class="copy-btn">📋</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>New Features:</h3>
+                <ul class="feature-list">
+                    <li>✅ <strong>Intelligent Element Names</strong> - Extracted from data-testid, id, aria-label</li>
+                    <li>✅ <strong>Full Locator Display</strong> - No more truncation with "..."</li>
+                    <li>✅ <strong>One-Click Copy</strong> - Individual and bulk copy buttons</li>
+                    <li>✅ <strong>Visual Feedback</strong> - Toast notifications for copy actions</li>
+                    <li>✅ <strong>Enhanced CSV Export</strong> - Includes Element Name column</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 30px 0;">
+            <h2>🎯 How Element Names are Generated:</h2>
+            <ol>
+                <li><strong>data-testid</strong> attributes → "submit-btn", "email-input", "user-form"</li>
+                <li><strong>id</strong> attributes → "firstName", "newsletter", "main-nav"</li>
+                <li><strong>aria-label</strong> attributes → "Go to homepage", "Submit form"</li>
+                <li><strong>Element text</strong> (if short) → "Save Changes", "Delete"</li>
+                <li><strong>name</strong> attributes → "email", "password", "country"</li>
+                <li><strong>Meaningful classes</strong> → "primary-action", "nav-link"</li>
+                <li><strong>Fallback</strong> → "button_element", "input_element"</li>
+            </ol>
+        </div>
+
+        <div style="background: #ecfdf5; padding: 20px; border-radius: 8px; margin: 30px 0; border-left: 4px solid #10b981;">
+            <h2>✅ Ready to Use!</h2>
+            <p><strong>The enhanced Universal Element Locator Extension is now ready for installation and use.</strong></p>
+            <p>All requested features have been successfully implemented:</p>
+            <ul>
+                <li>✅ Element Name column with intelligent naming</li>
+                <li>✅ Copy functionality for individual and bulk operations</li>
+                <li>✅ Full locator display without truncation</li>
+                <li>✅ Enhanced visual design and user experience</li>
+                <li>✅ CSP compliant and production ready</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <p><strong>Installation:</strong> Chrome → chrome://extensions/ → Load unpacked → Select browser-extension folder</p>
+            <p><strong>Test Page:</strong> <a href="enhanced-test-page.html">Enhanced Test Page</a> | <a href="test-page.html">Original Test Page</a></p>
+        </div>
+    </div>
+</body>
+</html>

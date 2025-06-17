@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Table Rendering - Full Page View</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="fullpage.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #e0e7ff;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        #preview {
+            margin-top: 20px;
+        }
+        .status {
+            text-align: center;
+            padding: 10px;
+            background: rgba(89, 249, 214, 0.1);
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .hl-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        #inspectElement, #extract {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body class="fullpage-mode">
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🧪 Table Rendering Test - Full Page View</h1>
+            <p>Testing the fixed table structure and button disabling functionality</p>
+        </div>
+
+        <div class="test-section">
+            <h2>1. Test Button Disabling Functions</h2>
+            <button id="inspectElement" title="This should be disabled">🔬 Inspect Element</button>
+            <button id="extract" title="This should be disabled">🚀 Extract Elements</button>
+            <button class="hl-btn" title="This should be disabled">👁️ Highlight Button 1</button>
+            <button class="hl-btn" title="This should be disabled">👁️ Highlight Button 2</button>
+            
+            <div style="margin: 15px 0;">
+                <button id="test-disable-btn" style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Test Button Disabling</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>2. Test Table Rendering with Sample Data</h2>
+            <button id="render-table-btn" style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Render Sample Table</button>
+            <div class="status" id="status">Ready to test table rendering...</div>
+            <div id="preview" class="preview-table fullpage-table"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>3. Expected Results</h2>
+            <ul>
+                <li>✅ Table should have columns: Name, Type, CSS Selector, XPath, ID, Text Content</li>
+                <li>✅ Columns should be properly aligned with min-widths</li>
+                <li>✅ CSS/XPath should use JetBrains Mono font</li>
+                <li>✅ Element types should have gradient badges</li>
+                <li>✅ Highlight buttons should show "🚫 Disabled" and be non-functional</li>
+                <li>✅ Inspect Element button should be disabled and non-functional</li>
+                <li>✅ Extract Elements button should be disabled and non-functional</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Sample data matching the extension's data structure
+        const sampleData = [
+            {
+                'Element Name': 'Submit Button',
+                'Element Type': 'BUTTON',
+                'Best Locator': '#submit-btn',
+                'Locator Type': 'ID',
+                'Strength': 95,
+                'ID': 'submit-btn',
+                'CSS': '#submit-btn',
+                'XPATH': '//*[@id="submit-btn"]',
+                'In Shadow DOM': 'No'
+            },
+            {
+                'Element Name': 'Email Input Field',
+                'Element Type': 'INPUT',
+                'Best Locator': 'input[type="email"][name="email"]',
+                'Locator Type': 'CSS',
+                'Strength': 85,
+                'ID': 'email-input',
+                'CSS': 'input[type="email"][name="email"]',
+                'XPATH': '//input[@type="email" and @name="email"]',
+                'In Shadow DOM': 'No'
+            },
+            {
+                'Element Name': 'Navigation Home Link',
+                'Element Type': 'LINK',
+                'Best Locator': '[data-testid="nav-home"]',
+                'Locator Type': 'data-testid',
+                'Strength': 90,
+                'ID': 'home-link',
+                'CSS': 'a[data-testid="nav-home"]',
+                'XPATH': '//a[@data-testid="nav-home"]',
+                'In Shadow DOM': 'No'
+            },
+            {
+                'Element Name': 'Country Selection Dropdown',
+                'Element Type': 'COMBO',
+                'Best Locator': '#country-select',
+                'Locator Type': 'ID',
+                'Strength': 95,
+                'ID': 'country-select',
+                'CSS': 'select#country-select',
+                'XPATH': '//*[@id="country-select"]',
+                'In Shadow DOM': 'No'
+            },
+            {
+                'Element Name': 'User Profile Image',
+                'Element Type': 'IMAGE',
+                'Best Locator': 'img[alt="User Profile"]',
+                'Locator Type': 'CSS',
+                'Strength': 75,
+                'ID': '',
+                'CSS': 'img[alt="User Profile"]',
+                'XPATH': '//img[@alt="User Profile"]',
+                'In Shadow DOM': 'No'
+            }
+        ];
+
+        // Copy the renderTableFallback function from fullpage.js
+        function renderTableFallback(data) {
+            const preview = document.getElementById('preview');
+            if (!preview || !data || data.length === 0) return;
+            
+            let html = `
+                <table style="width: 100%; border-collapse: collapse; color: #e0e7ff; font-family: 'JetBrains Mono', 'Consolas', monospace;">
+                    <thead>
+                        <tr style="background: rgba(255, 255, 255, 0.1);">
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 120px;">Name</th>
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 80px;">Type</th>
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 200px;">CSS Selector</th>
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 200px;">XPath</th>
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 100px;">ID</th>
+                            <th style="padding: 12px 8px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 600; min-width: 120px;">Text Content</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            data.forEach((element, index) => {
+                // Extract proper data structure matching popup format
+                const elementName = element['Element Name'] || element.tag || 'N/A';
+                const elementType = element['Element Type'] || element.type || 'N/A';
+                const cssSelector = element['CSS'] || element.css || 'N/A';
+                const xpath = element['XPATH'] || element.xpath || 'N/A';
+                const elementId = element['ID'] || element.id || 'N/A';
+                const textContent = element['Element Name'] || element.text || 'N/A';
+                
+                html += `
+                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top; word-wrap: break-word; max-width: 150px;">${elementName}</td>
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top;">
+                            <span style="background: linear-gradient(90deg, #59f9d6 10%, #18aaff 90%); color: #19224a; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; font-weight: bold;">${elementType}</span>
+                        </td>
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; word-wrap: break-word; max-width: 250px; background: rgba(0, 0, 0, 0.2); border-radius: 4px;">${cssSelector}</td>
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; word-wrap: break-word; max-width: 250px; background: rgba(0, 0, 0, 0.2); border-radius: 4px;">${xpath}</td>
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; word-wrap: break-word; max-width: 120px;">${elementId}</td>
+                        <td style="padding: 12px 8px; border: 1px solid rgba(255, 255, 255, 0.1); vertical-align: top; word-wrap: break-word; max-width: 180px; color: #b8c5d6;">${textContent}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            preview.innerHTML = html;
+            
+            // Disable any buttons that were just added
+            setTimeout(() => {
+                disableHighlightButtons();
+            }, 100);
+        }
+
+        // Copy the button disabling functions from fullpage.js
+        function disableHighlightButtons() {
+            const highlightButtons = document.querySelectorAll('.hl-btn');
+            highlightButtons.forEach(button => {
+                button.disabled = true;
+                button.style.opacity = '0.5';
+                button.style.cursor = 'not-allowed';
+                button.title = 'Highlight is disabled in full page view to avoid extension conflicts';
+                
+                // Remove existing handlers and prevent clicks
+                button.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
+                
+                // Change icon to indicate disabled state
+                if (button.textContent.includes('👁️')) {
+                    button.innerHTML = '🚫 Disabled';
+                    button.style.fontSize = '0.8em';
+                }
+            });
+        }
+
+        function disableInspectButton() {
+            const inspectElementBtn = document.getElementById('inspectElement');
+            if (inspectElementBtn) {
+                inspectElementBtn.disabled = true;
+                inspectElementBtn.style.opacity = '0.5';
+                inspectElementBtn.style.cursor = 'not-allowed';
+                inspectElementBtn.title = 'Inspect Element is disabled in full page view to avoid extension conflicts';
+                
+                // Remove any existing click handlers and prevent new ones
+                inspectElementBtn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
+            }
+        }
+
+        function disableExtractButton() {
+            const extractElementBtn = document.getElementById('extract');
+            if (extractElementBtn) {
+                extractElementBtn.disabled = true;
+                extractElementBtn.style.opacity = '0.5';
+                extractElementBtn.style.cursor = 'not-allowed';
+                extractElementBtn.title = 'Extract Elements is disabled in full page view to avoid extension conflicts';
+                
+                // Remove any existing click handlers and prevent new ones
+                extractElementBtn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                };
+            }
+        }
+
+        // Event listeners
+        document.getElementById('render-table-btn').addEventListener('click', () => {
+            document.getElementById('status').textContent = `Rendering ${sampleData.length} sample elements...`;
+            renderTableFallback(sampleData);
+            document.getElementById('status').textContent = `✅ Table rendered successfully with ${sampleData.length} elements`;
+        });
+
+        document.getElementById('test-disable-btn').addEventListener('click', () => {
+            disableHighlightButtons();
+            disableInspectButton();
+            disableExtractButton();
+            document.getElementById('status').textContent = '✅ All buttons disabled successfully';
+        });
+
+        // Test the original button functionality (should be overridden)
+        document.querySelectorAll('.hl-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('⚠️ This should not fire if buttons are properly disabled!');
+            });
+        });
+
+        document.getElementById('inspectElement').addEventListener('click', () => {
+            alert('⚠️ This should not fire if buttons are properly disabled!');
+        });
+
+        document.getElementById('extract').addEventListener('click', () => {
+            alert('⚠️ This should not fire if buttons are properly disabled!');
+        });
+
+        console.log('Table rendering test page loaded');
+    </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Highlighting Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        #user-1-container {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #2196f3;
+            border-radius: 6px;
+        }
+        #user-2-container {
+            background: #f3e5f5;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #9c27b0;
+            border-radius: 6px;
+        }
+        [data-testid="action-menu-button"] {
+            background: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        [data-testid="action-menu-button"]:hover {
+            background: #45a049;
+        }
+        .debug-panel {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+        }
+        .log-output {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .highlighted-manual {
+            border: 3px solid red !important;
+            background-color: rgba(255, 255, 0, 0.3) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Comprehensive Highlighting Debug</h1>
+        <p>Testing the contextual selector: <code>#user-1-container [data-testid="action-menu-button"]</code></p>
+        
+        <div class="debug-panel">
+            <h3>Test Controls</h3>
+            <button class="test-button" onclick="runBasicTest()">1. Basic querySelector Test</button>
+            <button class="test-button" onclick="runExtensionTest()">2. Extension Highlight Test</button>
+            <button class="test-button" onclick="runManualHighlight()">3. Manual Highlight Test</button>
+            <button class="test-button" onclick="clearAllHighlights()">Clear All Highlights</button>
+            <button class="test-button" onclick="clearLog()">Clear Log</button>
+        </div>
+        
+        <div id="user-1-container">
+            <h3>👤 User 1 Container</h3>
+            <p>This container has ID: user-1-container</p>
+            <button data-testid="action-menu-button">🎯 Target Button (Action Menu)</button>
+            <button data-testid="settings-button">Settings</button>
+            <button data-testid="delete-button">Delete</button>
+        </div>
+        
+        <div id="user-2-container">
+            <h3>👤 User 2 Container</h3>
+            <p>This container has ID: user-2-container</p>
+            <button data-testid="action-menu-button">Action Menu (Should NOT be highlighted)</button>
+            <button data-testid="settings-button">Settings</button>
+        </div>
+        
+        <div class="debug-panel">
+            <h3>🔍 Debug Log</h3>
+            <div id="log-output" class="log-output"></div>
+        </div>
+    </div>
+
+    <script>
+        let logDiv;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            logDiv = document.getElementById('log-output');
+            log('🚀 Page loaded and ready for testing');
+            log('Target selector: #user-1-container [data-testid="action-menu-button"]');
+            
+            // Run automatic basic test
+            setTimeout(runBasicTest, 1000);
+        });
+        
+        function log(message) {
+            if (!logDiv) return;
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<strong>[${timestamp}]</strong> ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            if (logDiv) {
+                logDiv.innerHTML = '';
+            }
+        }
+        
+        function runBasicTest() {
+            log('🧪 === BASIC QUERY SELECTOR TEST ===');
+            
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            log(`Testing selector: ${selector}`);
+            
+            try {
+                const elements = document.querySelectorAll(selector);
+                log(`✅ querySelectorAll found: ${elements.length} elements`);
+                
+                if (elements.length > 0) {
+                    elements.forEach((el, index) => {
+                        log(`  Element ${index + 1}: ${el.tagName} - "${el.textContent.trim()}" - ID: ${el.id || 'none'}`);
+                        log(`  Element ${index + 1} parent: ${el.parentElement.tagName} - ID: ${el.parentElement.id || 'none'}`);
+                    });
+                } else {
+                    log('❌ No elements found with basic querySelector');
+                }
+                
+                // Test the parent container exists
+                const container = document.getElementById('user-1-container');
+                if (container) {
+                    log(`✅ Parent container found: ${container.tagName} - ID: ${container.id}`);
+                    const buttonsInContainer = container.querySelectorAll('[data-testid="action-menu-button"]');
+                    log(`✅ Buttons in container: ${buttonsInContainer.length}`);
+                } else {
+                    log('❌ Parent container not found');
+                }
+                
+            } catch (error) {
+                log(`❌ Error in basic test: ${error.message}`);
+            }
+        }
+        
+        function runExtensionTest() {
+            log('🧪 === EXTENSION HIGHLIGHT TEST ===');
+            
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            log(`Sending highlight message to extension: ${selector}`);
+            
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                try {
+                    chrome.runtime.sendMessage({
+                        action: 'highlightElement',
+                        selector: selector
+                    }, (response) => {
+                        if (chrome.runtime.lastError) {
+                            log(`❌ Extension error: ${chrome.runtime.lastError.message}`);
+                        } else if (response) {
+                            log(`✅ Extension response: ${JSON.stringify(response)}`);
+                            if (response.success && response.found) {
+                                log(`🎯 Extension found and highlighted ${response.count} elements`);
+                            } else {
+                                log(`❌ Extension did not find elements to highlight`);
+                            }
+                        } else {
+                            log('❌ No response from extension');
+                        }
+                    });
+                } catch (error) {
+                    log(`❌ Error sending message to extension: ${error.message}`);
+                }
+            } else {
+                log('❌ Chrome extension API not available');
+            }
+        }
+        
+        function runManualHighlight() {
+            log('🧪 === MANUAL HIGHLIGHT TEST ===');
+            
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            log(`Manually highlighting: ${selector}`);
+            
+            try {
+                const elements = document.querySelectorAll(selector);
+                log(`Found ${elements.length} elements to highlight manually`);
+                
+                if (elements.length > 0) {
+                    elements.forEach((el, index) => {
+                        el.classList.add('highlighted-manual');
+                        log(`✅ Manually highlighted element ${index + 1}`);
+                    });
+                } else {
+                    log('❌ No elements found for manual highlighting');
+                }
+            } catch (error) {
+                log(`❌ Error in manual highlight: ${error.message}`);
+            }
+        }
+        
+        function clearAllHighlights() {
+            log('🧹 === CLEARING ALL HIGHLIGHTS ===');
+            
+            // Clear manual highlights
+            const manuallyHighlighted = document.querySelectorAll('.highlighted-manual');
+            manuallyHighlighted.forEach(el => {
+                el.classList.remove('highlighted-manual');
+            });
+            log(`Cleared ${manuallyHighlighted.length} manual highlights`);
+            
+            // Clear extension highlights if available
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.sendMessage({
+                    action: 'clearHighlights'
+                }, (response) => {
+                    if (response && response.success) {
+                        log('✅ Extension highlights cleared');
+                    }
+                });
+            }
+            
+            // Also try to clear any inline styles that might be applied
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(btn => {
+                btn.style.outline = '';
+                btn.style.border = '';
+                btn.style.boxShadow = '';
+                btn.style.backgroundColor = '';
+                btn.style.transition = '';
+                btn.style.zIndex = '';
+                btn.style.borderRadius = '';
+            });
+            log('Cleared all inline styles from buttons');
+        }
+        
+        // Listen for messages from content script
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'DEBUG_LOG') {
+                log(`📨 Content Script: ${event.data.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

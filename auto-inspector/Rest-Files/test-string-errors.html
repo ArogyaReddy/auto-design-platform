@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>String Error Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .test-section h3 { margin-top: 0; color: #333; }
+        .hidden { display: none; }
+        .empty-element { width: 50px; height: 50px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>String Method Error Test Page</h1>
+    
+    <div class="test-section">
+        <h3>Elements with Null/Undefined Text</h3>
+        <div id="null-text"></div>
+        <span data-testid="empty-span"></span>
+        <p class="empty-p"></p>
+    </div>
+
+    <div class="test-section">
+        <h3>Elements with Non-String Values</h3>
+        <div id="numeric-content">12345</div>
+        <span data-value="0">Zero Value</span>
+        <input type="number" value="123.45" name="numeric-input">
+    </div>
+
+    <div class="test-section">
+        <h3>Elements with Special Characters</h3>
+        <div title="Special chars: &lt;&gt;&amp;&quot;">Special Content</div>
+        <span data-special='{"key": "value"}'>JSON Data</span>
+        <p>Unicode: 🚀 🌟 ✨ 💎</p>
+    </div>
+
+    <div class="test-section">
+        <h3>Hidden and Invisible Elements</h3>
+        <div class="hidden">Hidden Content</div>
+        <span style="display: none;">Invisible Span</span>
+        <div style="visibility: hidden;">Visibility Hidden</div>
+        <div class="empty-element"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>Form Elements</h3>
+        <form>
+            <input type="text" placeholder="Text Input" name="text-field">
+            <input type="email" value="" placeholder="Email" required>
+            <select name="dropdown">
+                <option value="">Select Option</option>
+                <option value="1">Option 1</option>
+            </select>
+            <textarea placeholder="Textarea content"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="test-section">
+        <h3>Dynamic Content (Added via JavaScript)</h3>
+        <div id="dynamic-container"></div>
+    </div>
+
+    <script>
+        // Add some dynamic content that might have edge cases
+        const container = document.getElementById('dynamic-container');
+        
+        // Element with null/undefined properties
+        const dynamicDiv = document.createElement('div');
+        dynamicDiv.textContent = null; // This will be converted but might cause issues
+        dynamicDiv.setAttribute('data-null', null);
+        dynamicDiv.setAttribute('data-undefined', undefined);
+        container.appendChild(dynamicDiv);
+        
+        // Element with number attributes
+        const numDiv = document.createElement('div');
+        numDiv.setAttribute('data-number', 42);
+        numDiv.textContent = 'Dynamic Content';
+        container.appendChild(numDiv);
+        
+        // Element with object/array attributes (should be stringified)
+        const objDiv = document.createElement('div');
+        objDiv.setAttribute('data-object', JSON.stringify({test: 'value'}));
+        objDiv.textContent = 'Object Data';
+        container.appendChild(objDiv);
+
+        // Set some problematic properties directly on elements
+        setTimeout(() => {
+            const elements = document.querySelectorAll('div, span, p');
+            elements.forEach((el, index) => {
+                // Simulate some edge cases that might occur in real scenarios
+                if (index % 3 === 0) {
+                    el._customProperty = null;
+                }
+                if (index % 5 === 0) {
+                    el._numberProperty = 123;
+                }
+            });
+        }, 100);
+    </script>
+</body>
+</html>

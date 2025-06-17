@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Width Table Test</title>
+    <style>
+        body { 
+            margin: 40px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .test-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .data-table th {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+        .info-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .metric-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 id="main-title" data-testid="page-title">Full Width Table Test Page</h1>
+        <p class="subtitle" data-role="description">This page contains various elements to test the full-width table layout improvements.</p>
+
+        <div class="test-section" data-section="user-info">
+            <h2 id="user-form-heading">User Information Form</h2>
+            <form id="user-form" data-testid="user-registration-form">
+                <div class="form-group">
+                    <label for="firstName" data-label="first-name">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" data-testid="first-name-input" placeholder="Enter your first name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName" data-label="last-name">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" data-testid="last-name-input" placeholder="Enter your last name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" data-label="email">Email Address:</label>
+                    <input type="email" id="email" name="email" data-testid="email-input" placeholder="your.email@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" data-label="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" data-testid="phone-input" placeholder="+1 (555) 123-4567">
+                </div>
+                
+                <div class="form-group">
+                    <label for="country" data-label="country">Country:</label>
+                    <select id="country" name="country" data-testid="country-select" required>
+                        <option value="">Select your country</option>
+                        <option value="us" data-country="united-states">United States</option>
+                        <option value="ca" data-country="canada">Canada</option>
+                        <option value="uk" data-country="united-kingdom">United Kingdom</option>
+                        <option value="de" data-country="germany">Germany</option>
+                        <option value="fr" data-country="france">France</option>
+                        <option value="jp" data-country="japan">Japan</option>
+                        <option value="au" data-country="australia">Australia</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bio" data-label="bio">Biography:</label>
+                    <textarea id="bio" name="bio" data-testid="bio-textarea" placeholder="Tell us about yourself..." rows="4"></textarea>
+                </div>
+            </form>
+        </div>
+
+        <div class="test-section" data-section="actions">
+            <h2 id="actions-heading">Action Buttons</h2>
+            <div class="btn-group">
+                <button type="submit" id="submit-btn" class="btn-primary" data-testid="submit-button" data-action="submit">
+                    Submit Form
+                </button>
+                <button type="button" id="save-draft-btn" class="btn-secondary" data-testid="save-draft-button" data-action="save-draft">
+                    Save Draft
+                </button>
+                <button type="button" id="validate-btn" class="btn-success" data-testid="validate-button" data-action="validate">
+                    Validate Data
+                </button>
+                <button type="button" id="preview-btn" class="btn-warning" data-testid="preview-button" data-action="preview">
+                    Preview
+                </button>
+                <button type="reset" id="reset-btn" class="btn-danger" data-testid="reset-button" data-action="reset">
+                    Reset Form
+                </button>
+                <button type="button" id="help-btn" class="btn-info" data-testid="help-button" data-action="help" aria-label="Get help">
+                    Help & Support
+                </button>
+            </div>
+        </div>
+
+        <div class="test-section" data-section="data-display">
+            <h2 id="data-heading">Sample Data Table</h2>
+            <table class="data-table" id="sample-data-table" data-testid="sample-table">
+                <thead>
+                    <tr>
+                        <th data-column="id">ID</th>
+                        <th data-column="name">Name</th>
+                        <th data-column="role">Role</th>
+                        <th data-column="department">Department</th>
+                        <th data-column="status">Status</th>
+                        <th data-column="actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody data-table-body="employees">
+                    <tr data-row="employee-1">
+                        <td data-cell="id">001</td>
+                        <td data-cell="name">John Smith</td>
+                        <td data-cell="role">Senior Developer</td>
+                        <td data-cell="department">Engineering</td>
+                        <td data-cell="status"><span class="status-active" data-status="active">Active</span></td>
+                        <td data-cell="actions">
+                            <button class="btn-edit" data-action="edit" data-employee-id="001">Edit</button>
+                            <button class="btn-delete" data-action="delete" data-employee-id="001">Delete</button>
+                        </td>
+                    </tr>
+                    <tr data-row="employee-2">
+                        <td data-cell="id">002</td>
+                        <td data-cell="name">Sarah Johnson</td>
+                        <td data-cell="role">Product Manager</td>
+                        <td data-cell="department">Product</td>
+                        <td data-cell="status"><span class="status-active" data-status="active">Active</span></td>
+                        <td data-cell="actions">
+                            <button class="btn-edit" data-action="edit" data-employee-id="002">Edit</button>
+                            <button class="btn-delete" data-action="delete" data-employee-id="002">Delete</button>
+                        </td>
+                    </tr>
+                    <tr data-row="employee-3">
+                        <td data-cell="id">003</td>
+                        <td data-cell="name">Mike Davis</td>
+                        <td data-cell="role">UX Designer</td>
+                        <td data-cell="department">Design</td>
+                        <td data-cell="status"><span class="status-inactive" data-status="inactive">Inactive</span></td>
+                        <td data-cell="actions">
+                            <button class="btn-edit" data-action="edit" data-employee-id="003">Edit</button>
+                            <button class="btn-delete" data-action="delete" data-employee-id="003">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="test-section" data-section="metrics">
+            <h2 id="metrics-heading">Performance Metrics</h2>
+            <div class="info-card" data-info="overview">
+                <h3 data-metric="title">System Overview</h3>
+                <p data-metric="description">Real-time performance metrics and system status indicators.</p>
+            </div>
+            
+            <div class="metric-grid" data-grid="metrics">
+                <div class="metric-card" data-metric="cpu">
+                    <h4 data-metric-label="cpu-usage">CPU Usage</h4>
+                    <div class="metric-value" data-value="cpu-percentage">85%</div>
+                </div>
+                <div class="metric-card" data-metric="memory">
+                    <h4 data-metric-label="memory-usage">Memory Usage</h4>
+                    <div class="metric-value" data-value="memory-percentage">62%</div>
+                </div>
+                <div class="metric-card" data-metric="disk">
+                    <h4 data-metric-label="disk-usage">Disk Usage</h4>
+                    <div class="metric-value" data-value="disk-percentage">43%</div>
+                </div>
+                <div class="metric-card" data-metric="network">
+                    <h4 data-metric-label="network-usage">Network Usage</h4>
+                    <div class="metric-value" data-value="network-percentage">28%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden elements for testing visibility filtering -->
+        <div style="display: none;" data-hidden="true">
+            <input type="hidden" id="hidden-token" value="abc123" data-testid="csrf-token">
+            <span class="hidden-text">This should not be visible</span>
+        </div>
+
+        <!-- Elements with complex nested structure -->
+        <div class="nested-container" data-container="complex">
+            <div class="level-1" data-level="1">
+                <div class="level-2" data-level="2">
+                    <div class="level-3" data-level="3">
+                        <span class="deeply-nested" data-testid="deep-element" id="deep-span">
+                            Deeply nested content for testing locator specificity
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity for testing
+        document.getElementById('submit-btn').addEventListener('click', function() {
+            alert('Form submitted!');
+        });
+        
+        document.getElementById('help-btn').addEventListener('click', function() {
+            alert('Help dialog would open here');
+        });
+        
+        // Add dynamic content for testing
+        setTimeout(() => {
+            const dynamicDiv = document.createElement('div');
+            dynamicDiv.id = 'dynamic-content';
+            dynamicDiv.setAttribute('data-testid', 'dynamic-element');
+            dynamicDiv.textContent = 'This content was added dynamically';
+            dynamicDiv.className = 'dynamic-element';
+            document.body.appendChild(dynamicDiv);
+        }, 100);
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results Fix - Universal Element Locator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        .test-element {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        h1, h2 {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .sample-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        input, textarea, button, select {
+            margin: 5px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Universal Element Locator - Results Fix Test Page</h1>
+    
+    <div class="instructions">
+        <h2>Test Instructions:</h2>
+        <ol>
+            <li>Click the Universal Element Locator extension icon in your toolbar</li>
+            <li>Verify the popup shows "Connected" status</li>
+            <li>Click "Scan Page Elements" button</li>
+            <li>Wait for the scan to complete</li>
+            <li>The results page should open automatically</li>
+            <li>Verify that the results page shows actual scanned elements (not 0)</li>
+            <li>Check that statistics show proper counts for different element types</li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Elements</h2>
+        <nav class="test-element">
+            <a href="#home" id="nav-home">Home</a>
+            <a href="#about" id="nav-about">About</a>
+            <a href="#services" id="nav-services">Services</a>
+            <a href="#contact" id="nav-contact">Contact</a>
+        </nav>
+    </div>
+
+    <div class="test-section">
+        <h2>Form Elements</h2>
+        <form class="sample-form test-element">
+            <input type="text" placeholder="Your Name" id="user-name" class="form-input">
+            <input type="email" placeholder="Email Address" id="user-email" class="form-input">
+            <select id="country-select" class="form-select">
+                <option value="">Select Country</option>
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+            </select>
+            <textarea placeholder="Your Message" id="user-message" class="form-textarea"></textarea>
+            <button type="submit" id="submit-btn" class="form-button">Send Message</button>
+        </form>
+    </div>
+
+    <div class="test-section">
+        <h2>Content Grid</h2>
+        <div class="grid">
+            <div class="card test-element" data-type="service">
+                <h3>Web Development</h3>
+                <p>Custom web applications and websites</p>
+                <button class="service-btn">Learn More</button>
+            </div>
+            <div class="card test-element" data-type="service">
+                <h3>Mobile Apps</h3>
+                <p>iOS and Android application development</p>
+                <button class="service-btn">Learn More</button>
+            </div>
+            <div class="card test-element" data-type="service">
+                <h3>UI/UX Design</h3>
+                <p>User interface and experience design</p>
+                <button class="service-btn">Learn More</button>
+            </div>
+            <div class="card test-element" data-type="service">
+                <h3>Consulting</h3>
+                <p>Technical consulting and strategy</p>
+                <button class="service-btn">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Interactive Elements</h2>
+        <div class="test-element">
+            <button onclick="toggleVisibility('hidden-content')" id="toggle-btn">Toggle Hidden Content</button>
+            <div id="hidden-content" style="display: none; margin-top: 10px;">
+                <p>This content was hidden and is now visible!</p>
+                <ul>
+                    <li>List item 1</li>
+                    <li>List item 2</li>
+                    <li>List item 3</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Media Elements</h2>
+        <div class="test-element">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100'%3E%3Crect width='200' height='100' fill='%23667eea'/%3E%3Ctext x='100' y='55' text-anchor='middle' fill='white' font-family='Arial' font-size='16'%3ESample Image%3C/text%3E%3C/svg%3E" alt="Sample Image" id="sample-image">
+            <video controls width="200" height="100" id="sample-video">
+                <source src="data:video/mp4;base64," type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function toggleVisibility(id) {
+            const element = document.getElementById(id);
+            element.style.display = element.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Add some dynamic elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const dynamicSection = document.createElement('div');
+            dynamicSection.className = 'test-section';
+            dynamicSection.innerHTML = `
+                <h2>Dynamic Elements</h2>
+                <div class="test-element">
+                    <p>These elements were added dynamically via JavaScript:</p>
+                    <button onclick="addElement()" id="add-element-btn">Add New Element</button>
+                    <div id="dynamic-container"></div>
+                </div>
+            `;
+            document.body.appendChild(dynamicSection);
+        });
+
+        function addElement() {
+            const container = document.getElementById('dynamic-container');
+            const newElement = document.createElement('div');
+            newElement.className = 'test-element';
+            newElement.style.marginTop = '10px';
+            newElement.innerHTML = `
+                <p>Dynamic element #${container.children.length + 1}</p>
+                <span class="timestamp">Created at: ${new Date().toLocaleTimeString()}</span>
+            `;
+            container.appendChild(newElement);
+        }
+
+        // Add event listeners for testing
+        document.querySelectorAll('.service-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('Service button clicked: ' + this.parentElement.querySelector('h3').textContent);
+            });
+        });
+    </script>
+</body>
+</html>

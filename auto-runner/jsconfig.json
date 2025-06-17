@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS", // Or "ESNext" if you're moving towards ES modules
+    "target": "ES2020",   // Or a newer ES version
+    "checkJs": true,      // Enable basic type checking in .js files
+    "moduleResolution": "node" // How modules are resolved
+  },
+  "include": [
+    "features/**/*.js", // Include your step definitions and support code
+    "utils/**/*.js"     // Include your utility files
+    // Add other paths to your JavaScript source files if necessary
+  ],
+  "exclude": [
+    "node_modules",
+    "reports"
+  ]
+}

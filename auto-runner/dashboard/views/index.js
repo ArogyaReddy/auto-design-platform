@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= typeof title !== 'undefined' ? title : 'AI Automation Dashboard' %></title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Nicer font */
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7f6; /* Light background */
+        color: #333;
+        line-height: 1.6;
+      }
+      .container {
+        /* Add a container for centering and padding */
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 25px;
+        background-color: #fff;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      h1 {
+        color: #2c3e50; /* Darker blue for heading */
+        text-align: center;
+        margin-bottom: 25px;
+      }
+      .quote {
+        margin-bottom: 25px;
+        font-style: italic;
+        color: #007bff;
+        font-size: 1.1em;
+        padding: 15px;
+        background-color: #e7f5ff; /* Lighter blue for quote */
+        border-left: 4px solid #007bff;
+        border-radius: 4px;
+      }
+      .button-container {
+        display: flex;
+        flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee; /* Separator */
+      }
+      .button-container button {
+        padding: 12px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        border: none; /* Remove default border */
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s ease; /* Smooth transition */
+      }
+      .button-container button:hover:not(:disabled) {
+        background-color: #0056b3; /* Darker on hover */
+      }
+      .button-container button:disabled {
+        background-color: #d4d4d4; /* Lighter grey for disabled */
+        border-color: #d4d4d4;
+        color: #888888;
+        cursor: not-allowed;
+      }
+      #statusMessage {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        min-height: 45px;
+        border-radius: 4px;
+        font-size: 0.95em;
+      }
+      /* Styles for future input sections */
+      .run-options-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        background-color: #fdfdfd;
+      }
+      .run-options-section label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+      }
+      .run-options-section input[type='text'],
+      .run-options-section select {
+        width: calc(100% - 22px); /* Adjust for padding/border */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .run-options-section button {
+        /* Style for buttons within these sections */
+        padding: 10px 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AI Automation Dashboard</h1>
+      <div id="motivationalQuote" class="quote">Loading a motivation...</div>
+
+      <div class="button-container">
+        <button id="runAllTestsBtn">Run All Tests</button>
+        <button id="stopTestsBtn" disabled>Stop Running</button>
+        <button id="viewResultsBtn">View Latest Test Results</button>
+      </div>
+
+      <div id="statusMessage">Hello, I am AI.: Welcome!! Click a button to start. Like, <strong>Run All Tests</strong> to start running all your tests...</div>
+
+      <div class="run-options-section">
+        <label for="tagsInput">Run by Tags:</label>
+        <input type="text" id="tagsInput" name="tagsInput" placeholder="e.g., @smoke, @regression, @max, @E2E-Max" , />
+        <button id="runByTagsBtn">Run by Tags</button>
+      </div>
+
+      <div class="run-options-section">
+        <label for="featureFilesInput">Run by Specific Feature File(s):</label>
+        <input type="text" id="featureFilesInput" name="featureFilesInput" placeholder="e.g., features/login.feature, features/folder/some_other.feature" />
+        <button id="runByFeatureFilesBtn">Run Selected Feature File(s)</button>
+      </div>
+    </div>
+
+    <script>
+      const runByFeatureFilesBtn = document.getElementById('runByFeatureFilesBtn');
+      const runAllTestsBtn = document.getElementById('runAllTestsBtn');
+      const stopTestsBtn = document.getElementById('stopTestsBtn');
+      const viewResultsBtn = document.getElementById('viewResultsBtn');
+      const statusMessageDiv = document.getElementById('statusMessage');
+      const motivationalQuoteDiv = document.getElementById('motivationalQuote');
+      // ... Run by Tags ...
+      const tagsInput = document.getElementById('tagsInput');
+      const runByTagsBtn = document.getElementById('runByTagsBtn');
+      let statusPoller = null; // Variable to hold the polling interval ID
+      // ... Run by feature file ...
+      const featureFilesInput = document.getElementById('featureFilesInput');
+
+      // --- Function to update button states ---
+        function setTestExecutionState(isRunning) {
+          runAllTestsBtn.disabled = isRunning;
+          if (runByTagsBtn) runByTagsBtn.disabled = isRunning;
+          if (runByFeatureFilesBtn) runByFeatureFilesBtn.disabled = isRunning;
+          stopTestsBtn.disabled = !isRunning;
+        }
+
+      function stopStatusPolling() {
+        if (statusPoller) {
+          clearInterval(statusPoller);
+          statusPoller = null;
+          console.log('[UI] Status polling stopped.');
+        }
+      }
+
+      async function checkTestStatus() {
+        console.log('[UI] Polling for test status...');
+        try {
+          const response = await fetch('/api/test-status');
+          if (!response.ok) {
+            console.error('[UI] Error fetching test status:', response.statusText);
+            // Optionally stop polling on error or let it continue
+            return;
+          }
+          const statusResult = await response.json();
+          console.log('[UI] Test status from server:', statusResult);
+
+          if (!statusResult.isRunning) {
+            statusMessageDiv.innerHTML = '<strong>Tests execution complete!</strong> Ready to run again or view results.';
+            setTestExecutionState(false); // Re-enable Run buttons, Disable Stop
+            stopStatusPolling(); // Stop polling as tests are done
+          } else {
+            // Optional: Update status message to show tests are still running, if needed
+            // statusMessageDiv.innerHTML = `<strong>Test run is still in progress...</strong>`;
+          }
+        } catch (error) {
+          console.error('[UI] Error during status poll:', error);
+          // Decide if polling should stop on error
+          // stopStatusPolling();
+        }
+      }
+
+      function startStatusPolling() {
+        stopStatusPolling(); // Clear any existing poller first
+        console.log('[UI] Starting status polling.');
+        // Poll every 5 seconds (adjust as needed)
+        statusPoller = setInterval(checkTestStatus, 5000);
+        // Also do an initial check shortly after starting, in case tests are very fast
+        setTimeout(checkTestStatus, 1000);
+      }
+
+      if (runAllTestsBtn) {
+        runAllTestsBtn.addEventListener('click', async () => {
+          statusMessageDiv.innerHTML = 'Initiating <strong>full test run</strong>... Please check the server console.';
+          setTestExecutionState(true);
+
+          try {
+            const response = await fetch('/run-all-tests', {method: 'POST'});
+            const result = await response.json();
+            if (response.ok) {
+              statusMessageDiv.innerHTML = `Hello, I am AI.: ${result.message}. <strong>Test run is in progress.</strong>`;
+              startStatusPolling(); // Start polling when tests are initiated
+            } else {
+              statusMessageDiv.innerHTML = `<strong>Error starting tests:</strong> ${result.message || response.statusText}`;
+              setTestExecutionState(false);
+            }
+          } catch (error) {
+            console.error('Fetch error for /run-all-tests:', error);
+            statusMessageDiv.innerHTML = '<strong>Error:</strong> Failed to communicate with the server to start tests.';
+            setTestExecutionState(false);
+          }
+        });
+      }
+
+
+      if (stopTestsBtn) {
+        stopTestsBtn.addEventListener('click', async () => {
+          statusMessageDiv.innerHTML = 'Attempting to <strong>stop test run</strong>...';
+          stopStatusPolling(); // Stop polling immediately when user clicks stop
+
+          try {
+            const response = await fetch('/stop-tests', {method: 'POST'});
+            const result = await response.json();
+            if (response.ok) {
+              statusMessageDiv.innerHTML = `Hello, I am AI.: ${result.message} <strong>Test run stop initiated.</strong>`;
+            } else {
+              statusMessageDiv.innerHTML = `<strong>Error stopping tests:</strong> ${result.message || response.statusText}`;
+            }
+          } catch (error) {
+            console.error('Fetch error for /stop-tests:', error);
+            statusMessageDiv.innerHTML = '<strong>Error:</strong> Failed to communicate with the server.';
+          } finally {
+            setTestExecutionState(false); // Always re-enable Run buttons after stop attempt
+          }
+        });
+      }
+
+      // ... View Results ...
+      // const viewResultsBtn = document.getElementById("viewResultsBtn");
+      if (viewResultsBtn) {
+        viewResultsBtn.addEventListener('click', () => {
+          // Opens the report in a new tab
+          window.open('/reports/cucumber-report.html', '_blank');
+          statusMessageDiv.textContent = 'Attempting to open test results in a new tab. Ensure tests have run and generated a report.';
+        });
+      }
+
+
+      if (runByTagsBtn && tagsInput) {
+        runByTagsBtn.addEventListener('click', async () => {
+          const tagsToRun = tagsInput.value.trim();
+          if (!tagsToRun) {
+            statusMessageDiv.innerHTML = '<strong>Error:</strong> Please enter tags to run.';
+            tagsInput.focus();
+            return;
+          }
+          statusMessageDiv.innerHTML = `Initiating test run with tags: <strong>${tagsToRun}</strong>...`;
+          setTestExecutionState(true);
+          try {
+            const response = await fetch('/run-by-tags', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({tags: tagsToRun})
+            });
+            const result = await response.json();
+            if (response.ok) {
+              statusMessageDiv.innerHTML = `Hello, I am AI.: ${result.message}. <strong>Test run is in progress.</strong>`;
+              startStatusPolling(); // Start polling when tests are initiated
+            } else {
+              statusMessageDiv.innerHTML = `<strong>Error starting tests by tags:</strong> ${result.message || response.statusText}`;
+              setTestExecutionState(false);
+            }
+          } catch (error) {
+            console.error('Fetch error for /run-by-tags:', error);
+            statusMessageDiv.innerHTML = '<strong>Error:</strong> Failed to communicate with the server.';
+            setTestExecutionState(false);
+          }
+        });
+      }
+
+      if (runByFeatureFilesBtn && featureFilesInput) {
+          runByFeatureFilesBtn.addEventListener('click', async () => {
+            const featureFilesToRun = featureFilesInput.value.trim();
+            if (!featureFilesToRun) {
+              statusMessageDiv.innerHTML = '<strong>Error:</strong> Please enter feature file path(s).';
+              featureFilesInput.focus();
+              return;
+            }
+
+            statusMessageDiv.innerHTML = `Initiating test run for feature file(s): <strong>${featureFilesToRun}</strong>...`;
+            setTestExecutionState(true); // Disable Run buttons, Enable Stop
+
+            try {
+              const response = await fetch('/run-by-feature-files', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ featureFiles: featureFilesToRun }),
+              });
+
+              const result = await response.json();
+
+              if (response.ok) { // status 202 Accepted
+                statusMessageDiv.innerHTML = `Hello, I am AI.: ${result.message}. <strong>Test run is in progress.</strong>`;
+                startStatusPolling(); // Start polling for completion
+              } else { // status 400, 409, 500 etc.
+                statusMessageDiv.innerHTML = `<strong>Error starting tests by feature file(s):</strong> ${result.message || response.statusText}`;
+                setTestExecutionState(false);
+              }
+            } catch (error) {
+              console.error('Fetch error for /run-by-feature-files:', error);
+              statusMessageDiv.innerHTML = '<strong>Error:</strong> Failed to communicate with the server.';
+              setTestExecutionState(false);
+            }
+          });
+        }
+
+      // ... Quote Generating ...
+      // const motivationalQuoteDiv = document.getElementById("motivationalQuote");
+      const quotes = ['The only way to do great work is to love what you do. - Steve Jobs', 'The best way to predict the future is to invent it. - Alan Kay', 'Code is like humor. When you have to explain it, it’s bad. – Cory House', 'Make it work, make it right, make it fast. – Kent Beck', "The advance of technology is based on making it fit in so that you don't really even notice it, so it's part of everyday life. - Bill Gates", "It's not a bug, it's an undocumented feature! - ReddYY", 'First, solve the problem. Then, write the code. – John Johnson', 'Keep calm and code on. - ArogYYaa', 'Continuous improvement is better than delayed perfection. - Mark Twain'];
+
+      function displayRandomQuote() {
+        if (motivationalQuoteDiv && quotes.length > 0) {
+          const randomIndex = Math.floor(Math.random() * quotes.length);
+          motivationalQuoteDiv.textContent = quotes[randomIndex];
+        }
+      }
+      if (motivationalQuoteDiv && quotes.length > 0) {
+        displayRandomQuote();
+        setInterval(displayRandomQuote, 60000);
+      } else if (motivationalQuoteDiv) {
+        motivationalQuoteDiv.textContent = 'Stay motivated!';
+      }
+    </script>
+  </body>
+</html>

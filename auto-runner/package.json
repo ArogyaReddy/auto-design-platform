@@ -1,0 +1,53 @@
+{
+  "name": "ai-automation-framework",
+  "version": "1.0.0",
+  "description": "An AI-powered automation framework with Playwright and Cucumber.js",
+  "main": "index.js",
+  "scripts": {
+    "Playwright-Debug": "PWDEBUG=1 npm test",
+    "test:inspect": "cross-env PWDEBUG=1 cucumber-js",
+    "test": "npm run test:cucumber",
+    "test:cucumber": "cucumber-js",
+    "test:playwright": "playwright test",
+    "test:playwright:ui": "npx playwright test --headed --ui",
+    "test:playwright:report": "npx playwright show-report",
+    "test:playwright:trace": "npx playwright show-trace trace.zip",
+    "test1": "npx cucumber-js -p default",
+    "start:dashboard": "node dashboard/app.js",
+    "explore:app": "node utils/app_explorer.js",
+    "dashboard:test:login": "./node_modules/.bin/cucumber-js --config cucumber.js --tags @login-feature",
+    "dashboard:debug:login": "cross-env PWDEBUG=1 cucumber-js --config cucumber.js --tags @login-feature",
+    "dashboard:debug:test": "cross-env PWDEBUG=1 cucumber-js --config cucumber.js --tags @login_with_locked_out_data_manager",
+    "dashboard:debug:feature": "cross-env PWDEBUG=1 cucumber-js features/login_with_data_manager.feature --timeout 60000"
+  },
+  "keywords": [
+    "AI",
+    "Automation",
+    "Playwright",
+    "Cucumber",
+    "Node.js"
+  ],
+  "author": "ArogYYaa",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.27.1",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/register": "^7.27.1",
+    "@cucumber/cucumber": "^11.3.0",
+    "@faker-js/faker": "^8.4.1",
+    "@playwright/test": "^1.44.0",
+    "cross-env": "^7.0.3",
+    "cucumber-pretty": "^6.0.1",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "playwright": "^1.52.0",
+    "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.2",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "ws": "^8.17.0"
+  }
+}

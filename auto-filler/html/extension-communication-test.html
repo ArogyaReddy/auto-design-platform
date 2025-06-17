@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Communication Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #45a049;
+        }
+        
+        .log {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+        
+        .form-section {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔌 Extension Communication Test</h1>
+    
+    <div class="section">
+        <h2>Test Extension Connection</h2>
+        <p>This page tests if the Element AI Extractor extension is properly loaded and can communicate.</p>
+        
+        <button onclick="testContentScript()">🧪 Test Content Script</button>
+        <button onclick="testAutoFillerPing()">📡 Test Auto-Filler Ping</button>
+        <button onclick="testDirectInjection()">💉 Test Direct Injection</button>
+        <button onclick="clearLog()">🗑️ Clear Log</button>
+        
+        <div id="log" class="log">
+            Test log will appear here...
+        </div>
+    </div>
+    
+    <div class="form-section">
+        <h3>Quick Test Form</h3>
+        <input type="text" id="firstName" name="firstName" placeholder="First Name">
+        <input type="email" id="email" name="email" placeholder="Email">
+        <input type="tel" id="phone" name="phone" placeholder="Phone">
+        <button onclick="fillFormManually()">📝 Manual Fill</button>
+        <button onclick="clearForm()">🧹 Clear Form</button>
+    </div>
+
+    <script>
+        let logCount = 0;
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('log');
+            const colors = {
+                'info': '#333',
+                'success': '#0f5132',
+                'error': '#842029',
+                'warning': '#664d03'
+            };
+            
+            logCount++;
+            const entry = document.createElement('div');
+            entry.style.color = colors[type] || '#333';
+            entry.style.margin = '2px 0';
+            entry.innerHTML = `[${timestamp}] #${logCount} <strong>[${type.toUpperCase()}]</strong> ${message}`;
+            
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            console.log(`[EXT-TEST ${type.toUpperCase()}] ${message}`);
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            logCount = 0;
+            log('Log cleared', 'info');
+        }
+        
+        function testContentScript() {
+            log('Testing if content script is loaded...', 'info');
+            
+            // Check for content script variables
+            const checks = [
+                { name: 'aiExtractorLoaded', value: window.aiExtractorLoaded },
+                { name: 'aiExtractorMessageListenerAdded', value: window.aiExtractorMessageListenerAdded },
+                { name: 'aiExtractorIsInspecting', value: window.aiExtractorIsInspecting }
+            ];
+            
+            checks.forEach(check => {
+                if (check.value !== undefined) {
+                    log(`✅ ${check.name}: ${check.value}`, 'success');
+                } else {
+                    log(`❌ ${check.name}: undefined`, 'error');
+                }
+            });
+            
+            // Check for chrome extension API
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                log('✅ Chrome extension API available', 'success');
+                log(`Extension ID: ${chrome.runtime.id}`, 'info');
+            } else {
+                log('❌ Chrome extension API not available', 'error');
+            }
+        }
+        
+        function testAutoFillerPing() {
+            log('Testing auto-filler ping communication...', 'info');
+            
+            if (typeof chrome === 'undefined' || !chrome.runtime) {
+                log('❌ Chrome extension API not available', 'error');
+                return;
+            }
+            
+            log('Sending ping message to extension...', 'info');
+            
+            chrome.runtime.sendMessage({ action: 'pingAutoFiller' }, (response) => {
+                if (chrome.runtime.lastError) {
+                    log(`❌ Ping failed: ${chrome.runtime.lastError.message}`, 'error');
+                } else if (response) {
+                    log('✅ Ping response received', 'success');
+                    log(`Auto-filler ready: ${response.autoFillerReady}`, response.autoFillerReady ? 'success' : 'warning');
+                    log(`Auto-filler loaded: ${response.autoFillerLoaded}`, response.autoFillerLoaded ? 'success' : 'warning');
+                    if (response.autoFillerError) {
+                        log(`Auto-filler error: ${response.autoFillerError}`, 'error');
+                    }
+                } else {
+                    log('❌ No response received', 'error');
+                }
+            });
+        }
+        
+        function testDirectInjection() {
+            log('Testing direct auto-filler injection...', 'info');
+            
+            if (typeof chrome === 'undefined' || !chrome.tabs) {
+                log('⚠️ Cannot test direct injection (requires tab access)', 'warning');
+                return;
+            }
+            
+            // This would normally be done from the popup
+            log('Direct injection requires popup context', 'info');
+        }
+        
+        function fillFormManually() {
+            log('Filling form manually with test data...', 'info');
+            
+            document.getElementById('firstName').value = 'John';
+            document.getElementById('email').value = 'john@example.com';
+            document.getElementById('phone').value = '+1-555-123-4567';
+            
+            log('✅ Form filled manually', 'success');
+        }
+        
+        function clearForm() {
+            log('Clearing form...', 'info');
+            
+            document.getElementById('firstName').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            
+            log('✅ Form cleared', 'success');
+        }
+        
+        // Test extension availability on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🔌 Extension Communication Test Page loaded', 'info');
+            log(`User Agent: ${navigator.userAgent.substring(0, 50)}...`, 'info');
+            log(`Page URL: ${window.location.href}`, 'info');
+            
+            setTimeout(() => {
+                log('Running automatic content script test...', 'info');
+                testContentScript();
+            }, 1000);
+        });
+        
+        // Listen for extension messages (if any)
+        if (typeof chrome !== 'undefined' && chrome.runtime) {
+            chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+                log(`📨 Received message: ${JSON.stringify(message)}`, 'info');
+                return true;
+            });
+        }
+    </script>
+</body>
+</html>

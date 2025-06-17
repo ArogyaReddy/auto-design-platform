@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 400px;
+      min-height: 500px;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header p {
+      margin: 5px 0 0 0;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .status-section {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .status-message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .status-error {
+      color: #ff4444;
+    }
+
+    .status-success {
+      color: #44ff44;
+    }
+
+    .retry-button {
+      padding: 8px 16px;
+      margin: 10px 0;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .retry-button:hover:not(:disabled) {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .retry-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .scan-section {
+      margin-bottom: 20px;
+    }
+
+    .scan-button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #00ff88, #00aaff);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .scan-button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .scan-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .options {
+      margin: 15px 0;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .option input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+
+    .stats {
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .stat-value {
+      font-weight: 600;
+      color: #00ff88;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(255,255,255,0.2);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    .status {
+      text-align: center;
+      font-size: 12px;
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .status.success {
+      background: rgba(0,255,136,0.2);
+      border: 1px solid rgba(0,255,136,0.3);
+    }
+
+    .status.error {
+      background: rgba(255,0,0,0.2);
+      border: 1px solid rgba(255,0,0,0.3);
+    }
+
+    .status.scanning {
+      background: rgba(255,165,0,0.2);
+      border: 1px solid rgba(255,165,0,0.3);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #00ff88;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Individual Element Tools Styles */
+    .individual-tools {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .tools-header {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #00ff88;
+      text-align: center;
+    }
+
+    .tool-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tool-btn {
+      flex: 1;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tool-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.25);
+      border-color: rgba(255,255,255,0.5);
+      transform: translateY(-1px);
+    }
+
+    .tool-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .tool-btn.active {
+      background: linear-gradient(45deg, #00ff88, #00aaff);
+      border-color: #00ff88;
+      box-shadow: 0 2px 8px rgba(0,255,136,0.3);
+    }
+
+    .element-info {
+      background: rgba(0,0,0,0.2);
+      border-radius: 6px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .element-details {
+      font-size: 12px;
+    }
+
+    .element-name {
+      font-weight: 600;
+      color: #00ff88;
+      margin-bottom: 4px;
+    }
+
+    .element-tag {
+      opacity: 0.8;
+      font-family: 'Courier New', monospace;
+    }
+
+    .tool-btn.scanning {
+      background: linear-gradient(45deg, #ff6b35, #f7931e);
+      border-color: #ff6b35;
+      box-shadow: 0 2px 8px rgba(255,107,53,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎯 Universal Element Locator</h1>
+    <p>Scan & Generate Locators for Any Page</p>
+  </div>
+
+  <div class="content">
+    <div class="status-section">
+      <div id="status" class="status-message">Ready to scan any webpage!</div>
+      <div id="connectionStatus"></div>
+      <button id="retryConnection" class="retry-button" style="display: none;">Retry Connection</button>
+    </div>
+
+    <div class="scan-section">
+      <button id="scanButton" class="scan-button">
+        🔍 Scan Page Elements
+      </button>
+    </div>
+
+    <div class="tools-section" id="individualTools">
+      <h3>Individual Element Tools</h3>
+      <div class="button-group">
+        <button id="scanElement" class="tool-button">
+          🎯 Scan Element
+        </button>
+        <button id="highlightElement" class="tool-button">
+          ✨ Highlight Element
+        </button>
+      </div>
+    </div>
+
+    <div class="options-section">
+      <label class="checkbox-label">
+        <input type="checkbox" id="highlightDuringScan" checked>
+        <span>Highlight elements during scan</span>
+      </label>
+      <label class="checkbox-label">
+        <input type="checkbox" id="includeShadowDOM" checked>
+        <span>Include Shadow DOM elements</span>
+      </label>
+      <label class="checkbox-label">
+        <input type="checkbox" id="includeHidden">
+        <span>Include hidden elements</span>
+      </label>
+    </div>
+
+    <div id="stats" class="stats hidden">
+      <div class="stat-row">
+        <span>Total Elements:</span>
+        <span id="totalElements" class="stat-value">0</span>
+      </div>
+      <div class="stat-row">
+        <span>With Primary Locators:</span>
+        <span id="primaryElements" class="stat-value">0</span>
+      </div>
+      <div class="stat-row">
+        <span>With Secondary Locators:</span>
+        <span id="secondaryElements" class="stat-value">0</span>
+      </div>
+      <div class="stat-row">
+        <span>Shadow DOM Elements:</span>
+        <span id="shadowElements" class="stat-value">0</span>
+      </div>
+      <div class="stat-row">
+        <span>Scan Duration:</span>
+        <span id="scanDuration" class="stat-value">0ms</span>
+      </div>
+    </div>
+
+    <div id="actions" class="actions hidden">
+      <button id="viewResults" class="action-btn">📋 View Results</button>
+      <button id="exportData" class="action-btn">💾 Export</button>
+      <button id="clearData" class="action-btn">🗑️ Clear</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>Ready to scan any webpage!</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

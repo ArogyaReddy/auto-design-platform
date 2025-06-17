@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Element AI Extractor - Full Page</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="fullpage.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="fullpage-mode">
+    <div class="fullpage-container">
+        <div class="fullpage-header">
+            <div class="header-section">
+                <div class="title-section">
+                    <span class="logo">🤖</span>
+                    <span class="title">Element <span class="ai-gradient">AI Extractor</span> <span class="eye">👁️</span></span>
+                    <span class="fullpage-indicator">Full Page View</span>
+                </div>
+                <div class="header-buttons">
+                    <button class="close-tab-btn icon-only" id="closeTabBtn" title="Close this tab">
+                        <span>✕</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fullpage-content">
+            <div class="left-panel">
+                <div class="ai-tip" id="ai-tip">
+                    <div class="ai-tip-sidebar"></div>
+                    <div class="ai-tip-content">
+                        <strong>AI Tip:</strong> Interactable (clickable) elements are best for automation.
+                    </div>
+                </div>
+
+                <div class="search-row">
+                    <span class="search-icon">🔍</span>
+                    <input id="search" class="search-box" placeholder="Search elements..." type="text" autocomplete="off" />
+                    <button id="clearSearch" class="clear-btn" title="Clear search">✕</button>
+                </div>
+
+                <div class="type-row">
+                    <label class="filter-btn"><input type="checkbox" id="filterAll" checked>All Elements</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterLinks">Links</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterButtons">Buttons</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterInputs">Inputs</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterCombo">Combo</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterTextboxes">Textboxes</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterCheckboxes">Checkboxes</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterRadios">Radios</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterLists">Lists</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterForms">Forms</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterImages">Images</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterIframes">Iframes</label>
+                    <label class="filter-btn"><input type="checkbox" id="filterCustom">Custom Elements</label>
+                </div>
+
+                <div class="quick-actions">
+                    <button class="action-btn" id="selectAll" title="Select All Elements">
+                        <span>🎯</span> All
+                    </button>
+                    <button class="action-btn" id="selectInteractive" title="Select Interactive Elements Only">
+                        <span>⚡</span> Interactive
+                    </button>
+                    <button class="action-btn" id="clearFilters" title="Clear All Filters">
+                        <span>🧹</span> Clear
+                    </button>
+                    <button class="action-btn" id="refreshExtraction" title="Refresh Extraction">
+                        <span>🔄</span> Refresh
+                    </button>
+                </div>
+
+                <div class="toggle-row">
+                    <span class="switch-label">Visible Only</span>
+                    <label class="switch">
+                        <input type="checkbox" id="filterVisible" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">Hidden Only</span>
+                    <label class="switch">
+                        <input type="checkbox" id="filterHidden">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="switch-label">Shadow DOM</span>
+                    <label class="switch">
+                        <input type="checkbox" id="filterShadow">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- Inspector Section -->
+                <div class="inspector-section">
+                    <button class="inspect-btn" id="inspectElement" title="Click to inspect elements one by one">
+                        <span class="inspect-icon">🔬</span> Inspect Element
+                    </button>
+                    <div id="inspector-status" class="inspector-status"></div>
+                </div>
+
+                <!-- Inspected Element Details -->
+                <div id="inspected-element-details" class="inspected-element-details" style="display: none;"></div>
+
+                <div class="export-controls">
+                    <select id="exportFormat" class="format-select" title="Choose export format for extracted elements">
+                        <option value="table" selected>Table</option>
+                        <option value="csv">CSV Format</option>
+                        <option value="json">JSON Format</option>
+                        <option value="excel">Excel Format</option>
+                    </select>
+                    <button class="extract-btn" id="extract" title="Extract elements from the current page based on selected filters">
+                        <span class="rocket">🚀</span> Extract Elements
+                    </button>
+                </div>
+                <div id="status" class="status-row"></div>
+            </div>
+
+            <div class="right-panel">
+                <div class="results-header">
+                    <h3>Extracted Elements</h3>
+                    <div class="stats-bar" id="stats">
+                        <span id="elementCount">0 elements found</span>
+                        <span id="visibilityStats">0 visible • 0 hidden</span>
+                    </div>
+                </div>
+                
+                <div id="preview" class="preview-table fullpage-table"></div>
+                
+                <!-- Pagination Controls -->
+                <div class="pagination-controls" id="paginationControls" style="display: none;">
+                    <div class="pagination-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </div>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" id="prevBtn" title="Previous page">‹ Previous</button>
+                        <button class="pagination-btn" id="nextBtn" title="Next page">Next ›</button>
+                        <button class="pagination-btn show-all-btn" id="showAllBtn" title="Show all elements">Show All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span> for <span class="ai-gradient">ADP</span></span>
+            <span> by <span class="ai-gradient">Arogya Reddy</span></span>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+    <script src="fullpage.js"></script>
+</body>
+
+</html>

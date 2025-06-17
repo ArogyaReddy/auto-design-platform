@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Element Locator (Basic)",
+  "version": "0.1.0",
+  "description": "Basic element scanner",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background_basic.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Element Locator"
+  }
+}

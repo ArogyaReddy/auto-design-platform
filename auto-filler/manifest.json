@@ -1,0 +1,67 @@
+{
+  "manifest_version": 3,
+  "name": "Element AI Extractor",
+  "version": "1.2.5.0",
+  "description": "Extract UI elements and locators with AI and magic.",
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "scripting",
+    "storage",
+    "activeTab",
+    "contextMenus",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "locator_suggester.js",
+        "contentScript.js"
+      ],
+      "all_frames": true,
+      "run_at": "document_start",
+      "match_about_blank": true
+    }
+  ],
+  "commands": {
+    "open-extractor": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+E"
+      },
+      "description": "Open Element AI Extractor"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*",
+        "magic-effects/*",
+        "styles/*.css",
+        "fullpage.html",
+        "fullpage.css",
+        "fullpage.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

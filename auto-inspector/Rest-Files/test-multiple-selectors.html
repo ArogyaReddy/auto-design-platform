@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Element Selector Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+        }
+        
+        .action-menu-button {
+            background: #2196f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .action-menu-button:hover {
+            background: #1976d2;
+        }
+        
+        .container {
+            border: 2px solid #ccc;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiple Element Selector Test Page</h1>
+    <p>This page contains multiple elements with the same <code class="highlight">data-test-id="action-menu-button"</code> attribute to test unique selector generation.</p>
+    
+    <div class="container" id="header-section">
+        <h2>Header Section</h2>
+        <p>Navigation buttons with the same data-test-id:</p>
+        <div class="button-grid">
+            <button data-test-id="action-menu-button" class="action-menu-button" id="home-btn">🏠 Home</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" id="profile-btn">👤 Profile</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" id="settings-btn">⚙️ Settings</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" id="help-btn">❓ Help</button>
+        </div>
+    </div>
+    
+    <div class="container" id="main-content">
+        <h2>Main Content Actions</h2>
+        <p>Content management buttons with the same data-test-id:</p>
+        <div class="button-grid">
+            <button data-test-id="action-menu-button" class="action-menu-button" data-action="create">➕ Create New</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" data-action="edit">✏️ Edit</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" data-action="delete">🗑️ Delete</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" data-action="share">📤 Share</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" data-action="export">💾 Export</button>
+        </div>
+    </div>
+    
+    <div class="container" id="sidebar">
+        <h2>Sidebar Actions</h2>
+        <p>Quick action buttons in sidebar:</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button data-test-id="action-menu-button" class="action-menu-button" title="Quick Save">💾 Quick Save</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" title="Quick Print">🖨️ Quick Print</button>
+            <button data-test-id="action-menu-button" class="action-menu-button" title="Quick Share">📲 Quick Share</button>
+        </div>
+    </div>
+    
+    <div class="container" id="footer-section">
+        <h2>Footer Actions</h2>
+        <p>Footer utility buttons:</p>
+        <div class="button-grid">
+            <button data-test-id="action-menu-button" class="action-menu-button">📞 Contact</button>
+            <button data-test-id="action-menu-button" class="action-menu-button">📰 News</button>
+            <button data-test-id="action-menu-button" class="action-menu-button">🔗 Links</button>
+        </div>
+    </div>
+    
+    <div class="container" id="test-forms">
+        <h2>Form Elements (different selector)</h2>
+        <p>These elements have different attributes for comparison:</p>
+        
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" data-field="username" placeholder="Enter username">
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" data-field="email" placeholder="Enter email">
+        </div>
+        
+        <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="role" data-field="role">
+                <option value="">Select role</option>
+                <option value="admin">Administrator</option>
+                <option value="user">User</option>
+                <option value="guest">Guest</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="bio">Biography:</label>
+            <textarea id="bio" name="bio" data-field="bio" rows="4" placeholder="Tell us about yourself"></textarea>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 20px; background: #e3f2fd; border-radius: 8px;">
+        <h3>🔍 Testing Instructions</h3>
+        <ol>
+            <li>Open the extension popup</li>
+            <li>Try scanning the page with "Scan Page Elements"</li>
+            <li>Look for elements with <code>data-test-id="action-menu-button"</code></li>
+            <li>Check the "🎯 Unique Locators" column in the results</li>
+            <li>Use the "Manual Highlight" feature with: <code class="highlight">[data-test-id="action-menu-button"]</code></li>
+            <li>Notice the numbered badges on each matching element</li>
+            <li>Test individual unique selectors from the results</li>
+        </ol>
+        
+        <p><strong>Expected Results:</strong></p>
+        <ul>
+            <li>✅ All 14 buttons should be found and numbered</li>
+            <li>✅ Each element should have unique selectors in the results</li>
+            <li>✅ Unique selectors should target only one specific element</li>
+            <li>✅ Users can identify and target individual elements precisely</li>
+        </ul>
+    </div>
+    
+    <script>
+        console.log('Multiple element test page loaded');
+        
+        // Add click handlers to demonstrate functionality
+        document.querySelectorAll('[data-test-id="action-menu-button"]').forEach((button, index) => {
+            button.addEventListener('click', () => {
+                alert(`Button ${index + 1} clicked: "${button.textContent.trim()}"`);
+            });
+        });
+        
+        console.log(`Total elements with data-test-id="action-menu-button": ${document.querySelectorAll('[data-test-id="action-menu-button"]').length}`);
+    </script>
+</body>
+</html>

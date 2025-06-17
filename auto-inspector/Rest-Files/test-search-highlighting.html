@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Highlighting Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .test-section {
+            border: 2px solid #ccc;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .test-element {
+            margin: 10px 0;
+            padding: 8px;
+            background: #f5f5f5;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Highlighting Test</h1>
+    <p>This page contains various elements to test search highlighting functionality.</p>
+    
+    <div class="test-section">
+        <h2>Text Content Testing</h2>
+        <div class="test-element">
+            <p>Accepted usernames are standard login credentials.</p>
+            <span>Username input field for authentication</span>
+            <button id="login-btn">Login Button</button>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Attributes Testing</h2>
+        <input type="text" data-testid="username-field" placeholder="Enter username" class="username-input" />
+        <input type="password" data-testid="password-field" name="password" id="pwd-field" />
+        <button data-action="submit" class="submit-btn" aria-label="Submit form">Submit</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Mixed Content Testing</h2>
+        <div class="login-container">
+            <label for="user">User credentials:</label>
+            <input type="email" id="user" name="userEmail" data-field="email" />
+            <div class="helper-text">Enter your username or email address</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Selector Testing</h2>
+        <div id="main-content" class="content-wrapper">
+            <article class="article-content" data-article="main">
+                <h3>Article Title</h3>
+                <p class="article-text">This article contains username validation rules.</p>
+            </article>
+        </div>
+    </div>
+    
+    <script>
+        console.log('Search highlighting test page loaded');
+        console.log('Elements for testing:');
+        console.log('- Text containing "username":', document.querySelectorAll('*').length);
+        console.log('- Data attributes with "username":', document.querySelectorAll('[data-testid*="username"]').length);
+        console.log('- Class names with "username":', document.querySelectorAll('[class*="username"]').length);
+        
+        // Test various search terms
+        window.testSearchTerms = [
+            'username',
+            'accepted',
+            'login',
+            'submit',
+            'data-testid',
+            'user',
+            'content',
+            'article'
+        ];
+        
+        console.log('Test search terms:', window.testSearchTerms);
+        console.log('Use these terms in the search box to test highlighting');
+    </script>
+</body>
+</html>

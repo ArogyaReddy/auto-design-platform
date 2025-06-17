@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Area Scan Test</title>
+    <style>
+        body { margin: 50px; font-family: Arial, sans-serif; }
+        .container { 
+            background: #f0f0f0; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        button { padding: 10px; margin: 5px; }
+        input { padding: 8px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Simple Area Scan Test</h1>
+    
+    <div class="container" id="test-container">
+        <h2>Test Container</h2>
+        <p>This is a simple container for testing area scan.</p>
+        <button onclick="alert('Button 1 clicked!')">Button 1</button>
+        <button onclick="alert('Button 2 clicked!')">Button 2</button>
+        <input type="text" placeholder="Test input">
+        <select>
+            <option>Option 1</option>
+            <option>Option 2</option>
+        </select>
+        <a href="#" onclick="alert('Link clicked!')">Test Link</a>
+    </div>
+    
+    <div class="container" id="simple-form">
+        <h3>Simple Form</h3>
+        <form>
+            <input type="email" placeholder="Email">
+            <input type="password" placeholder="Password">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    
+    <script>
+        console.log('Simple test page loaded');
+        
+        // Test messaging directly
+        setTimeout(() => {
+            console.log('Testing direct message to popup...');
+            try {
+                chrome.runtime.sendMessage({
+                    action: 'areaScanComplete',
+                    results: {
+                        elements: [
+                            { id: 'test1', tagName: 'button', locators: { primary: [{ selector: 'button' }] } },
+                            { id: 'test2', tagName: 'input', locators: { primary: [{ selector: 'input' }] } }
+                        ],
+                        scanDuration: 100
+                    },
+                    containerInfo: {
+                        tagName: 'div',
+                        id: 'test-container',
+                        className: 'container',
+                        url: window.location.href,
+                        selector: '#test-container'
+                    }
+                });
+            } catch (error) {
+                console.error('Failed to send test message:', error);
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+{
+    "cucumberautocomplete.steps": [
+         "features/step_definitions/**/*js"
+     ],
+     "cucumberautocomplete.syncfeatures": "features/step_definitions/**/*feature",
+     "cucumberautocomplete.strictGherkinCompletion": true,
+     "cucumberautocomplete.strictGherkinValidation": true,
+     "cucumberautocomplete.smartSnippets": true,
+     "cucumberautocomplete.stepsInvariants": true,        
+     "cucumberautocomplete.skipDocStringsFormat": true,
+     "cucumberautocomplete.formatConfOverride": {
+         "And": 3,
+         "But": "relative",
+     },
+     "cucumberautocomplete.onTypeFormat": true,
+     "editor.quickSuggestions": {
+         "comments": false,
+         "strings": true,
+         "other": true,
+         
+     },
+     "cucumberautocomplete.gherkinDefinitionPart": "(Given|When|Then|And)\\(",
+     "cucumberautocomplete.stepRegExSymbol": "'"  ,
+
+
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode" // If you use Prettier
+    },
+    // "eslint.validate": ["javascript"], // If you use ESLint
+
+     "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "prettier.printWidth": 999,
+    "prettier.proseWrap": "never",
+    "prettier.arrowParens": "avoid",
+    "prettier.trailingComma": "none",
+    "prettier.bracketSpacing": false,
+    "prettier.singleQuote": true,
+    // "[javascript]": {"editor.defaultFormatter": "esbenp.prettier-vscode"}
+}
+
+
+// // .vscode/settings.json
+// {
+//   // General Editor Settings
+//   // "editor.tabSize": 2,
+//   // "editor.insertSpaces": true,
+//   // "editor.formatOnSave": true,
+//   // "editor.defaultFormatter": "esbenp.prettier-vscode",
+//   // "files.eol": "\n", // Ensure consistent line endings
+
+//   // File Exclusions (for cleaner sidebar and faster search)
+//   "files.exclude": {
+//     "**/.git": true,
+//     "**/.svn": true,
+//     "**/.hg": true,
+//     "**/CVS": true,
+//     "**/.DS_Store": true,
+//     "**/node_modules": true,
+//     "**/reports": true, // Exclude generated reports
+//     "**/generated_features": true // Exclude dynamically generated features
+//   },
+
+//   // JavaScript Specific Settings
+//   "javascript.updateImportsOnFileMove.enabled": "always",
+//   "javascript.format.enable": false, // Let Prettier handle JS formatting
+//   "eslint.enable": true,
+//   "eslint.options": {
+//     "overrideConfigFile": "./.eslintrc.js" // Adjust if your ESLint config is named differently
+//   },
+//   "eslint.validate": [
+//     "javascript",
+//     "javascriptreact",
+//     "typescript",
+//     "typescriptreact"
+//   ],
+
+//   // Cucumber/Gherkin Settings
+//   "cucumber.features": [
+//     // "features/**/*.feature"
+//     "features/*.feature"
+//   ],
+//   "cucumber.stepDefinitions": [
+//     // "features/step_definitions/**/*.js",
+//     "features/step_definitions/*.js",
+//     "features/support/*.js"
+//   ],
+//   "cucumber.glue": ["features/step_definitions", "features/support"],
+
+//   // Playwright Test Extension Settings (optional, usually auto-detected)
+//   "playwright.testRunner.args": ["--config", "playwright.config.js"],
+
+//   // Node.js Debugging
+//   "debug.javascript.autoAttachFilter": "smart"
+// }
+
+
+// // .vscode/settings.json
+// {
+//   "cucumber.features": [
+//     "features/**/*.feature" // Glob pattern for your feature files
+//   ],
+//   "cucumber.glue": [
+//     "features/step_definitions/**/*.js", // Glob pattern for your JS step definitions
+//     "features/support/**/*.js"          // Glob pattern for your JS support files (hooks, world)
+//   ],
+//   // Optional: If your step definitions are sometimes slow to load,
+//   // you can increase the synchronization timeout.
+//   "cucumber.syncfeatures": true, 
+//   // Note: Some extensions might use a different setting name or numeric value for timeout
+//   // e.g., "cucumber.stepRegExSymbol": "RegExp"
+//   // or specific timeout settings.
+//   // The exact settings can vary slightly by extension.
+
+//   // If you are using "Cucumber (Gherkin) Full Support" extension,
+//   // it often works well with the paths defined in your cucumber.js config.
+//   // However, explicitly setting glue and features paths here is usually more reliable for the IDE.
+
+//   // Ensure there are no other conflicting settings for Cucumber from other extensions.
+// }

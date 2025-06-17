@@ -1,0 +1,457 @@
+/* Full Page Layout Styles */
+.fullpage-mode {
+    min-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.fullpage-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.fullpage-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fullpage-indicator {
+    background: linear-gradient(90deg, #59f9d6 20%, #18aaff 60%, #ffc366 95%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 15px;
+    padding: 4px 12px;
+    border: 1px solid rgba(89, 249, 214, 0.3);
+    border-radius: 12px;
+    background-color: rgba(89, 249, 214, 0.1);
+    color: #59f9d6;
+}
+
+.fullpage-content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 20px;
+    flex: 1;
+    min-height: 0;
+}
+
+.left-panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+}
+
+.right-panel {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.results-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 15px;
+}
+
+.results-header h3 {
+    color: #ffffff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.fullpage-table {
+    flex: 1;
+    overflow: auto;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fullpage-table table {
+    min-width: 1500px; /* Increased to accommodate 7th column (Playwright) */
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.fullpage-table th,
+.fullpage-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    white-space: nowrap;
+}
+
+/* Column minimum width management for proper spacing in fullpage view */
+.fullpage-table th:nth-child(1), .fullpage-table td:nth-child(1) { min-width: 140px; } /* Name */
+.fullpage-table th:nth-child(2), .fullpage-table td:nth-child(2) { min-width: 100px; } /* Type */
+.fullpage-table th:nth-child(3), .fullpage-table td:nth-child(3) { min-width: 180px; } /* Best/CSS */
+.fullpage-table th:nth-child(4), .fullpage-table td:nth-child(4) { min-width: 180px; } /* XPATH */
+.fullpage-table th:nth-child(5), .fullpage-table td:nth-child(5) { min-width: 120px; } /* ID */
+.fullpage-table th:nth-child(6), .fullpage-table td:nth-child(6) { min-width: 200px; } /* Text Content */
+.fullpage-table th:nth-child(7), .fullpage-table td:nth-child(7) { min-width: 100px; } /* Playwright */
+
+.fullpage-table th {
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 600;
+    color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.fullpage-table td {
+    color: #e0e7ff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Enhanced text overflow handling for specific columns in fullpage view */
+.fullpage-table .element-name {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #ffffff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.fullpage-table .element-name:hover {
+    overflow: visible;
+    white-space: normal;
+    word-break: break-word;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    max-width: none;
+    min-width: 200px;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+.fullpage-table .locator-text {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.85em;
+    color: #c6e6fc;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    padding: 4px 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.fullpage-table .locator-text:hover {
+    overflow: visible;
+    white-space: normal;
+    word-break: break-all;
+    background: rgba(57, 107, 230, 0.3);
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    max-width: none;
+    min-width: 250px;
+    border-radius: 6px;
+    padding: 6px 8px;
+}
+
+.fullpage-table .element-id {
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.85em;
+    color: #ffc366;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.fullpage-table .element-id:hover {
+    overflow: visible;
+    white-space: normal;
+    word-break: break-all;
+    background: rgba(255, 195, 102, 0.2);
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    max-width: none;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+
+.fullpage-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced table interactions for full page */
+.fullpage-table table tr:hover {
+    background: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+}
+
+.fullpage-table .copy-btn:hover {
+    background: rgba(57, 107, 230, 0.8);
+    transform: scale(1.05);
+}
+
+/* Selection highlighting */
+.fullpage-table td::-moz-selection,
+.fullpage-table td::selection {
+    background: rgba(89, 249, 214, 0.3);
+    color: #ffffff;
+}
+
+/* Scrollbar styling for full page */
+.fullpage-table::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.fullpage-table::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.fullpage-table::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.fullpage-table::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Search highlighting in full page */
+.fullpage-table .highlight {
+    background: rgba(255, 193, 7, 0.4);
+    border-radius: 2px;
+    padding: 1px 2px;
+}
+
+/* Header Buttons */
+.header-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Icon-only button base styles for fullpage */
+.icon-only {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(12px);
+}
+
+.icon-only:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.icon-only:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.open-tab-btn,
+.close-tab-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+    color: #ffffff;
+}
+
+.open-tab-btn:hover,
+.close-tab-btn:hover {
+    background: linear-gradient(135deg, #ff8e8e 0%, #ffb0b0 100%);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+}
+
+.open-tab-btn:active,
+.close-tab-btn:active {
+    background: linear-gradient(135deg, #ff5a5a 0%, #ff7d7d 100%);
+}
+
+/* Custom Tooltip Styles for Icon Buttons in fullpage */
+.icon-only[title] {
+    position: relative;
+}
+
+.icon-only[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFadeIn 0.2s ease-out 0.5s forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.icon-only[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.9);
+    z-index: 1001;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltipFadeIn 0.2s ease-out 0.5s forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .fullpage-content {
+        grid-template-columns: 350px 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .fullpage-content {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .left-panel {
+        max-height: 400px;
+    }
+    
+    .fullpage-container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .fullpage-table {
+        font-size: 0.85rem;
+    }
+    
+    .fullpage-table th,
+    .fullpage-table td {
+        padding: 8px 10px;
+    }
+    
+    /* Reduce minimum widths for mobile fullpage view while maintaining scrolling */
+    .fullpage-table table {
+        min-width: 1200px; /* Smaller minimum width for mobile but still enables scrolling */
+    }
+    
+    .fullpage-table th:nth-child(1), .fullpage-table td:nth-child(1) { min-width: 100px; } /* Name */
+    .fullpage-table th:nth-child(2), .fullpage-table td:nth-child(2) { min-width: 80px; } /* Type */
+    .fullpage-table th:nth-child(3), .fullpage-table td:nth-child(3) { min-width: 130px; } /* Best/CSS */
+    .fullpage-table th:nth-child(4), .fullpage-table td:nth-child(4) { min-width: 130px; } /* XPATH */
+    .fullpage-table th:nth-child(5), .fullpage-table td:nth-child(5) { min-width: 80px; } /* ID */
+    .fullpage-table th:nth-child(6), .fullpage-table td:nth-child(6) { min-width: 150px; } /* Text Content */
+    .fullpage-table th:nth-child(7), .fullpage-table td:nth-child(7) { min-width: 80px; } /* Playwright */
+    
+    .fullpage-table .copy-btn {
+        padding: 3px 6px;
+        font-size: 0.75rem;
+    }
+    
+    /* Adjust max-widths for mobile text overflow handling */
+    .fullpage-table .element-name {
+        max-width: 120px;
+    }
+    
+    .fullpage-table .locator-text {
+        max-width: 150px;
+    }
+    
+    .fullpage-table .element-id {
+        max-width: 100px;
+    }
+}
+
+/* Enhanced Table Styling for Full Page */
+.fullpage-table .copy-btn {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    margin: 2px;
+}
+
+.fullpage-table .locator-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 8px;
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+/* Stats bar in full page */
+.right-panel .stats-bar {
+    display: flex;
+    justify-content: space-between;
+    color: #a0aec0;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* Footer in full page */
+.fullpage-container .footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #a0aec0;
+    font-size: 0.9rem;
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}

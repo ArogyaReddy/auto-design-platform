@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Element Locator - Scan Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .scan-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .elements-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-top: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #5a67d8;
+        }
+
+        .elements-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 12px;
+            table-layout: fixed;
+            min-width: 1000px;
+        }
+
+        .elements-table th,
+        .elements-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow: hidden;
+        }
+
+        .elements-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Fixed column widths for better layout */
+        .elements-table th:nth-child(1) { width: 40px; }   /* # */
+        .elements-table th:nth-child(2) { width: 120px; }  /* Element Name */
+        .elements-table th:nth-child(3) { width: 70px; }   /* Tag */
+        .elements-table th:nth-child(4) { width: 80px; }   /* Confidence */
+        .elements-table th:nth-child(5) { width: 100px; }  /* Text */
+        .elements-table th:nth-child(6) { width: 200px; }  /* Primary */
+        .elements-table th:nth-child(7) { width: 200px; }  /* Secondary */
+        .elements-table th:nth-child(8) { width: 200px; }  /* Fallback */
+        .elements-table th:nth-child(9) { width: 80px; }   /* Position */
+
+        .elements-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .element-tag {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-high {
+            background: #10b981;
+            color: white;
+        }
+
+        .confidence-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .confidence-low {
+            background: #ef4444;
+            color: white;
+        }
+
+        .locators-list {
+            max-width: 300px;
+        }
+
+        .locator-item {
+            background: #f3f4f6;
+            margin: 2px 0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .locator-primary {
+            background: #dcfce7;
+            border-left: 3px solid #10b981;
+        }
+
+        .locator-secondary {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+        }
+
+        .locator-fallback {
+            background: #fee2e2;
+            border-left: 3px solid #ef4444;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background: #f3f4f6;
+        }
+
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .shadow-indicator {
+            color: #8b5cf6;
+            font-weight: bold;
+        }
+
+        /* New styles for enhanced features */
+        .element-name {
+            font-weight: 600;
+            color: #374151;
+            max-width: 110px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .locators-list {
+            min-width: 180px;
+            max-width: 190px;
+        }
+
+        .locators-header {
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 4px;
+        }
+
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+
+        .locator-item {
+            background: #f8f9fa;
+            margin: 2px 0;
+            padding: 4px 6px;
+            border-radius: 3px;
+            border-left: 3px solid #e5e7eb;
+            display: block;
+            position: relative;
+            font-size: 10px;
+        }
+
+        .locator-primary {
+            border-left-color: #10b981;
+        }
+
+        .locator-secondary {
+            border-left-color: #f59e0b;
+        }
+
+        .locator-fallback {
+            border-left-color: #ef4444;
+        }
+
+        .locator-type {
+            font-weight: 600;
+            font-size: 9px;
+            color: #6b7280;
+            text-transform: uppercase;
+            display: inline-block;
+            min-width: 35px;
+        }
+
+        .locator-value {
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 9px;
+            color: #374151;
+            word-break: break-all;
+            line-height: 1.2;
+            display: block;
+            margin-top: 2px;
+            max-width: 160px;
+        }
+
+        .copy-single-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 1px 3px;
+            border-radius: 2px;
+            font-size: 8px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s;
+            position: absolute;
+            right: 2px;
+            top: 2px;
+        }
+
+        .copy-single-btn:hover {
+            background: #4b5563;
+            opacity: 1;
+        }
+
+        .locator-item:hover .copy-single-btn {
+            opacity: 1;
+        }
+
+        /* Animation for copy notifications */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .copy-notification {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Table responsiveness */
+        .elements-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .element-tag {
+            background: #667eea;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .confidence-badge {
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .confidence-high {
+            background: #10b981;
+            color: white;
+        }
+
+        .confidence-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .confidence-low {
+            background: #ef4444;
+            color: white;
+        }
+
+        .shadow-indicator {
+            color: #8b5cf6;
+            font-weight: bold;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Scan Results</h1>
+            <div class="subtitle">Detailed analysis of page elements and their locators</div>
+            
+            <div class="scan-info" id="scanInfo">
+                <div class="info-card">
+                    <div class="info-label">Page URL</div>
+                    <div class="info-value" id="pageUrl">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Scan Date</div>
+                    <div class="info-value" id="scanDate">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Duration</div>
+                    <div class="info-value" id="scanDuration">-</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-label">Page Title</div>
+                    <div class="info-value" id="pageTitle">-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2>📊 Statistics</h2>
+            <div class="stats-grid" id="statsGrid">
+                <!-- Stats will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="elements-section">
+            <h2>📋 Elements</h2>
+            
+            <div class="controls">
+                <input type="text" class="search-box" id="searchBox" placeholder="Search elements by tag, text, or selector...">
+                <select class="filter-select" id="confidenceFilter">
+                    <option value="">All Confidence Levels</option>
+                    <option value="high">High (≥80%)</option>
+                    <option value="medium">Medium (60-79%)</option>
+                    <option value="low">Low (<60%)</option>
+                </select>
+                <select class="filter-select" id="tagFilter">
+                    <option value="">All Tags</option>
+                </select>
+                <button class="export-btn" id="exportBtn">💾 Export CSV</button>
+            </div>
+
+            <div id="elementsContainer">
+                <div class="loading">Loading scan results...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="results.js"></script>
+</body>
+</html>

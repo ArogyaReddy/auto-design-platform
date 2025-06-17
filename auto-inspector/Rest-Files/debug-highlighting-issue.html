@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Highlighting Issue</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #user-1-container {
+            background: #f0f0f0;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        [data-testid="action-menu-button"] {
+            background: #007cba;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        [data-testid="action-menu-button"]:hover {
+            background: #005a8a;
+        }
+        .highlight-test {
+            background: #e8f5e8;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .debug-info {
+            background: #fff3cd;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Debug Highlighting Issue</h1>
+        <p>This page tests the highlighting functionality for contextual selectors.</p>
+        
+        <div class="highlight-test">
+            <h3>Test Selector: <code>#user-1-container [data-testid="action-menu-button"]</code></h3>
+            <p>This should highlight the button inside the user container below.</p>
+        </div>
+        
+        <div id="user-1-container">
+            <h3>User 1 Actions</h3>
+            <p>This is the user container with ID "user-1-container".</p>
+            <button data-testid="action-menu-button">Action Menu</button>
+            <button data-testid="settings-button">Settings</button>
+            <button data-testid="delete-button">Delete</button>
+        </div>
+        
+        <div id="user-2-container">
+            <h3>User 2 Actions</h3>
+            <p>This is another user container to test specificity.</p>
+            <button data-testid="action-menu-button">Action Menu</button>
+            <button data-testid="settings-button">Settings</button>
+        </div>
+        
+        <div class="debug-info">
+            <strong>Debug Information:</strong><br>
+            Target selector: <code>#user-1-container [data-testid="action-menu-button"]</code><br>
+            Expected result: Should highlight only the first "Action Menu" button<br>
+            Check browser console for detailed debugging output.
+        </div>
+        
+        <div class="highlight-test">
+            <h3>Manual Testing:</h3>
+            <button onclick="testHighlighting()">Test Highlighting Manually</button>
+            <button onclick="testBasicSelector()">Test Basic Selector</button>
+            <button onclick="clearHighlights()">Clear Highlights</button>
+        </div>
+        
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // Manual testing functions
+        function testHighlighting() {
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            console.log('🧪 MANUAL TEST: Testing selector:', selector);
+            
+            // Test 1: Basic querySelectorAll
+            const elements = document.querySelectorAll(selector);
+            console.log('🧪 querySelectorAll found:', elements.length, 'elements');
+            elements.forEach((el, i) => {
+                console.log(`  Element ${i + 1}:`, el);
+            });
+            
+            // Test 2: Send message to extension
+            if (window.chrome && chrome.runtime) {
+                console.log('🧪 Sending highlight message to extension...');
+                chrome.runtime.sendMessage({
+                    action: 'highlightElement',
+                    selector: selector
+                }, (response) => {
+                    console.log('🧪 Extension response:', response);
+                    updateTestResults(`Extension response: ${JSON.stringify(response)}`);
+                });
+            } else {
+                console.log('🧪 Extension not available for testing');
+                updateTestResults('Extension not available for testing');
+            }
+            
+            // Test 3: Manual highlighting
+            if (elements.length > 0) {
+                elements.forEach(el => {
+                    el.style.border = '3px solid red';
+                    el.style.backgroundColor = 'yellow';
+                });
+                updateTestResults(`Manually highlighted ${elements.length} elements`);
+            } else {
+                updateTestResults('No elements found to highlight');
+            }
+        }
+        
+        function testBasicSelector() {
+            const selector = '[data-testid="action-menu-button"]';
+            console.log('🧪 BASIC TEST: Testing selector:', selector);
+            
+            const elements = document.querySelectorAll(selector);
+            console.log('🧪 Basic selector found:', elements.length, 'elements');
+            
+            if (elements.length > 0) {
+                elements.forEach(el => {
+                    el.style.border = '3px solid blue';
+                    el.style.backgroundColor = 'lightblue';
+                });
+                updateTestResults(`Basic selector highlighted ${elements.length} elements`);
+            }
+        }
+        
+        function clearHighlights() {
+            console.log('🧪 Clearing manual highlights...');
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.style.border = '';
+                btn.style.backgroundColor = '';
+            });
+            updateTestResults('Manual highlights cleared');
+        }
+        
+        function updateTestResults(message) {
+            const resultsDiv = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            resultsDiv.innerHTML += `<div class="debug-info">[${timestamp}] ${message}</div>`;
+        }
+        
+        // Auto-test on load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Page loaded, running automatic tests...');
+            
+            // Test the selector manually
+            const selector = '#user-1-container [data-testid="action-menu-button"]';
+            const elements = document.querySelectorAll(selector);
+            console.log('🧪 AUTO-TEST: Selector found', elements.length, 'elements');
+            
+            if (elements.length > 0) {
+                updateTestResults(`Auto-test: Found ${elements.length} elements with contextual selector`);
+            } else {
+                updateTestResults('Auto-test: No elements found with contextual selector');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Sorting Test Page</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            line-height: 1.6;
+        }
+        .section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px;
+        }
+        .primary-rich { 
+            background: #e8f5e8; 
+        }
+        .secondary-rich { 
+            background: #fff3cd; 
+        }
+        .shadow-container { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statistics Sorting Test Page</h1>
+    <p>This page tests the sorting functionality of statistics cards with diverse element types.</p>
+
+    <!-- Elements with many primary locators -->
+    <div class="section primary-rich">
+        <h2>Primary Locator Rich Section</h2>
+        <button id="primary-btn-1" class="btn-primary" data-testid="primary-action" aria-label="Primary Action">Primary Button 1</button>
+        <button id="primary-btn-2" class="btn-primary" data-testid="secondary-action" aria-label="Secondary Action">Primary Button 2</button>
+        <input id="primary-input" class="form-control" data-testid="text-input" aria-label="Text Input" placeholder="Enter text">
+        <select id="primary-select" class="form-select" data-testid="dropdown" aria-label="Select Option">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+        </select>
+    </div>
+
+    <!-- Elements with many secondary locators -->
+    <div class="section secondary-rich">
+        <h2>Secondary Locator Rich Section</h2>
+        <div>
+            <span>Simple span 1</span>
+            <span>Simple span 2</span>
+            <span>Simple span 3</span>
+        </div>
+        <div>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+            <p>Paragraph 3</p>
+        </div>
+        <ul>
+            <li>List item 1</li>
+            <li>List item 2</li>
+            <li>List item 3</li>
+        </ul>
+    </div>
+
+    <!-- Shadow DOM elements -->
+    <div class="section">
+        <h2>Shadow DOM Section</h2>
+        <div id="shadow-host-1" class="shadow-container">
+            <p>This will have shadow content</p>
+        </div>
+        <div id="shadow-host-2" class="shadow-container">
+            <p>This will also have shadow content</p>
+        </div>
+    </div>
+
+    <!-- Mixed content -->
+    <div class="section">
+        <h2>Mixed Content Section</h2>
+        <form id="test-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <button type="submit">Submit</button>
+        </form>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Data 1</td>
+                    <td>Data 2</td>
+                </tr>
+                <tr>
+                    <td>Data 3</td>
+                    <td>Data 4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Create Shadow DOM content
+        const shadowHost1 = document.getElementById('shadow-host-1');
+        const shadow1 = shadowHost1.attachShadow({mode: 'open'});
+        shadow1.innerHTML = `
+            <style>
+                .shadow-content { color: purple; padding: 10px; }
+                button { background: purple; color: white; padding: 5px 10px; }
+            </style>
+            <div class="shadow-content">
+                <h3>Shadow DOM Content 1</h3>
+                <button id="shadow-btn-1" data-shadow="true">Shadow Button 1</button>
+                <input type="text" placeholder="Shadow input 1">
+            </div>
+        `;
+
+        const shadowHost2 = document.getElementById('shadow-host-2');
+        const shadow2 = shadowHost2.attachShadow({mode: 'open'});
+        shadow2.innerHTML = `
+            <style>
+                .shadow-content { color: darkblue; padding: 10px; }
+                .nested-shadow { border: 2px solid darkblue; margin: 5px; }
+            </style>
+            <div class="shadow-content">
+                <h3>Shadow DOM Content 2</h3>
+                <div class="nested-shadow">
+                    <p>Nested shadow content</p>
+                    <button id="shadow-btn-2" data-shadow="true">Shadow Button 2</button>
+                    <span>Shadow span</span>
+                </div>
+            </div>
+        `;
+
+        console.log('✅ Test page loaded with diverse elements for statistics sorting test');
+    </script>
+</body>
+</html>

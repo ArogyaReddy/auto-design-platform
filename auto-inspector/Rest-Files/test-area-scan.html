@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Area Scan Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .form-section {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #2196f3;
+        }
+        
+        .button-group {
+            background: #fff3e0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ff9800;
+        }
+        
+        input, select, textarea, button {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #2196f3;
+            color: white;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #1976d2;
+        }
+        
+        .info-card {
+            background: #f1f8e9;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <h1>Universal Element Locator - Area Scan Test</h1>
+    <p>Use this page to test the <strong>Scan Area</strong> feature. Click the "Scan Area" button in the extension popup, then click on any container below to scan all elements within it.</p>
+    
+    <div class="container" id="main-container">
+        <h2>Main Container</h2>
+        <p>This is the main container with various elements inside.</p>
+        
+        <div class="form-section" id="user-form">
+            <h3>User Information Form</h3>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name">
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email">
+            
+            <label for="age">Age:</label>
+            <select id="age" name="age">
+                <option value="">Select age range</option>
+                <option value="18-25">18-25</option>
+                <option value="26-35">26-35</option>
+                <option value="36-50">36-50</option>
+                <option value="51+">51+</option>
+            </select>
+            
+            <label for="bio">Bio:</label>
+            <textarea id="bio" name="bio" placeholder="Tell us about yourself" rows="3"></textarea>
+        </div>
+        
+        <div class="button-group" id="action-buttons">
+            <h3>Action Buttons</h3>
+            <button id="save-btn" onclick="alert('Save clicked!')">Save</button>
+            <button id="cancel-btn" onclick="alert('Cancel clicked!')">Cancel</button>
+            <button id="submit-btn" onclick="alert('Submit clicked!')">Submit</button>
+            <button id="reset-btn" onclick="document.getElementById('user-form').reset()">Reset</button>
+        </div>
+        
+        <div class="info-card" id="info-section">
+            <h3>Information Section</h3>
+            <p>This section contains informational content.</p>
+            <ul>
+                <li><a href="#" onclick="alert('Link 1 clicked!')">Important Link 1</a></li>
+                <li><a href="#" onclick="alert('Link 2 clicked!')">Important Link 2</a></li>
+                <li><a href="#" onclick="alert('Link 3 clicked!')">Important Link 3</a></li>
+            </ul>
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzQxYWZmNCIvPgogIDx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0cHgiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5JbWFnZTwvdGV4dD4KICA8L3N2Zz4K" alt="Sample image" style="width: 100px; height: 100px;">
+        </div>
+    </div>
+    
+    <div class="container" id="secondary-container">
+        <h2>Secondary Container</h2>
+        <p>This is a separate container to test area scanning on different sections.</p>
+        
+        <div class="form-section">
+            <label for="search">Search:</label>
+            <input type="search" id="search" placeholder="Search...">
+            <button onclick="alert('Search clicked!')">🔍 Search</button>
+        </div>
+        
+        <div class="info-card">
+            <h4>Quick Actions</h4>
+            <button onclick="alert('Quick action 1!')">Action 1</button>
+            <button onclick="alert('Quick action 2!')">Action 2</button>
+            <button onclick="alert('Quick action 3!')">Action 3</button>
+        </div>
+    </div>
+    
+    <footer style="margin-top: 40px; padding: 20px; background: #333; color: white; text-align: center;">
+        <p>Footer content - try scanning this footer area too!</p>
+        <a href="#" style="color: #4fc3f7;">Footer Link 1</a> |
+        <a href="#" style="color: #4fc3f7;">Footer Link 2</a> |
+        <a href="#" style="color: #4fc3f7;">Footer Link 3</a>
+    </footer>
+    
+    <script>
+        console.log('Area scan test page loaded');
+        
+        // Add some dynamic content
+        setTimeout(() => {
+            const dynamicDiv = document.createElement('div');
+            dynamicDiv.innerHTML = '<h4>Dynamic Content</h4><p>This content was added dynamically.</p><button onclick="alert(\'Dynamic button!\')">Dynamic Button</button>';
+            dynamicDiv.className = 'info-card';
+            dynamicDiv.id = 'dynamic-content';
+            document.getElementById('main-container').appendChild(dynamicDiv);
+        }, 1000);
+    </script>
+</body>
+</html>

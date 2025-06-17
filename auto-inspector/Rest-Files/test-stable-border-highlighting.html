@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stable Border Highlighting Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background: #f8f9fa;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            border: 1px solid #e0e0e0;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 6px;
+            background: #fdfdfd;
+        }
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .test-element {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .visual-user-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        .visual-user-link:hover {
+            background: #e7f3ff;
+        }
+        .special-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .form-element {
+            width: 200px;
+            padding: 10px;
+            border: 2px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .complex-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .dark-section {
+            background: #343a40;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .nested-container {
+            border: 2px solid #ff6b6b;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 6px;
+        }
+        .nested-item {
+            border: 2px solid #4ecdc4;
+            padding: 10px;
+            margin: 8px;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        .selector-demo {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #ffc107;
+            color: #212529;
+            border-radius: 4px;
+            border: 1px solid #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Stable Border Highlighting Test</h1>
+        <p><strong>New Feature:</strong> Clean, stable border highlighting without shaking or scaling animations.</p>
+        
+        <div class="test-section">
+            <h2>📋 Single Element Testing</h2>
+            <div class="element-grid">
+                <div class="test-element">
+                    <a href="#" class="visual-user-link" id="visual-user">visual_user</a>
+                </div>
+                <div class="test-element">
+                    <button class="special-button" id="primary-btn">Primary Button</button>
+                </div>
+                <div class="test-element">
+                    <input type="text" class="form-element" id="text-input" placeholder="Text Input" />
+                </div>
+                <div class="test-element">
+                    <select class="form-element" id="dropdown">
+                        <option value="">Choose Option</option>
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎨 Background Visibility Testing</h2>
+            
+            <div class="complex-bg">
+                <h3>Gradient Background Element</h3>
+                <p>Testing border visibility on complex gradient backgrounds.</p>
+                <button style="background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 10px 20px; border-radius: 4px;" id="gradient-btn">
+                    Transparent Button
+                </button>
+            </div>
+            
+            <div class="dark-section">
+                <h3>Dark Background Element</h3>
+                <p>Testing border visibility on dark backgrounds.</p>
+                <a href="#" style="color: #17a2b8; text-decoration: none;" id="dark-link">Colored Link on Dark</a>
+                <br><br>
+                <input type="email" style="padding: 8px; border-radius: 4px; border: 1px solid #6c757d;" placeholder="Email input" id="dark-input" />
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 Multiple Element Testing</h2>
+            <p>Test selectors that match multiple elements:</p>
+            
+            <div class="selector-demo">button</div>
+            <div class="selector-demo">.form-element</div>
+            <div class="selector-demo">.test-element</div>
+            <div class="selector-demo">a</div>
+            
+            <div style="margin-top: 20px;">
+                <button class="special-button">Button 1</button>
+                <button class="special-button">Button 2</button>
+                <button class="special-button">Button 3</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📦 Nested Element Testing</h2>
+            <div class="nested-container">
+                <h4>Level 1 Container</h4>
+                <div class="nested-item">
+                    <strong>Level 2 Item</strong>
+                    <div style="border: 1px solid #6f42c1; padding: 8px; margin: 5px; border-radius: 3px; background: white;">
+                        <span id="deeply-nested">Deeply Nested Span</span>
+                        <button style="margin-left: 10px; padding: 5px 10px; border: none; background: #6f42c1; color: white; border-radius: 3px;" id="nested-btn">
+                            Nested Button
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 Testing Instructions</h2>
+            <div style="background: #e9ecef; padding: 15px; border-radius: 5px; border-left: 4px solid #007bff;">
+                <h4>Manual Highlight Test Selectors:</h4>
+                <ul style="margin: 10px 0;">
+                    <li><code>#visual-user</code> → Single link element</li>
+                    <li><code>#primary-btn</code> → Single button element</li>
+                    <li><code>.form-element</code> → All form elements (multiple)</li>
+                    <li><code>button</code> → All buttons (multiple)</li>
+                    <li><code>#gradient-btn</code> → Button on gradient background</li>
+                    <li><code>#dark-link</code> → Link on dark background</li>
+                    <li><code>#deeply-nested</code> → Nested span element</li>
+                    <li><code>.test-element</code> → All grid elements (multiple)</li>
+                </ul>
+                
+                <h4>✅ Expected Visual Results:</h4>
+                <ul style="margin: 10px 0;">
+                    <li>🔴 <strong>Red border</strong> - 4px outline + 3px border</li>
+                    <li>🟡 <strong>Light yellow background</strong> - Subtle highlight</li>
+                    <li>✨ <strong>Soft glow effect</strong> - Gentle shadow</li>
+                    <li>📐 <strong>Rounded corners</strong> - 4px border radius</li>
+                    <li>🚫 <strong>NO animations</strong> - No shaking, scaling, or pulsing</li>
+                    <li>💯 <strong>Stable appearance</strong> - Clean, professional look</li>
+                </ul>
+                
+                <h4>🎯 Benefits of New Approach:</h4>
+                <ul style="margin: 10px 0;">
+                    <li>More professional and less distracting</li>
+                    <li>Better for accessibility (no motion)</li>
+                    <li>Clearer element boundaries</li>
+                    <li>Works well on any background</li>
+                    <li>Maintains page layout stability</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        console.log('🎨 Stable Border Highlighting Test Page Loaded');
+        console.log('Available test elements:');
+        console.log('- Single elements: #visual-user, #primary-btn, #text-input, #dropdown');
+        console.log('- Multiple elements: button, .form-element, .test-element');
+        console.log('- Background tests: #gradient-btn, #dark-link, #dark-input');
+        console.log('- Nested elements: #deeply-nested, #nested-btn');
+        
+        // Helper function to verify highlighting results
+        window.verifyHighlighting = function() {
+            const highlightedElements = Array.from(document.querySelectorAll('*')).filter(el => 
+                el.style.outline && el.style.outline.includes('#ff1744')
+            );
+            
+            console.log('🔍 Currently highlighted elements:', highlightedElements.length);
+            highlightedElements.forEach((el, index) => {
+                console.log(`${index + 1}. ${el.tagName}${el.id ? '#' + el.id : ''}${el.className ? '.' + el.className.split(' ')[0] : ''}`);
+            });
+            
+            return {
+                count: highlightedElements.length,
+                elements: highlightedElements
+            };
+        };
+        
+        // Test the new stable highlighting
+        console.log('💡 Use Manual Highlight with the test selectors above!');
+        console.log('💡 Run verifyHighlighting() to check results');
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Page for Element Extraction</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; margin: 5px; }
+        input { padding: 8px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Test Page for Element AI Extractor</h1>
+    
+    <div class="test-section">
+        <h2>Buttons</h2>
+        <button id="btn1">Primary Button</button>
+        <button id="btn2" class="secondary">Secondary Button</button>
+        <button id="btn3" disabled>Disabled Button</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Form Inputs</h2>
+        <input type="text" id="username" placeholder="Enter username">
+        <input type="email" id="email" placeholder="Enter email">
+        <input type="password" id="password" placeholder="Enter password">
+        <input type="checkbox" id="remember"> <label for="remember">Remember me</label>
+    </div>
+    
+    <div class="test-section">
+        <h2>Links</h2>
+        <a href="#home" id="home-link">Home</a> |
+        <a href="#about" id="about-link">About</a> |
+        <a href="#contact" id="contact-link">Contact</a>
+    </div>
+    
+    <div class="test-section">
+        <h2>Lists</h2>
+        <ul id="nav-list">
+            <li><a href="#item1">Item 1</a></li>
+            <li><a href="#item2">Item 2</a></li>
+            <li><a href="#item3">Item 3</a></li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h2>Form Elements</h2>
+        <form id="test-form">
+            <select id="country">
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+            </select>
+            <textarea id="comments" placeholder="Enter comments here"></textarea>
+        </form>
+    </div>
+</body>
+</html>

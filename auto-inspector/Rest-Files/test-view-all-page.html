@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page for View All Issue</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            line-height: 1.6;
+        }
+        .test-element {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+        .debug-panel {
+            background: #e8f4f8;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .status {
+            font-weight: bold;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #cce7ff; color: #004085; }
+    </style>
+</head>
+<body>
+    <h1>Test Page for View All Issue Debugging</h1>
+    
+    <div class="debug-panel">
+        <h3>Testing Instructions</h3>
+        <ol>
+            <li>Open the Universal Element Locator extension</li>
+            <li>Click "Scan Page Elements" to scan this page</li>
+            <li>Click "View Scanned Results" to open results</li>
+            <li>In results page: Click "View All X Elements" button</li>
+            <li>Check if empty box appears or if all elements are shown</li>
+        </ol>
+        
+        <div id="extensionStatus" class="status info">
+            Extension status: Check console for details
+        </div>
+        
+        <button onclick="checkExtensionStatus()">Check Extension Status</button>
+        <button onclick="openResultsInNewTab()">Open Results in New Tab</button>
+    </div>
+
+    <div class="debug-panel">
+        <h3>Test Elements (Total: <span id="elementCount">0</span>)</h3>
+        <p>This page contains various elements to test the scanning functionality:</p>
+    </div>
+
+    <!-- Create many test elements to trigger pagination -->
+    <div class="test-section">
+        <h2>Interactive Elements</h2>
+        <!-- Generate elements via JavaScript -->
+    </div>
+
+    <script>
+        // Generate test elements
+        function generateTestElements() {
+            const testSection = document.querySelector('.test-section');
+            let count = 0;
+            
+            // Add various types of elements
+            for (let i = 1; i <= 60; i++) {
+                const div = document.createElement('div');
+                div.className = 'test-element';
+                div.id = `test-element-${i}`;
+                div.setAttribute('data-testid', `element-${i}`);
+                div.innerHTML = `
+                    <h4>Test Element ${i}</h4>
+                    <p>This is test element number ${i} with some content.</p>
+                    <button id="btn-${i}" class="test-btn-${i}">Button ${i}</button>
+                    <input type="text" id="input-${i}" placeholder="Input ${i}" />
+                    <span class="label-${i}">Label ${i}</span>
+                `;
+                testSection.appendChild(div);
+                count += 5; // div, h4, p, button, input = 5 elements each
+            }
+            
+            document.getElementById('elementCount').textContent = count;
+            return count;
+        }
+
+        function checkExtensionStatus() {
+            const statusEl = document.getElementById('extensionStatus');
+            
+            // Check if extension is injected
+            if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.id) {
+                statusEl.textContent = 'Extension detected: ' + chrome.runtime.id;
+                statusEl.className = 'status success';
+            } else {
+                statusEl.textContent = 'Extension not detected or not loaded';
+                statusEl.className = 'status error';
+            }
+
+            // Log scan results if available
+            if (typeof chrome !== 'undefined' && chrome.storage) {
+                chrome.storage.local.get(['scanResults'], function(result) {
+                    if (result.scanResults) {
+                        console.log('📊 Scan results found:', result.scanResults);
+                        console.log('📊 Elements count:', result.scanResults.elements ? result.scanResults.elements.length : 0);
+                    } else {
+                        console.log('❌ No scan results found');
+                    }
+                });
+            }
+        }
+
+        function openResultsInNewTab() {
+            // Try to open the results page
+            const extensionId = chrome?.runtime?.id;
+            if (extensionId) {
+                const resultsUrl = `chrome-extension://${extensionId}/results.html`;
+                window.open(resultsUrl, '_blank');
+            } else {
+                alert('Extension not detected. Make sure the Universal Element Locator extension is installed and enabled.');
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Test page loaded');
+            const elementCount = generateTestElements();
+            console.log(`📊 Generated ${elementCount} test elements`);
+            
+            // Check extension status after a short delay
+            setTimeout(checkExtensionStatus, 1000);
+
+            // Set up extension communication listener
+            if (typeof chrome !== 'undefined' && chrome.runtime) {
+                chrome.runtime.onMessage?.addListener(function(request, sender, sendResponse) {
+                    console.log('📨 Message received:', request);
+                    if (request.action === 'extensionLoaded') {
+                        checkExtensionStatus();
+                    }
+                });
+            }
+        });
+
+        // Add some console helpers for debugging
+        window.debugExtension = function() {
+            console.log('=== EXTENSION DEBUG ===');
+            console.log('Chrome object:', typeof chrome);
+            console.log('Runtime ID:', chrome?.runtime?.id);
+            console.log('Storage available:', typeof chrome?.storage);
+            
+            if (chrome?.storage) {
+                chrome.storage.local.get(['scanResults'], function(result) {
+                    console.log('Stored scan results:', result);
+                });
+            }
+        };
+
+        window.testViewAll = function() {
+            console.log('=== VIEW ALL TEST ===');
+            console.log('This will test the view all functionality manually');
+            console.log('1. Make sure extension is loaded');
+            console.log('2. Scan this page with the extension');
+            console.log('3. Open results and click View All');
+            console.log('4. Check console for any errors');
+        };
+    </script>
+</body>
+</html>

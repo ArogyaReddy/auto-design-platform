@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Unique Selectors - Universal Element Locator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f8f9fa;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .action-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .action-button:hover {
+            background: #0056b3;
+        }
+        .container {
+            border: 2px dashed #28a745;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+        .instructions {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <h2>🔍 Debug Unique Selectors Test</h2>
+        <p><strong>Issue:</strong> Many selectors are showing "Unique: No" when they should be unique.</p>
+        <ol>
+            <li>Scan this page with the extension</li>
+            <li>Check the "Scan Element" mode and select any action button</li>
+            <li>Look at the popup - many selectors should show "Unique: ✅" but are showing "Unique: ❌"</li>
+            <li>Click the 🎯 Test buttons to verify highlighting works</li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Multiple Identical Buttons (Should Generate Contextual Selectors)</h2>
+        <p>These buttons have the same data-testid but different parent contexts:</p>
+        
+        <div id="user-1-container" class="container">
+            <h3>User 1 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 1</button>
+            <span>User: john_doe</span>
+        </div>
+        
+        <div id="user-2-container" class="container">
+            <h3>User 2 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 2</button>
+            <span>User: jane_smith</span>
+        </div>
+        
+        <div id="user-3-container" class="container">
+            <h3>User 3 Container</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 3</button>
+            <span>User: admin_user</span>
+        </div>
+        
+        <div class="container">
+            <h3>User 4 Container (No ID)</h3>
+            <button data-testid="action-menu-button" class="action-button">Action Menu 4</button>
+            <span>User: guest_user</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Table Context Test</h2>
+        <table id="users-table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="padding: 10px; border: 1px solid #dee2e6;">User</th>
+                    <th style="padding: 10px; border: 1px solid #dee2e6;">Role</th>
+                    <th style="padding: 10px; border: 1px solid #dee2e6;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">Alice Johnson</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">Admin</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">
+                        <button data-testid="action-menu-button" class="action-button">Actions</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">Bob Wilson</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">User</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">
+                        <button data-testid="action-menu-button" class="action-button">Actions</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">Charlie Brown</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">Manager</td>
+                    <td style="padding: 10px; border: 1px solid #dee2e6;">
+                        <button data-testid="action-menu-button" class="action-button">Actions</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Unique Elements (Should Show Unique: ✅)</h2>
+        <div class="button-grid">
+            <button id="unique-save-btn" data-testid="save-button" class="action-button">Save</button>
+            <button id="unique-cancel-btn" data-testid="cancel-button" class="action-button">Cancel</button>
+            <button id="unique-delete-btn" data-testid="delete-button" class="action-button">Delete</button>
+            <button id="unique-submit-btn" data-testid="submit-button" class="action-button">Submit</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Expected Results</h2>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; font-family: monospace; font-size: 12px;">
+            <h3>For action-menu-button (non-unique basic selector):</h3>
+            <ul>
+                <li><code>[data-testid="action-menu-button"]</code> → <strong>Unique: ❌</strong> (7 elements)</li>
+                <li><code>#user-1-container [data-testid="action-menu-button"]</code> → <strong>Unique: ✅</strong> (1 element)</li>
+                <li><code>#user-2-container [data-testid="action-menu-button"]</code> → <strong>Unique: ✅</strong> (1 element)</li>
+                <li><code>#users-table tr:nth-child(1) [data-testid="action-menu-button"]</code> → <strong>Unique: ✅</strong> (1 element)</li>
+            </ul>
+            
+            <h3>For unique elements:</h3>
+            <ul>
+                <li><code>[data-testid="save-button"]</code> → <strong>Unique: ✅</strong> (1 element)</li>
+                <li><code>#unique-save-btn</code> → <strong>Unique: ✅</strong> (1 element)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add some debug functionality
+        window.testSelector = function(selector) {
+            console.log('Testing selector:', selector);
+            const elements = document.querySelectorAll(selector);
+            console.log(`Found ${elements.length} elements:`, elements);
+            
+            // Highlight found elements temporarily
+            elements.forEach((el, index) => {
+                el.style.outline = '3px solid #ff6b35';
+                el.style.boxShadow = '0 0 10px rgba(255, 107, 53, 0.5)';
+                setTimeout(() => {
+                    el.style.outline = '';
+                    el.style.boxShadow = '';
+                }, 2000);
+            });
+            
+            return elements;
+        };
+        
+        // Log the test setup
+        console.log('🔍 Debug Unique Selectors test page loaded');
+        console.log('📊 Test selectors available:');
+        console.log('  [data-testid="action-menu-button"] - should find 7 elements (non-unique)');
+        console.log('  #user-1-container [data-testid="action-menu-button"] - should find 1 element (unique)');
+        console.log('  [data-testid="save-button"] - should find 1 element (unique)');
+        console.log('Use testSelector("your-selector") to test selectors manually');
+    </script>
+</body>
+</html>

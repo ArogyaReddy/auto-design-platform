@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View All Debug Test</title>
+    <style>
+        body { margin: 20px; font-family: Arial, sans-serif; }
+        .test-section { margin: 20px 0; border: 1px solid #ccc; padding: 15px; }
+        .console-output { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 4px; }
+        button { margin: 5px; padding: 10px; }
+        #testResults { background: #f9f9f9; padding: 15px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>View All Debug Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Steps</h2>
+        <button onclick="createTestData()">1. Create Test Data</button>
+        <button onclick="testViewAllMode()">2. Test View All Mode</button>
+        <button onclick="testPaginationMode()">3. Test Pagination Mode</button>
+        <button onclick="simulateViewAllClick()">4. Simulate View All Click</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Mock Results Container</h2>
+        <div id="mockResultsContainer">
+            <!-- This will simulate the results container -->
+        </div>
+    </div>
+
+    <script>
+        // Load the actual results.js functions for testing
+        let scanResults = null;
+        let filteredElements = [];
+        let currentPage = 1;
+        const itemsPerPage = 50;
+        let viewAllMode = false;
+
+        function log(message) {
+            const output = document.getElementById('testResults');
+            output.innerHTML += '<div class="console-output">' + message + '</div>';
+            console.log(message);
+        }
+
+        function createTestData() {
+            log('Creating test data...');
+            
+            // Create mock scan results with 75 elements
+            const elements = [];
+            for (let i = 1; i <= 75; i++) {
+                elements.push({
+                    tagName: 'DIV',
+                    text: `Element ${i}`,
+                    textContent: { cleanText: `Element ${i} content` },
+                    attributes: { id: `element${i}` },
+                    locators: {
+                        primary: [{ type: 'id', selector: `#element${i}` }],
+                        secondary: [{ type: 'class', selector: `.element${i}` }],
+                        fallback: [{ type: 'xpath', selector: `//div[@id='element${i}']` }]
+                    },
+                    elementState: { isInteractive: true, isFormElement: false },
+                    confidence: 0.95
+                });
+            }
+
+            scanResults = {
+                url: 'https://test.com',
+                title: 'Test Page',
+                timestamp: Date.now(),
+                duration: 1500,
+                elements: elements
+            };
+
+            filteredElements = elements;
+            log(`✅ Created ${elements.length} test elements`);
+        }
+
+        function testViewAllMode() {
+            log('Testing View All Mode...');
+            viewAllMode = true;
+            
+            const elementsToShow = viewAllMode ? filteredElements : filteredElements.slice(0, itemsPerPage);
+            log(`ViewAllMode: ${viewAllMode}`);
+            log(`FilteredElements length: ${filteredElements.length}`);
+            log(`ElementsToShow length: ${elementsToShow.length}`);
+            
+            if (viewAllMode && elementsToShow.length === filteredElements.length) {
+                log('✅ View All Mode working correctly');
+            } else {
+                log('❌ View All Mode NOT working correctly');
+            }
+        }
+
+        function testPaginationMode() {
+            log('Testing Pagination Mode...');
+            viewAllMode = false;
+            
+            const elementsToShow = viewAllMode ? filteredElements : filteredElements.slice(0, itemsPerPage);
+            log(`ViewAllMode: ${viewAllMode}`);
+            log(`FilteredElements length: ${filteredElements.length}`);
+            log(`ElementsToShow length: ${elementsToShow.length}`);
+            
+            if (!viewAllMode && elementsToShow.length === itemsPerPage) {
+                log('✅ Pagination Mode working correctly');
+            } else {
+                log('❌ Pagination Mode NOT working correctly');
+            }
+        }
+
+        function simulateViewAllClick() {
+            log('Simulating View All button click...');
+            
+            // Simulate the exact event handler logic from results.js
+            if (true) { // Simulating event.target.id === 'viewAllBtn'
+                viewAllMode = true;
+                currentPage = 1;
+                displayElementsTest();
+                log('✅ View All button click simulated');
+            }
+        }
+
+        function displayElementsTest() {
+            log('Running displayElements test...');
+            
+            if (filteredElements.length === 0) {
+                log('❌ No filtered elements');
+                return;
+            }
+
+            let elementsToShow;
+            let controlsHtml;
+            
+            if (viewAllMode) {
+                elementsToShow = filteredElements;
+                controlsHtml = `Showing all ${filteredElements.length} elements`;
+                log(`✅ View All Mode: showing ${elementsToShow.length} elements`);
+            } else {
+                const totalPages = Math.ceil(filteredElements.length / itemsPerPage);
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                elementsToShow = filteredElements.slice(startIndex, endIndex);
+                
+                controlsHtml = `Showing ${elementsToShow.length} of ${filteredElements.length} elements`;
+                log(`✅ Pagination Mode: showing ${elementsToShow.length} elements`);
+            }
+
+            // Simulate table creation
+            const mockContainer = document.getElementById('mockResultsContainer');
+            mockContainer.innerHTML = `
+                <div>${controlsHtml}</div>
+                <div>Mock table with ${elementsToShow.length} rows</div>
+                <div>View All Mode: ${viewAllMode}</div>
+            `;
+        }
+
+        // Helper function to safely handle strings (from results.js)
+        function safeString(value) {
+            if (value === null || value === undefined) {
+                return '';
+            }
+            return String(value);
+        }
+    </script>
+</body>
+</html>

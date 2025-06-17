@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Element AI Extractor 👁️</title>
+    <link rel="stylesheet" href="popup.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="popup-root">
+        <div class="header-row">
+            <div class="title-section">
+                <span class="logo">🤖</span>
+                <span class="title">Element <span class="ai-gradient">AI Extractor</span> <span class="eye">👁️</span></span>
+            </div>
+            <div class="header-buttons">
+                <button class="open-tab-btn icon-only" id="openTabBtn" title="Open in new tab">
+                    <span>🚀</span>
+                </button>
+                <button class="expand-collapse-btn icon-only" id="expandCollapseBtn" title="Expand/Collapse popup">
+                    <span id="expandCollapseIcon">🔼</span>
+                </button>
+            </div>
+        </div>
+        <div class="ai-tip" id="ai-tip">
+            <div class="ai-tip-sidebar"></div>
+            <div class="ai-tip-content">
+                <strong>AI Tip:</strong> Interactable (clickable) elements are best for automation.
+            </div>
+        </div>
+
+        <div class="search-row">
+            <span class="search-icon">🔍</span>
+            <input id="search" class="search-box" placeholder="Search elements..." type="text" autocomplete="off" />
+            <button id="clearSearch" class="clear-btn" title="Clear search">✕</button>
+        </div>
+
+        <div class="type-row">
+            <label class="filter-btn"><input type="checkbox" id="filterAll" checked>All Elements</label>
+            <label class="filter-btn"><input type="checkbox" id="filterLinks">Links</label>
+            <label class="filter-btn"><input type="checkbox" id="filterButtons">Buttons</label>
+            <label class="filter-btn"><input type="checkbox" id="filterInputs">Inputs</label>
+            <label class="filter-btn"><input type="checkbox" id="filterCombo">Combo</label>
+            <label class="filter-btn"><input type="checkbox" id="filterTextboxes">Textboxes</label>
+            <label class="filter-btn"><input type="checkbox" id="filterCheckboxes">Checkboxes</label>
+            <label class="filter-btn"><input type="checkbox" id="filterRadios">Radios</label>
+            <label class="filter-btn"><input type="checkbox" id="filterLists">Lists</label>
+            <label class="filter-btn"><input type="checkbox" id="filterForms">Forms</label>
+            <label class="filter-btn"><input type="checkbox" id="filterImages">Images</label>
+            <label class="filter-btn"><input type="checkbox" id="filterIframes">Iframes</label>
+            <label class="filter-btn"><input type="checkbox" id="filterCustom">Custom Elements</label>
+        </div>
+
+        <div class="quick-actions">
+            <button class="action-btn" id="selectAll" title="Select All Elements">
+                <span>🎯</span> All
+            </button>
+            <button class="action-btn" id="selectInteractive" title="Select Interactive Elements Only">
+                <span>⚡</span> Interactive
+            </button>
+            <button class="action-btn" id="clearFilters" title="Clear All Filters">
+                <span>🧹</span> Clear
+            </button>
+            <button class="action-btn" id="refreshExtraction" title="Refresh Extraction">
+                <span>🔄</span> Refresh
+            </button>
+        </div>
+
+        <div class="toggle-row">
+            <span class="switch-label">Visible Only</span>
+            <label class="switch">
+                <input type="checkbox" id="filterVisible" checked>
+                <span class="slider"></span>
+            </label>
+            <span class="switch-label">Hidden Only</span>
+            <label class="switch">
+                <input type="checkbox" id="filterHidden">
+                <span class="slider"></span>
+            </label>
+            <span class="switch-label">Shadow DOM</span>
+            <label class="switch">
+                <input type="checkbox" id="filterShadow">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Playwright Validation Section -->
+        <div class="playwright-section">
+            <div class="playwright-header">
+                <span class="playwright-icon">🎭</span>
+                <span class="playwright-title">Playwright Validation</span>
+                <label class="switch playwright-switch">
+                    <input type="checkbox" id="playwrightEnabled" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="playwright-controls">
+                <button class="playwright-btn" id="validateAllBtn" title="Validate all extracted elements with Playwright">
+                    <span>🎭</span> Validate All
+                </button>
+                <button class="playwright-btn" id="validateSelectedBtn" title="Validate selected elements with Playwright">
+                    <span>✓</span> Validate Selected
+                </button>
+                <label class="playwright-option">
+                    <input type="checkbox" id="autoValidate">
+                    <span>Auto-validate</span>
+                </label>
+            </div>
+            <div class="playwright-stats" id="playwrightStats" style="display: none;">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Excellent (A+/A)</span>
+                        <span class="stat-value" id="excellentCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Good (B/C)</span>
+                        <span class="stat-value" id="goodCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Poor (D/F)</span>
+                        <span class="stat-value" id="poorCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg Score</span>
+                        <span class="stat-value" id="avgScore">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inspector Section -->
+        <div class="inspector-section">
+            <button class="inspect-btn" id="inspectElement" title="Click to inspect elements one by one">
+                <span class="inspect-icon">🔬</span> Inspect Element
+            </button>
+            <div id="inspector-status" class="inspector-status"></div>
+        </div>
+
+        <!-- Auto-Filler Section -->
+        <div class="auto-filler-section">
+            <div class="auto-filler-header">
+                <span class="auto-filler-icon">🤖</span>
+                <span class="auto-filler-title">Smart Auto-Filler</span>
+                <button class="settings-btn" id="autoFillerSettings" title="Configure auto-fill data">⚙️</button>
+            </div>
+            <div class="auto-filler-controls">
+                <button class="auto-fill-btn" id="autoFillBtn" title="Automatically fill forms on current page">
+                    <span>✏️</span> Auto Fill Forms
+                </button>
+                <button class="auto-interact-btn" id="autoInteractBtn" title="Auto-interact with page elements">
+                    <span>🎯</span> Auto Interact
+                </button>
+                <button class="test-mode-btn" id="testModeBtn" title="Enable test mode for safe interaction">
+                    <span id="testModeIcon">🧪</span> <span id="testModeText">Test Mode</span>
+                </button>
+            </div>
+            <div id="auto-filler-status" class="auto-filler-status"></div>
+            <div id="auto-filler-log" class="auto-filler-log" style="display: none;"></div>
+        </div>
+
+        <!-- Inspected Element Details -->
+        <div id="inspected-element-details" class="inspected-element-details" style="display: none;"></div>
+
+        <div class="export-controls">
+            <select id="exportFormat" class="format-select" title="Choose export format for extracted elements">
+                <option value="table" selected>Table</option>
+                <option value="csv">CSV Format</option>
+                <option value="json">JSON Format</option>
+                <option value="excel">Excel Format</option>
+            </select>
+            <button class="extract-btn" id="extract" title="Extract elements from the current page based on selected filters">
+                <span class="rocket">🚀</span> Extract Elements
+            </button>
+        </div>
+        <div id="status" class="status-row"></div>
+        <div id="preview" class="preview-table"></div>
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls" id="paginationControls" style="display: none;">
+            <div class="pagination-info">
+                Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+            </div>
+            <div class="pagination-buttons">
+                <button class="pagination-btn" id="prevBtn" title="Previous page">‹ Previous</button>
+                <button class="pagination-btn" id="nextBtn" title="Next page">Next ›</button>
+                <button class="pagination-btn show-all-btn" id="showAllBtn" title="Show all elements">Show All</button>
+            </div>
+        </div>
+        
+        <div class="stats-bar" id="stats">
+            <span id="elementCount">0 elements found</span>
+            <span id="visibilityStats">0 visible • 0 hidden</span>
+        </div>
+
+        <div class="footer">
+            <span> for <span class="ai-gradient">ADP</span></span>
+            <span> by <span class="ai-gradient">Arogya Reddy</span></span>
+        </div>
+    </div>
+    <!-- Include scoring alignment fix BEFORE popup.js -->
+    <script src="scoring-alignment-fix.js"></script>
+    <script src="scoring-integration.js"></script>
+    
+    <script src="popup.js"></script>
+    
+    <!-- Initialize scoring alignment AFTER popup.js -->
+    <script src="scoring-alignment-init.js"></script>
+    <script src="scoring-alignment-diagnostic.js"></script>
+
+</body>
+
+</html>

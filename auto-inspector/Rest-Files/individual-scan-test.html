@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Element Scan Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .test-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        
+        .test-input {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            margin: 10px;
+            width: 200px;
+        }
+        
+        .test-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .special-element {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        #uniqueDiv {
+            background: #00ff88;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .hidden-element {
+            display: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Individual Element Scan Test Page</h1>
+    <p>This page is designed to test the individual element scanning functionality of the Universal Element Locator extension.</p>
+    
+    <div class="test-section">
+        <h2>🔲 Buttons to Test</h2>
+        <button class="test-button" id="primaryButton" data-testid="primary-btn">Primary Button</button>
+        <button class="test-button" id="secondaryButton" aria-label="Secondary Action">Secondary Button</button>
+        <button class="test-button" onclick="alert('Clicked!')">Click Me</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📝 Form Elements</h2>
+        <input type="text" class="test-input" id="nameInput" placeholder="Enter your name" data-testid="name-field">
+        <input type="email" class="test-input" id="emailInput" placeholder="Enter your email" aria-label="Email Address">
+        <select id="countrySelect" class="test-input">
+            <option value="">Select Country</option>
+            <option value="us">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="ca">Canada</option>
+        </select>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔗 Links and Navigation</h2>
+        <a href="#section1" class="test-link" id="navLink1">Go to Section 1</a> |
+        <a href="#section2" class="test-link" data-testid="nav-section2">Go to Section 2</a> |
+        <a href="https://example.com" class="test-link" target="_blank" aria-label="External Link">External Link</a>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎨 Special Elements</h2>
+        <div class="special-element" data-testid="special-div" role="banner">
+            This is a special div with custom styling and attributes
+        </div>
+        <div id="uniqueDiv" aria-describedby="unique-description">
+            Unique div with ID and ARIA attributes
+        </div>
+        <span id="unique-description" class="hidden-element">Description for the unique div</span>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Table Elements</h2>
+        <table id="dataTable" data-testid="main-table">
+            <thead>
+                <tr>
+                    <th id="nameColumn">Name</th>
+                    <th id="ageColumn">Age</th>
+                    <th id="cityColumn">City</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-testid="user1-name">John Doe</td>
+                    <td data-testid="user1-age">30</td>
+                    <td data-testid="user1-city">New York</td>
+                </tr>
+                <tr>
+                    <td data-testid="user2-name">Jane Smith</td>
+                    <td data-testid="user2-age">25</td>
+                    <td data-testid="user2-city">London</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="test-section">
+        <h2>📋 Nested Elements</h2>
+        <div class="outer-container" data-testid="outer-container">
+            <div class="inner-container" id="innerContainer">
+                <p class="nested-text" aria-label="Nested paragraph">
+                    This is a <span class="highlight" data-testid="highlight-span">highlighted</span> text inside nested elements.
+                </p>
+                <ul class="nested-list" id="testList">
+                    <li data-testid="item1">First item</li>
+                    <li data-testid="item2" class="special-item">Second item (special)</li>
+                    <li data-testid="item3">Third item</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🧪 Test Instructions</h2>
+        <ol>
+            <li><strong>Install the Extension:</strong> Make sure the Universal Element Locator extension is installed and active.</li>
+            <li><strong>Open Extension Popup:</strong> Click on the extension icon to open the popup.</li>
+            <li><strong>Test Individual Scan:</strong> Click "🎯 Scan Element" button and then click on any element on this page.</li>
+            <li><strong>Verify Element Info:</strong> Check that the element information appears in the popup.</li>
+            <li><strong>Test Highlighting:</strong> Click "✨ Highlight Element" to highlight the scanned element.</li>
+            <li><strong>Test Multiple Elements:</strong> Repeat with different types of elements (buttons, inputs, links, etc.).</li>
+        </ol>
+    </div>
+    
+    <script>
+        // Add some dynamic behavior for testing
+        document.getElementById('primaryButton').addEventListener('click', function() {
+            alert('Primary button clicked! Element has ID: ' + this.id);
+        });
+        
+        document.getElementById('nameInput').addEventListener('input', function() {
+            console.log('Name input changed:', this.value);
+        });
+        
+        // Add dynamic element for advanced testing
+        setTimeout(() => {
+            const dynamicDiv = document.createElement('div');
+            dynamicDiv.id = 'dynamicElement';
+            dynamicDiv.className = 'special-element';
+            dynamicDiv.setAttribute('data-testid', 'dynamic-element');
+            dynamicDiv.textContent = 'This element was added dynamically after page load';
+            document.querySelector('.test-section:last-child').appendChild(dynamicDiv);
+        }, 2000);
+    </script>
+</body>
+</html>

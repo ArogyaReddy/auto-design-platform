@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Highlight Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        
+        .selector-examples {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+        
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .highlight-target {
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            background: #fff;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.2s;
+        }
+        
+        button:hover {
+            background: #5a6fd8;
+        }
+        
+        input, select, textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        
+        .form-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Manual Highlight Test Page</h1>
+            <p>Test the new manual highlight feature with various CSS selectors</p>
+        </div>
+        
+        <div class="selector-examples">
+            <h3>📋 Try These Selectors in the Extension:</h3>
+            <ul>
+                <li><span class="code">#signBtn</span> - Targets the Sign In button (1 element)</li>
+                <li><span class="code">.login-button</span> - Targets buttons with login-button class (2 elements)</li>
+                <li><span class="code">button</span> - Targets ALL buttons (multiple elements)</li>
+                <li><span class="code">input</span> - Targets ALL input fields (multiple elements)</li>
+                <li><span class="code">button[data-test="submit"]</span> - Targets the submit button (1 element)</li>
+                <li><span class="code">input[name="username"]</span> - Targets the username input (1 element)</li>
+                <li><span class="code">.form-section input</span> - Targets inputs in form sections (multiple elements)</li>
+                <li><span class="code">h2</span> - Targets all h2 headings (3 elements)</li>
+                <li><span class="code">[data-role]</span> - Targets elements with data-role attribute (multiple elements)</li>
+                <li><span class="code">.highlight-target</span> - Targets all highlight target containers (multiple elements)</li>
+            </ul>
+            <div style="background: #fff3cd; padding: 10px; border-radius: 6px; margin-top: 10px;">
+                <strong>🎯 Note:</strong> Extension now highlights <strong>ALL matching elements</strong> (like browser dev tools), 
+                not just the first one!
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔘 Button Tests</h2>
+            <div class="highlight-target">
+                <button id="signBtn">Sign In</button>
+                <button class="login-button">Log In</button>
+                <button class="login-button">Login with Google</button>
+                <button data-test="submit" class="submit-btn">Submit Form</button>
+                <button onclick="alert('Clicked!')">Click Me</button>
+                <button class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📝 Form Elements</h2>
+            <div class="form-section">
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter username">
+                </div>
+                <div>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter password">
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter email">
+                </div>
+                <div>
+                    <label for="country">Country:</label>
+                    <select id="country" name="country">
+                        <option value="">Select Country</option>
+                        <option value="us">United States</option>
+                        <option value="uk">United Kingdom</option>
+                        <option value="ca">Canada</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🏷️ Data Attribute Tests</h2>
+            <div class="highlight-target">
+                <div data-role="navigation" style="padding: 10px; background: #e3f2fd; border-radius: 4px;">
+                    Navigation Element
+                </div>
+                <span data-test="label" style="display: inline-block; padding: 5px; background: #f3e5f5; margin: 5px;">
+                    Test Label
+                </span>
+                <article data-component="card" style="padding: 15px; background: #e8f5e8; border-radius: 4px; margin: 10px 0;">
+                    Card Component
+                </article>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔗 Complex Selectors</h2>
+            <div class="highlight-target">
+                <div class="parent-container">
+                    <div class="child-element">
+                        <span class="nested-span">Nested Text</span>
+                        <a href="#" class="link-element">Link Inside Nested Element</a>
+                    </div>
+                </div>
+                <ul class="test-list">
+                    <li class="list-item">First Item</li>
+                    <li class="list-item active">Second Item (Active)</li>
+                    <li class="list-item">Third Item</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📋 Instructions</h2>
+            <ol>
+                <li><strong>Open Extension:</strong> Click the Universal Element Locator extension icon</li>
+                <li><strong>Find Manual Highlight:</strong> Scroll to "Manual Highlight" section</li>
+                <li><strong>Enter Selector:</strong> Copy any selector from the examples above</li>
+                <li><strong>Highlight:</strong> Click the 🎯 Highlight button or press Enter</li>
+                <li><strong>Observe:</strong> The element should highlight with orange outline and glow</li>
+                <li><strong>Test Multiple:</strong> Try different selectors to test various elements</li>
+            </ol>
+        </div>
+        
+        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin: 20px 0;">
+            <h4>💡 Tips:</h4>
+            <ul>
+                <li>If highlighting doesn't work, try refreshing this page first</li>
+                <li>Check the extension popup status for feedback messages</li>
+                <li>Use browser Developer Tools (F12) to inspect elements and get their selectors</li>
+                <li>The highlighting will automatically clear after a few seconds</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        console.log('🎯 Manual Highlight Test Page loaded');
+        console.log('Ready for Universal Element Locator manual highlight testing');
+        
+        // Add some interactive behavior
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON') {
+                console.log('Button clicked:', e.target.textContent, 'ID:', e.target.id, 'Class:', e.target.className);
+            }
+        });
+    </script>
+</body>
+</html>

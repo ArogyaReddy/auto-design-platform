@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Visibility Test Page</title>
+    <style>
+        .visible-section {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f0f8ff;
+            border: 1px solid #ddd;
+        }
+        
+        .hidden-display { display: none; }
+        .hidden-visibility { visibility: hidden; }
+        .hidden-opacity { opacity: 0; }
+        .zero-size { width: 0; height: 0; }
+        .offscreen { position: absolute; left: -9999px; }
+        
+        .meaningful-content {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        .button-group {
+            margin: 15px 0;
+        }
+        
+        .button-group button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #007cba;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .form-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        
+        .form-section input, .form-section select, .form-section textarea {
+            margin: 5px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <header class="visible-section">
+        <h1 id="main-title" data-testid="page-header">Element Visibility Test Page</h1>
+        <p class="subtitle">This page tests the extension's ability to find only visible elements.</p>
+    </header>
+
+    <!-- Visible elements with various locators -->
+    <main class="visible-section main-content">
+        <h2 id="section-visible" class="section-header primary-heading" data-section="visible">Visible Elements Section</h2>
+        
+        <div class="meaningful-content" data-testid="content-block-1">
+            <p id="visible-text" class="description-text">This is visible text that should be captured.</p>
+            <span class="highlight-text important-info" data-info="key-point">Important information here.</span>
+        </div>
+
+        <div class="button-group" data-group="actions">
+            <button id="primary-btn" class="primary-button action-btn" data-action="submit">Submit Form</button>
+            <button id="secondary-btn" class="secondary-button action-btn" data-action="cancel">Cancel</button>
+            <button class="utility-button" data-testid="help-button">Help</button>
+        </div>
+
+        <div class="form-section" data-testid="user-form">
+            <h3 class="form-title">User Information Form</h3>
+            <input type="text" id="username" name="username" placeholder="Username" class="form-input required-field" data-field="user">
+            <input type="email" id="email" name="email" placeholder="Email" class="form-input required-field" data-field="contact">
+            <select id="country" name="country" class="form-select" data-field="location">
+                <option value="">Select Country</option>
+                <option value="us">United States</option>
+                <option value="uk">United Kingdom</option>
+                <option value="ca">Canada</option>
+            </select>
+            <textarea id="comments" name="comments" placeholder="Comments" class="form-textarea" data-field="feedback"></textarea>
+        </div>
+
+        <ul class="feature-list" data-testid="feature-showcase">
+            <li class="feature-item" data-feature="visibility">Checks element visibility</li>
+            <li class="feature-item" data-feature="locators">Generates multiple locator types</li>
+            <li class="feature-item" data-feature="text">Extracts clean text content</li>
+        </ul>
+    </main>
+
+    <!-- Hidden elements that should NOT be captured -->
+    <div class="hidden-display">
+        <p id="hidden-display-text">This text is hidden with display: none</p>
+        <button class="hidden-button">Hidden Button</button>
+    </div>
+
+    <div class="hidden-visibility">
+        <p id="hidden-visibility-text">This text is hidden with visibility: hidden</p>
+        <input type="text" value="Hidden input" class="hidden-input">
+    </div>
+
+    <div class="hidden-opacity">
+        <p id="hidden-opacity-text">This text is hidden with opacity: 0</p>
+        <span class="hidden-span">Hidden span</span>
+    </div>
+
+    <div class="zero-size">
+        <p id="zero-size-text">This text has zero size</p>
+    </div>
+
+    <div class="offscreen">
+        <p id="offscreen-text">This text is positioned offscreen</p>
+        <button class="offscreen-button" data-testid="offscreen-btn">Offscreen Button</button>
+    </div>
+
+    <!-- Script elements that should be ignored -->
+    <script>
+        // This script content should not appear in results
+        console.log('This is JavaScript code that should not be captured');
+        function testFunction() {
+            return 'function content';
+        }
+        var someVariable = 'variable content';
+    </script>
+
+    <footer class="visible-section" data-section="footer">
+        <p class="footer-text" data-testid="footer-info">© 2024 Test Page - Visible footer content</p>
+    </footer>
+
+    <!-- Inline script with more code patterns -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded');
+        });
+        
+        const config = {
+            setting1: 'value1',
+            setting2: 'value2'
+        };
+    </script>
+</body>
+</html>

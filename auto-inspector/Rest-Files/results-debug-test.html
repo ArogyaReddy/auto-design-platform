@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Debug Test</title>
+    <link rel="stylesheet" href="content.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-panel {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .debug-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        .debug-content {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .test-results-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Universal Element Locator - Debug Test</h1>
+    
+    <div class="debug-panel">
+        <div class="debug-title">Test Controls</div>
+        <button onclick="setupMockData()">Setup Mock Data</button>
+        <button onclick="testPaginationView()">Test Pagination View</button>
+        <button onclick="testViewAllClick()">Test View All Click</button>
+        <button onclick="checkState()">Check Current State</button>
+    </div>
+
+    <div class="debug-panel">
+        <div class="debug-title">Debug Output</div>
+        <div id="debugOutput" class="debug-content"></div>
+    </div>
+
+    <div class="debug-panel">
+        <div class="debug-title">Simulated Results Container</div>
+        <div id="elementsContainer" class="test-results-container">
+            <div class="loading">Waiting for test data...</div>
+        </div>
+    </div>
+
+    <script>
+        // Copy relevant parts from results.js for testing
+        let scanResults = null;
+        let filteredElements = [];
+        let currentPage = 1;
+        const itemsPerPage = 50;
+        let viewAllMode = false;
+
+        function debug(message) {
+            const output = document.getElementById('debugOutput');
+            output.textContent += new Date().toLocaleTimeString() + ': ' + message + '\n';
+            console.log(message);
+        }
+
+        function setupMockData() {
+            debug('Setting up mock data...');
+            
+            const elements = [];
+            for (let i = 1; i <= 75; i++) {
+                elements.push({
+                    tagName: 'DIV',
+                    text: `Test Element ${i}`,
+                    textContent: { cleanText: `Test Element ${i} content` },
+                    attributes: { id: `test${i}`, class: `element-${i}` },
+                    locators: {
+                        primary: [{ type: 'id', selector: `#test${i}` }],
+                        secondary: [{ type: 'class', selector: `.element-${i}` }],
+                        fallback: [{ type: 'xpath', selector: `//div[@id='test${i}']` }]
+                    },
+                    elementState: { isInteractive: false, isFormElement: false },
+                    confidence: 0.9,
+                    position: { x: 100 + i * 10, y: 200 + i * 5 },
+                    size: { width: 150, height: 30 },
+                    xpath: `//div[@id='test${i}']`
+                });
+            }
+
+            scanResults = {
+                url: 'https://test-page.com',
+                title: 'Test Page for Debug',
+                timestamp: Date.now(),
+                duration: 1200,
+                elements: elements
+            };
+
+            filteredElements = [...elements];
+            viewAllMode = false;
+            currentPage = 1;
+            
+            debug(`✅ Created ${elements.length} mock elements`);
+            debug(`Filtered elements: ${filteredElements.length}`);
+            
+            // Initial display
+            displayElements();
+        }
+
+        function testPaginationView() {
+            debug('Testing pagination view...');
+            viewAllMode = false;
+            currentPage = 1;
+            displayElements();
+            debug(`✅ Pagination view set (should show ${itemsPerPage} elements)`);
+        }
+
+        function testViewAllClick() {
+            debug('Testing View All button click...');
+            debug(`Before: viewAllMode=${viewAllMode}, filteredElements.length=${filteredElements.length}`);
+            
+            // Simulate the exact event handler
+            viewAllMode = true;
+            currentPage = 1;
+            displayElements();
+            
+            debug(`After: viewAllMode=${viewAllMode}`);
+            debug('✅ View All click simulated');
+        }
+
+        function checkState() {
+            debug('=== CURRENT STATE ===');
+            debug(`viewAllMode: ${viewAllMode}`);
+            debug(`currentPage: ${currentPage}`);
+            debug(`itemsPerPage: ${itemsPerPage}`);
+            debug(`filteredElements.length: ${filteredElements.length}`);
+            debug(`scanResults: ${scanResults ? 'exists' : 'null'}`);
+            debug('=====================');
+        }
+
+        function displayElements() {
+            debug('displayElements() called');
+            
+            const container = document.getElementById('elementsContainer');
+            if (!container) {
+                debug('❌ No container found');
+                return;
+            }
+
+            if (!filteredElements || filteredElements.length === 0) {
+                debug('❌ No filtered elements');
+                container.innerHTML = '<div class="no-data">No elements found.</div>';
+                return;
+            }
+
+            debug(`Displaying elements: viewAllMode=${viewAllMode}, filteredElements.length=${filteredElements.length}`);
+
+            // Determine elements to show based on view mode
+            let elementsToShow;
+            let controlsHtml;
+            
+            if (viewAllMode) {
+                elementsToShow = filteredElements;
+                controlsHtml = `<div class="results-summary"><span>Showing all ${filteredElements.length} elements</span></div>`;
+                debug(`✅ View All Mode: showing ${elementsToShow.length} elements`);
+            } else {
+                const totalPages = Math.ceil(filteredElements.length / itemsPerPage);
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                elementsToShow = filteredElements.slice(startIndex, endIndex);
+                
+                controlsHtml = `<div class="results-summary"><span>Showing ${elementsToShow.length} of ${filteredElements.length} elements (Page ${currentPage} of ${totalPages})</span></div>`;
+                debug(`✅ Pagination Mode: showing ${elementsToShow.length} elements`);
+            }
+
+            debug(`Elements to show: ${elementsToShow.length}`);
+
+            // Create simplified table
+            const tableContent = `
+                <div class="table-wrapper">
+                    <table class="elements-table" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8f9fa;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">#</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Element Name</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Tag</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Text Content</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${elementsToShow.map((element, index) => {
+                                const actualIndex = viewAllMode ? index + 1 : ((currentPage - 1) * itemsPerPage) + index + 1;
+                                return `<tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${actualIndex}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">Element ${actualIndex}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${element.tagName}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${element.text}</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">${element.attributes.id}</td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // Create pagination
+            const pagination = createPagination(Math.ceil(filteredElements.length / itemsPerPage));
+            const finalHTML = controlsHtml + tableContent + pagination;
+            
+            debug(`Setting container innerHTML, final HTML length: ${finalHTML.length}`);
+            container.innerHTML = finalHTML;
+            
+            // Re-attach event listeners for dynamic content
+            setupEventListeners();
+            
+            debug('✅ Container innerHTML set successfully');
+        }
+
+        function createPagination(totalPages) {
+            // If we're in view all mode, show the back to pagination controls
+            if (viewAllMode) {
+                return `
+                    <div class="pagination" style="margin: 15px 0; text-align: center;">
+                        <button id="paginationModeBtn" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                            📑 Back to Pagination
+                        </button>
+                    </div>
+                    <div class="view-all-section">
+                        <div class="view-mode-info">📊 Viewing all ${filteredElements.length} elements</div>
+                    </div>
+                `;
+            }
+            
+            if (totalPages <= 1) {
+                return `
+                    <div class="view-all-section">
+                        <div class="view-mode-info">📊 All ${filteredElements.length} elements displayed</div>
+                    </div>
+                `;
+            }
+
+            const pages = [];
+            for (let i = 1; i <= totalPages; i++) {
+                const isActive = i === currentPage;
+                pages.push(`
+                    <button data-page="${i}" style="background: ${isActive ? '#667eea' : '#f8f9fa'}; color: ${isActive ? 'white' : '#333'}; border: 1px solid #ddd; padding: 5px 10px; margin: 0 2px; cursor: pointer;">
+                        ${i}
+                    </button>
+                `);
+            }
+
+            return `
+                <div class="pagination" style="margin: 15px 0; text-align: center;">
+                    <button data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''} style="background: #f8f9fa; color: #333; border: 1px solid #ddd; padding: 5px 10px; margin: 0 2px; cursor: pointer;">
+                        ← Previous
+                    </button>
+                    ${pages.join('')}
+                    <button data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''} style="background: #f8f9fa; color: #333; border: 1px solid #ddd; padding: 5px 10px; margin: 0 2px; cursor: pointer;">
+                        Next →
+                    </button>
+                    <button id="viewAllBtn" style="background: #17a2b8; color: white; border: none; padding: 8px 15px; margin-left: 10px; border-radius: 4px; cursor: pointer;">
+                        📋 View All ${filteredElements.length}
+                    </button>
+                </div>
+                <div class="view-all-section">
+                    <div class="view-mode-info">📄 Page ${currentPage} of ${totalPages} (${filteredElements.length} total elements)</div>
+                </div>
+            `;
+        }
+
+        function setupEventListeners() {
+            // Remove existing listeners to avoid duplicates
+            const container = document.getElementById('elementsContainer');
+            const newContainer = container.cloneNode(true);
+            container.parentNode.replaceChild(newContainer, container);
+            
+            // Add event delegation for dynamic elements
+            document.getElementById('elementsContainer').addEventListener('click', function(event) {
+                debug(`Click event: target=${event.target.tagName}, id=${event.target.id}`);
+                
+                // View mode button event delegation
+                if (event.target.id === 'viewAllBtn') {
+                    debug('View All button clicked!');
+                    viewAllMode = true;
+                    currentPage = 1;
+                    displayElements();
+                    return;
+                }
+                
+                if (event.target.id === 'paginationModeBtn') {
+                    debug('Pagination Mode button clicked!');
+                    viewAllMode = false;
+                    currentPage = 1;
+                    displayElements();
+                    return;
+                }
+
+                // Pagination event delegation
+                if (event.target.tagName === 'BUTTON' && event.target.hasAttribute('data-page')) {
+                    const page = parseInt(event.target.getAttribute('data-page'));
+                    if (!isNaN(page) && page > 0) {
+                        debug(`Pagination button clicked: page ${page}`);
+                        currentPage = page;
+                        displayElements();
+                    }
+                }
+            });
+        }
+
+        // Initialize
+        debug('Debug test page loaded');
+    </script>
+</body>
+</html>

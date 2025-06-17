@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Filler Settings Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin: 15px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .status-display {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🤖 Auto-Filler Settings Test Page</h1>
+        <p>Use this page to test the new Auto-Filler settings functionality and custom data configuration</p>
+    </div>
+
+    <div class="instructions">
+        <h3>📋 Testing Instructions</h3>
+        <ol>
+            <li><strong>Open Extension:</strong> Click the Element AI Extractor extension icon</li>
+            <li><strong>Access Settings:</strong> In the Auto-Filler section, click the ⚙️ Settings button</li>
+            <li><strong>Configure Data:</strong> Modify the custom fill data in JSON format</li>
+            <li><strong>Test Presets:</strong> Try the different preset options (Personal, Business, Testing)</li>
+            <li><strong>Save & Test:</strong> Save settings and test auto-fill on the forms below</li>
+            <li><strong>Verify Custom Data:</strong> Ensure your custom data is used instead of defaults</li>
+        </ol>
+    </div>
+
+    <div id="status" class="status-display"></div>
+
+    <!-- Test Form 1: Personal Information -->
+    <div class="test-section">
+        <h2>👤 Personal Information Form</h2>
+        <form id="personal-form">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" class="form-control" placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter phone number">
+            </div>
+        </form>
+    </div>
+
+    <!-- Test Form 2: Address Information -->
+    <div class="test-section">
+        <h2>🏠 Address Information Form</h2>
+        <form id="address-form">
+            <div class="form-group">
+                <label for="address">Street Address:</label>
+                <input type="text" id="address" name="address" class="form-control" placeholder="Enter street address">
+            </div>
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" class="form-control" placeholder="Enter city">
+            </div>
+            <div class="form-group">
+                <label for="state">State:</label>
+                <select id="state" name="state" class="form-control">
+                    <option value="">Select State...</option>
+                    <option value="CA">California</option>
+                    <option value="NY">New York</option>
+                    <option value="TX">Texas</option>
+                    <option value="FL">Florida</option>
+                    <option value="IL">Illinois</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="zip">ZIP Code:</label>
+                <input type="text" id="zip" name="zip" class="form-control" placeholder="Enter ZIP code">
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <select id="country" name="country" class="form-control">
+                    <option value="">Select Country...</option>
+                    <option value="US">United States</option>
+                    <option value="CA">Canada</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="AU">Australia</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Test Form 3: Company Information -->
+    <div class="test-section">
+        <h2>🏢 Company Information Form</h2>
+        <form id="company-form">
+            <div class="form-group">
+                <label for="company">Company Name:</label>
+                <input type="text" id="company" name="company" class="form-control" placeholder="Enter company name">
+            </div>
+            <div class="form-group">
+                <label for="jobTitle">Job Title:</label>
+                <input type="text" id="jobTitle" name="jobTitle" class="form-control" placeholder="Enter job title">
+            </div>
+            <div class="form-group">
+                <label for="department">Department:</label>
+                <input type="text" id="department" name="department" class="form-control" placeholder="Enter department">
+            </div>
+            <div class="form-group">
+                <label for="website">Website:</label>
+                <input type="url" id="website" name="website" class="form-control" placeholder="Enter website URL">
+            </div>
+        </form>
+    </div>
+
+    <!-- Test Form 4: Additional Fields -->
+    <div class="test-section">
+        <h2>📝 Additional Information Form</h2>
+        <form id="additional-form">
+            <div class="form-group">
+                <label for="bio">Biography:</label>
+                <textarea id="bio" name="bio" class="form-control" rows="3" placeholder="Enter biography"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" class="form-control" rows="3" placeholder="Enter message"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" class="form-control" rows="3" placeholder="Enter comments"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" class="form-control" placeholder="Enter age">
+            </div>
+            <div class="form-group">
+                <label for="birthdate">Birth Date:</label>
+                <input type="date" id="birthdate" name="birthdate" class="form-control">
+            </div>
+        </form>
+    </div>
+
+    <!-- Test Form 5: Checkboxes and Radio Buttons -->
+    <div class="test-section">
+        <h2>☑️ Selections and Preferences</h2>
+        <form id="preferences-form">
+            <div class="form-group">
+                <label>Interests (Checkboxes):</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="newsletter" value="newsletter">
+                        Subscribe to Newsletter
+                    </label>
+                    <label>
+                        <input type="checkbox" name="terms" value="terms">
+                        Accept Terms and Conditions
+                    </label>
+                    <label>
+                        <input type="checkbox" name="privacy" value="privacy">
+                        Accept Privacy Policy
+                    </label>
+                    <label>
+                        <input type="checkbox" name="marketing" value="marketing">
+                        Receive Marketing Communications
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Preferred Contact Method (Radio Buttons):</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="contactMethod" value="email">
+                        Email
+                    </label>
+                    <label>
+                        <input type="radio" name="contactMethod" value="phone">
+                        Phone
+                    </label>
+                    <label>
+                        <input type="radio" name="contactMethod" value="mail">
+                        Mail
+                    </label>
+                    <label>
+                        <input type="radio" name="contactMethod" value="sms">
+                        SMS
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="test-section">
+        <h2>🎮 Test Controls</h2>
+        <button class="btn btn-primary" onclick="showTestInstructions()">
+            📋 Show Instructions
+        </button>
+        <button class="btn btn-success" onclick="highlightTestFields()">
+            🎯 Highlight Test Fields
+        </button>
+        <button class="btn btn-warning" onclick="clearAllForms()">
+            🧹 Clear All Forms
+        </button>
+        <button class="btn btn-primary" onclick="validateCustomData()">
+            ✅ Validate Filled Data
+        </button>
+    </div>
+
+    <script>
+        let highlightActive = false;
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status-display status-${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showTestInstructions() {
+            showStatus('📋 Check the instructions at the top of the page for testing steps!', 'info');
+        }
+
+        function highlightTestFields() {
+            if (highlightActive) {
+                // Remove highlighting
+                const highlighted = document.querySelectorAll('.highlight');
+                highlighted.forEach(el => {
+                    el.classList.remove('highlight');
+                });
+                highlightActive = false;
+                showStatus('🎯 Field highlighting removed', 'info');
+            } else {
+                // Add highlighting
+                const formFields = document.querySelectorAll('input, select, textarea');
+                formFields.forEach(field => {
+                    field.classList.add('highlight');
+                });
+                highlightActive = true;
+                showStatus('🎯 All form fields highlighted for easy identification', 'success');
+            }
+        }
+
+        function clearAllForms() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.reset();
+            });
+            showStatus('🧹 All forms cleared successfully', 'success');
+        }
+
+        function validateCustomData() {
+            const filledFields = [];
+            const emptyFields = [];
+            
+            const formFields = document.querySelectorAll('input, select, textarea');
+            formFields.forEach(field => {
+                const value = field.type === 'checkbox' || field.type === 'radio' 
+                    ? field.checked 
+                    : field.value.trim();
+                
+                if (value) {
+                    filledFields.push({
+                        name: field.name || field.id,
+                        type: field.type,
+                        value: field.type === 'checkbox' || field.type === 'radio' ? 'checked' : field.value
+                    });
+                } else {
+                    emptyFields.push(field.name || field.id);
+                }
+            });
+            
+            const message = `📊 Validation Results: ${filledFields.length} fields filled, ${emptyFields.length} fields empty`;
+            showStatus(message, filledFields.length > 0 ? 'success' : 'info');
+            
+            // Log detailed results to console
+            console.log('📊 Form Validation Results:');
+            console.log('✅ Filled Fields:', filledFields);
+            console.log('❌ Empty Fields:', emptyFields);
+        }
+
+        // Add visual feedback when fields are filled
+        document.addEventListener('input', function(e) {
+            if (e.target.matches('input, textarea, select')) {
+                if (e.target.value) {
+                    e.target.style.backgroundColor = '#e8f5e8';
+                    e.target.style.borderColor = '#28a745';
+                } else {
+                    e.target.style.backgroundColor = '';
+                    e.target.style.borderColor = '#ddd';
+                }
+            }
+        });
+
+        // Add visual feedback for checkboxes and radios
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' || e.target.type === 'radio') {
+                if (e.target.checked) {
+                    e.target.closest('label').style.backgroundColor = '#e8f5e8';
+                    e.target.closest('label').style.borderRadius = '4px';
+                    e.target.closest('label').style.padding = '4px';
+                } else {
+                    e.target.closest('label').style.backgroundColor = '';
+                    e.target.closest('label').style.padding = '';
+                }
+            }
+        });
+
+        // Page load message
+        window.addEventListener('load', function() {
+            showStatus('🚀 Auto-Filler Settings Test Page loaded! Open the extension and test the settings feature.', 'success');
+        });
+    </script>
+</body>
+</html>

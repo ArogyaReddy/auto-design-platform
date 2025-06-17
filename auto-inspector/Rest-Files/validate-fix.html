@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Quick Validation</title></head>
+<body>
+    <a href="#" class="visual-user-link">visual_user</a>
+    <a href="#test">test_link</a>
+    <button>test_button</button>
+    <input type="text" placeholder="test_input" />
+    
+    <script>
+        console.log('Validation page elements:');
+        console.log('Links:', document.querySelectorAll('a').length);
+        console.log('Buttons:', document.querySelectorAll('button').length);
+        console.log('Inputs:', document.querySelectorAll('input').length);
+        console.log('Total interactive:', document.querySelectorAll('a, button, input').length);
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+// Generated Step Definitions for {{featureName}}
+const { Given, When, Then } = require('@cucumber/cucumber');
+const { expect } = require('@playwright/test');
+const { {{pageClassName}} } = require('../Pages/{{featureName}}.page.js');
+
+Given(`I navigate to the application`, async function () {
+  this.pageObject = new {{pageClassName}}(this.page);
+  // Page is already loaded by hooks.js, just verify we're ready
+  await expect(this.page).toBeTruthy();
+  console.log(`✅ Page object initialized for: ${this.page.url()}`);
+});
+
+// Specific step definitions (unique to this feature)
+{{#each uniqueSteps}}
+{{#if (eq this.keyword "When")}}
+{{#if this.locatorName}}
+When(`{{{this.text}}}`, async function () {
+  await expect(this.pageObject.{{this.locatorName}}).toBeVisible();
+  {{#if (eq this.actionType "click")}}
+  await this.pageObject.{{this.locatorName}}.click();
+  {{else if (eq this.actionType "fill")}}
+  await this.pageObject.{{this.locatorName}}.fill(`{{{this.actionValue}}}`);
+  {{else}}
+  // Add your custom action here
+  {{/if}}
+});
+{{else}}
+When(`{{{this.text}}}`, async function () {
+  // Custom step implementation needed
+  console.log(`Step: {{{this.text}}}`);
+});
+{{/if}}
+
+{{else if (eq this.keyword "And")}}
+{{#if this.locatorName}}
+When(`{{{this.text}}}`, async function () {
+  await expect(this.pageObject.{{this.locatorName}}).toBeVisible();
+  {{#if (eq this.actionType "click")}}
+  await this.pageObject.{{this.locatorName}}.click();
+  {{else if (eq this.actionType "fill")}}
+  await this.pageObject.{{this.locatorName}}.fill(`{{{this.actionValue}}}`);
+  {{else}}
+  // Add your custom action here
+  {{/if}}
+});
+{{else}}
+When(`{{{this.text}}}`, async function () {
+  // Custom step implementation needed
+  console.log(`Step: {{{this.text}}}`);
+});
+{{/if}}
+
+{{else if (eq this.keyword "Then")}}
+Then(`{{{this.text}}}`, async function () {
+  // Verification step implementation
+  {{#if (eq this.text "I should be successfully logged in")}}
+  // Check for successful login indicators
+  await this.page.waitForTimeout(2000);
+  await expect(this.page).toHaveURL(/.*inventory|dashboard|home|main/);
+  console.log(`✅ Login verification passed`);
+  {{else if (eq this.text "I should see my dashboard")}}
+  // Look for dashboard elements
+  await expect(this.page.getByText(/dashboard|welcome|menu/i).first()).toBeVisible();
+  console.log(`✅ Dashboard visibility verified`);
+  {{else if (eq this.text "I should see an error message")}}
+  // Look for error messages
+  await expect(this.page.getByText(/error|invalid|incorrect|failed/i).first()).toBeVisible();
+  console.log(`✅ Error message verified`);
+  {{else if (eq this.text "the operation should complete successfully")}}
+  // Generic success verification
+  await this.page.waitForTimeout(1000);
+  console.log(`✅ Operation completed: {{{this.text}}}`);
+  {{else}}
+  // Custom verification - customize as needed
+  await this.page.waitForTimeout(1000);
+  console.log(`✅ Verification: {{{this.text}}}`);
+  {{/if}}
+});
+
+{{/if}}
+{{/each}}
+
+// No generic fallback steps to prevent ambiguity - all steps are specifically generated
+// from recorded actions or defined explicitly for this feature

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow DOM Extension Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+        }
+        .regular-section {
+            background: #f8f9fa;
+        }
+        .shadow-section {
+            background: #fff3cd;
+        }
+        .nested-shadow-section {
+            background: #d1ecf1;
+        }
+        .test-element {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="main-title">Shadow DOM Extension Test Page</h1>
+        <p class="description">This page tests the Universal Element Locator extension's ability to scan Shadow DOM elements.</p>
+        
+        <!-- Regular DOM Elements Section -->
+        <div class="section regular-section">
+            <h2>Regular DOM Elements</h2>
+            <div class="test-element" id="regular-div" data-testid="regular-element">
+                Regular DIV with ID and data attribute
+            </div>
+            <button class="test-element" id="regular-button" type="button">Regular Button</button>
+            <input class="test-element" id="regular-input" type="text" placeholder="Regular input field" data-role="input">
+        </div>
+
+        <!-- Simple Shadow DOM Section -->
+        <div class="section shadow-section">
+            <h2>Simple Shadow DOM</h2>
+            <p>These elements are inside a simple shadow root:</p>
+            <div id="simple-shadow-host"></div>
+        </div>
+
+        <!-- Complex Shadow DOM Section -->
+        <div class="section shadow-section">
+            <h2>Complex Shadow DOM</h2>
+            <p>These elements are inside a complex shadow root with multiple levels:</p>
+            <div id="complex-shadow-host"></div>
+        </div>
+
+        <!-- Nested Shadow DOM Section -->
+        <div class="section nested-shadow-section">
+            <h2>Nested Shadow DOM</h2>
+            <p>These elements are inside nested shadow roots (shadow inside shadow):</p>
+            <div id="nested-shadow-host"></div>
+        </div>
+
+        <!-- Web Components Section -->
+        <div class="section shadow-section">
+            <h2>Custom Web Components</h2>
+            <p>These are custom web components with shadow DOM:</p>
+            <custom-button data-testid="custom-component">Custom Component</custom-button>
+            <custom-card title="Test Card" content="This is a test card component"></custom-card>
+        </div>
+    </div>
+
+    <script>
+        console.log('Setting up Shadow DOM test elements...');
+
+        // Simple Shadow DOM
+        const simpleHost = document.getElementById('simple-shadow-host');
+        const simpleShadow = simpleHost.attachShadow({ mode: 'open' });
+        simpleShadow.innerHTML = `
+            <style>
+                .shadow-content { background: #e7f3ff; padding: 15px; border-radius: 5px; }
+                .shadow-button { background: #007cba; color: white; padding: 8px 16px; border: none; border-radius: 4px; }
+                .shadow-input { border: 1px solid #ccc; padding: 8px; margin: 5px; }
+            </style>
+            <div class="shadow-content">
+                <h3 id="shadow-title">Shadow DOM Content</h3>
+                <p class="shadow-text" data-shadow="true">This text is inside Shadow DOM</p>
+                <button class="shadow-button" id="shadow-btn" data-testid="shadow-button">Shadow Button</button>
+                <input type="text" class="shadow-input" id="shadow-input" placeholder="Shadow input field" data-role="shadow-input">
+                <div class="shadow-container" data-shadow-container="main">
+                    <span class="shadow-span" data-content="nested">Nested span in shadow</span>
+                </div>
+            </div>
+        `;
+
+        // Complex Shadow DOM
+        const complexHost = document.getElementById('complex-shadow-host');
+        const complexShadow = complexHost.attachShadow({ mode: 'open' });
+        complexShadow.innerHTML = `
+            <style>
+                .complex-shadow { background: #f0f8ff; padding: 20px; border: 2px solid #4169e1; }
+                .shadow-form { background: white; padding: 15px; margin: 10px 0; }
+                .shadow-table { width: 100%; border-collapse: collapse; }
+                .shadow-table td, .shadow-table th { padding: 8px; border: 1px solid #ddd; }
+            </style>
+            <div class="complex-shadow">
+                <h3 id="complex-title">Complex Shadow DOM</h3>
+                <form class="shadow-form" data-shadow-form="complex">
+                    <label for="shadow-name">Name:</label>
+                    <input type="text" id="shadow-name" name="shadowName" data-field="name">
+                    
+                    <label for="shadow-email">Email:</label>
+                    <input type="email" id="shadow-email" name="shadowEmail" data-field="email">
+                    
+                    <select id="shadow-select" name="shadowSelect" data-field="dropdown">
+                        <option value="">Choose option</option>
+                        <option value="option1" data-value="1">Option 1</option>
+                        <option value="option2" data-value="2">Option 2</option>
+                    </select>
+                    
+                    <button type="submit" id="shadow-submit" data-action="submit">Submit</button>
+                </form>
+                
+                <table class="shadow-table" data-shadow-table="main">
+                    <thead>
+                        <tr>
+                            <th data-column="name">Name</th>
+                            <th data-column="value">Value</th>
+                            <th data-column="action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-row="1">
+                            <td data-cell="name">Shadow Row 1</td>
+                            <td data-cell="value">100</td>
+                            <td data-cell="action"><button class="action-btn" data-action="edit">Edit</button></td>
+                        </tr>
+                        <tr data-row="2">
+                            <td data-cell="name">Shadow Row 2</td>
+                            <td data-cell="value">200</td>
+                            <td data-cell="action"><button class="action-btn" data-action="delete">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        // Nested Shadow DOM
+        const nestedHost = document.getElementById('nested-shadow-host');
+        const nestedShadow = nestedHost.attachShadow({ mode: 'open' });
+        nestedShadow.innerHTML = `
+            <style>
+                .outer-shadow { background: #ffe6e6; padding: 20px; border: 2px solid #ff6b6b; }
+                .inner-host { background: #e6f3ff; padding: 15px; margin: 10px 0; border: 1px solid #4dabf7; }
+            </style>
+            <div class="outer-shadow">
+                <h3 id="outer-title">Outer Shadow DOM</h3>
+                <p class="outer-text" data-level="outer">This is in the outer shadow root</p>
+                <div id="inner-shadow-host" class="inner-host"></div>
+                <button class="outer-button" id="outer-btn" data-testid="outer-shadow-btn">Outer Shadow Button</button>
+            </div>
+        `;
+
+        // Create inner shadow inside the nested shadow
+        const innerHost = nestedShadow.getElementById('inner-shadow-host');
+        const innerShadow = innerHost.attachShadow({ mode: 'open' });
+        innerShadow.innerHTML = `
+            <style>
+                .inner-shadow { background: #fff0e6; padding: 15px; border: 2px solid #ff922b; }
+                .deeply-nested { color: #d63031; font-weight: bold; }
+            </style>
+            <div class="inner-shadow">
+                <h4 id="inner-title">Inner Shadow DOM</h4>
+                <p class="inner-text deeply-nested" data-level="inner">This is deeply nested in shadow DOM!</p>
+                <input type="text" id="inner-input" class="inner-input" placeholder="Deeply nested input" data-nested="true">
+                <button class="inner-button" id="inner-btn" data-testid="inner-shadow-btn" data-action="nested-action">Inner Shadow Button</button>
+                <div class="nested-container" data-container="deep">
+                    <span class="deep-span" data-deep="true">Deeply nested span</span>
+                    <a href="#" class="deep-link" data-link="nested">Nested Link</a>
+                </div>
+            </div>
+        `;
+
+        // Custom Web Components
+        class CustomButton extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({ mode: 'open' });
+                shadow.innerHTML = `
+                    <style>
+                        .custom-btn {
+                            background: linear-gradient(45deg, #667eea, #764ba2);
+                            color: white;
+                            padding: 12px 24px;
+                            border: none;
+                            border-radius: 25px;
+                            cursor: pointer;
+                            font-size: 16px;
+                            transition: transform 0.2s;
+                        }
+                        .custom-btn:hover { transform: scale(1.05); }
+                    </style>
+                    <button class="custom-btn" id="custom-button" data-component="custom-button">
+                        <slot></slot>
+                    </button>
+                `;
+            }
+        }
+
+        class CustomCard extends HTMLElement {
+            constructor() {
+                super();
+                const shadow = this.attachShadow({ mode: 'open' });
+                const title = this.getAttribute('title') || 'Card Title';
+                const content = this.getAttribute('content') || 'Card content';
+                
+                shadow.innerHTML = `
+                    <style>
+                        .card {
+                            background: white;
+                            border: 1px solid #e0e0e0;
+                            border-radius: 8px;
+                            padding: 20px;
+                            margin: 10px 0;
+                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                        }
+                        .card-title {
+                            color: #333;
+                            margin: 0 0 10px 0;
+                            font-size: 18px;
+                            font-weight: bold;
+                        }
+                        .card-content {
+                            color: #666;
+                            line-height: 1.5;
+                        }
+                        .card-footer {
+                            margin-top: 15px;
+                            padding-top: 15px;
+                            border-top: 1px solid #eee;
+                        }
+                    </style>
+                    <div class="card" data-component="custom-card">
+                        <h3 class="card-title" id="card-title" data-title="true">${title}</h3>
+                        <p class="card-content" data-content="true">${content}</p>
+                        <div class="card-footer">
+                            <button class="card-action" id="card-action" data-action="card-click">Card Action</button>
+                            <input type="text" class="card-input" id="card-input" placeholder="Card input" data-input="card">
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        customElements.define('custom-button', CustomButton);
+        customElements.define('custom-card', CustomCard);
+
+        console.log('Shadow DOM test elements created successfully!');
+        console.log('Total shadow roots created: 5 (simple, complex, outer nested, inner nested, 2 custom components)');
+    </script>
+</body>
+</html>

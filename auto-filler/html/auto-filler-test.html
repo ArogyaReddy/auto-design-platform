@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Filler Test Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .demo-info {
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .demo-info h3 {
+            margin: 0 0 10px 0;
+            color: #234e52;
+        }
+        
+        .demo-info p {
+            margin: 0;
+            color: #285e61;
+        }
+        
+        .row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .col {
+            flex: 1;
+        }
+        
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        
+        .results {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Auto-Filler Test Page</h1>
+        
+        <div class="demo-info">
+            <h3>🎯 Demo Instructions</h3>
+            <p>Use the Element AI Extractor extension's <strong>Smart Auto-Filler</strong> feature to automatically fill out this form. Try both "Auto Fill Forms" and "Auto Interact" buttons. Enable "Test Mode" for safe testing!</p>
+        </div>
+        
+        <form id="testForm">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <h2>👤 Personal Information</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="your.email@example.com">
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+1-555-123-4567">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" placeholder="25" min="18" max="100">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthdate">Date of Birth</label>
+                    <input type="date" id="birthdate" name="birthdate">
+                </div>
+            </div>
+            
+            <!-- Address Information Section -->
+            <div class="form-section">
+                <h2>🏠 Address Information</h2>
+                <div class="form-group">
+                    <label for="address">Street Address</label>
+                    <input type="text" id="address" name="address" placeholder="123 Main Street">
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" placeholder="New York">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="state">State/Province</label>
+                            <select id="state" name="state">
+                                <option value="">Select State</option>
+                                <option value="AL">Alabama</option>
+                                <option value="CA">California</option>
+                                <option value="FL">Florida</option>
+                                <option value="NY">New York</option>
+                                <option value="TX">Texas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code</label>
+                            <input type="text" id="zipCode" name="zipCode" placeholder="10001">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="country">
+                        <option value="">Select Country</option>
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Work Information Section -->
+            <div class="form-section">
+                <h2>💼 Work Information</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" placeholder="Example Corp">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="jobTitle">Job Title</label>
+                            <input type="text" id="jobTitle" name="jobTitle" placeholder="Software Engineer">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Company Website</label>
+                    <input type="url" id="website" name="website" placeholder="https://example.com">
+                </div>
+            </div>
+            
+            <!-- Account Information Section -->
+            <div class="form-section">
+                <h2>🔐 Account Information</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" placeholder="johndoe123">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Password123!">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Information Section -->
+            <div class="form-section">
+                <h2>📝 Additional Information</h2>
+                <div class="form-group">
+                    <label for="bio">Biography</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Any additional comments or questions..."></textarea>
+                </div>
+            </div>
+            
+            <!-- Preferences Section -->
+            <div class="form-section">
+                <h2>⚙️ Preferences</h2>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">Subscribe to newsletter</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms">
+                    <label for="terms">I agree to the terms and conditions</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="privacy" name="privacy">
+                    <label for="privacy">I agree to the privacy policy</label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="marketing" name="marketing">
+                    <label for="marketing">Send me marketing emails</label>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <button type="button" class="btn-primary" onclick="clearForm()">🧹 Clear Form</button>
+                <button type="button" class="btn-secondary" onclick="validateForm()">✅ Validate</button>
+                <button type="button" class="btn-success" onclick="showResults()">📊 Show Data</button>
+                <button type="button" class="btn-warning" onclick="fakeSubmit()">⚠️ Fake Submit</button>
+                <button type="submit" class="btn-primary">🚀 Submit Form</button>
+            </div>
+        </form>
+        
+        <div id="results" class="results">
+            <h3>📋 Form Data</h3>
+            <pre id="formData"></pre>
+        </div>
+    </div>
+    
+    <script>
+        // Prevent actual form submission for demo purposes
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('🎉 Form submission prevented for demo purposes!\n\nThis demonstrates that the auto-filler can interact with forms safely.');
+            showResults();
+        });
+        
+        function clearForm() {
+            document.getElementById('testForm').reset();
+            document.getElementById('results').classList.remove('show');
+        }
+        
+        function validateForm() {
+            const requiredFields = ['firstName', 'lastName', 'email'];
+            const missing = [];
+            
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    missing.push(field);
+                    element.style.borderColor = '#f56565';
+                } else {
+                    element.style.borderColor = '#48bb78';
+                }
+            });
+            
+            if (missing.length === 0) {
+                alert('✅ Form validation passed! All required fields are filled.');
+            } else {
+                alert(`❌ Form validation failed! Missing: ${missing.join(', ')}`);
+            }
+        }
+        
+        function showResults() {
+            const formData = new FormData(document.getElementById('testForm'));
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Add checkbox states
+            const checkboxes = ['newsletter', 'terms', 'privacy', 'marketing'];
+            checkboxes.forEach(cb => {
+                data[cb] = document.getElementById(cb).checked;
+            });
+            
+            document.getElementById('formData').textContent = JSON.stringify(data, null, 2);
+            document.getElementById('results').classList.add('show');
+        }
+        
+        function fakeSubmit() {
+            alert('⚠️ This is a fake submit button for testing auto-interaction!\n\nThe auto-filler can safely click this in test mode.');
+        }
+        
+        // Add some dynamic behavior to test auto-filler intelligence
+        document.getElementById('firstName').addEventListener('input', function(e) {
+            if (e.target.value.length > 0) {
+                document.getElementById('lastName').style.borderColor = '#667eea';
+            }
+        });
+        
+        document.getElementById('email').addEventListener('input', function(e) {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailPattern.test(e.target.value)) {
+                e.target.style.borderColor = '#48bb78';
+            } else {
+                e.target.style.borderColor = '#f56565';
+            }
+        });
+        
+        // Console log for demonstration
+        console.log('🤖 Auto-Filler Test Page loaded!');
+        console.log('📝 This page is ready to test the Element AI Extractor Auto-Filler feature.');
+    </script>
+</body>
+</html>
